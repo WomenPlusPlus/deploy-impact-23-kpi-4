@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for kpi4-backend-app on 2023-09-26T15:20:49+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "kpi4-backend-app"
+primary_region = "ams"
+console_command = "/code/manage.py shell"
+
+[build]
+
+[deploy]
+  release_command = "python manage.py migrate"
+
+[env]
+  PORT = "8000"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[statics]]
+  guest_path = "/code/staticfiles"
+  url_prefix = "/static/"
