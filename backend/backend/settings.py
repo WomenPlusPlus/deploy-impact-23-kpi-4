@@ -14,15 +14,16 @@ from pathlib import Path
 import environ
 from django.core.management.utils import get_random_secret_key
 
-env = environ.Env(
-    DEBUG=(bool, False),
-)
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent #/deploy_impact
+BASE_BACKEND_DIR = Path(__file__).resolve().parent.parent
+BACKEND_DIR = BASE_BACKEND_DIR / 'backend'  # rename variable for clarity
+FRONTEND_BUILD_DIR = BASE_BACKEND_DIR / 'build'   # /backend/backend/build
 
 # Read env variables from .env file
-environ.Env.read_env(BASE_DIR / '.env')
+environ.Env.read_env(BASE_BACKEND_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -32,14 +33,19 @@ SECRET_KEY = env.str('SECRET_KEY', default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
+DATABASE_URL = env('DATABASE_URL')
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'kpi4-backend-app.fly.dev'
+    'kpi4.fly.dev',  # nurpinar's copy
+    'kpi4-backend-app.fly.dev',   # github default
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://kpi4-backend-app.fly.dev']
+CSRF_TRUSTED_ORIGINS = [
+    'https://kpi4.fly.dev',
+    'https://kpi4-backend-app.fly.dev'
+]
 
 # Application definition
 
@@ -56,6 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,12 +72,19 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
+
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage')
+
+STATIC_ROOT = BASE_BACKEND_DIR / 'static'
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [FRONTEND_BUILD_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,7 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+WHITENOISE_ROOT = FRONTEND_BUILD_DIR  / 'root'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
