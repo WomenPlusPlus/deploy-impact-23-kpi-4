@@ -38,9 +38,7 @@ ALLOWED_HOSTS = [
     'kpi4.fly.dev',
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://kpi4.fly.dev',
-]
+CSRF_TRUSTED_ORIGINS = ['https://kpi4.fly.dev']
 
 # Application definition
 
