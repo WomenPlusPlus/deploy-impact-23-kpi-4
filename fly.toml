@@ -3,8 +3,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-# app = "kpi4"
-app = "kpi4-backend-app"
+app = "kpi4"
 primary_region = "ams"
 console_command = "/code/manage.py shell"
 

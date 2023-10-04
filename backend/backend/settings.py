@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+from decouple import config
 from django.core.management.utils import get_random_secret_key
+from dj_database_url import parse as dburl
 
-env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent #/deploy_impact
@@ -22,29 +22,24 @@ BASE_BACKEND_DIR = Path(__file__).resolve().parent.parent
 BACKEND_DIR = BASE_BACKEND_DIR / 'backend'  # rename variable for clarity
 FRONTEND_BUILD_DIR = BASE_BACKEND_DIR / 'build'   # /backend/backend/build
 
-# Read env variables from .env file
-environ.Env.read_env(BASE_BACKEND_DIR / '.env')
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY', default=get_random_secret_key())
+SECRET_KEY = config('SECRET_KEY', default=get_random_secret_key(), cast=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
-DATABASE_URL = env('DATABASE_URL')
+DEBUG = config('DEBUG', default=False, cast=bool)
+DATABASE_URL = config('DATABASE_URL', cast=dburl)
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'kpi4.fly.dev',  # nurpinar's copy
-    'kpi4-backend-app.fly.dev',   # github default
+    'kpi4.fly.dev',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://kpi4.fly.dev',
-    'https://kpi4-backend-app.fly.dev'
 ]
 
 # Application definition
@@ -104,7 +99,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db()
+    'default': DATABASE_URL
 }
 
 

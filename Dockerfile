@@ -11,6 +11,7 @@ RUN npm run build
 
 # Stage 2/2: Build the Django backend
 FROM python:${PYTHON_VERSION}
+ENV DATABASE_URL=postgresql://postgres:TSjQogRkJRoWjcUx@db.rwgvhztztzdcbwolbkfw.supabase.co:5432/postgres
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -28,7 +29,7 @@ COPY backend ./
 COPY --from=frontend-build /code/frontend/build /code/backend/build
 
 # Collect static files
-# RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
 
 # Expose the port that Django runs on (default is 8000)
 EXPOSE 8000
