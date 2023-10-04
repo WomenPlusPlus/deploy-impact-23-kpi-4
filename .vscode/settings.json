@@ -1,0 +1,24 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionMethod": "Profile",
+            "previewLimit": 50,
+            "driver": "driver.athena",
+            "name": "leadpoint_staging",
+            "group": "primary",
+            "workgroup": "primary",
+            "region": "us-west-1",
+            "outputLocation": "s3://leadpoint-datalake/jars/",
+            "profile": "leadpoint_staging"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "deploy_impact_v4",
+            "database": "deploy_impact_staging_v4",
+            "username": "postgres"
+        }
+    ]
+}
