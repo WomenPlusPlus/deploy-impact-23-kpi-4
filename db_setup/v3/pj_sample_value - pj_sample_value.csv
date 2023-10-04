@@ -1,0 +1,86 @@
+circle,kpi,periodicity,range,period_year,period_month,value,user,role
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,1,35,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,2,50,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,3,50,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,4,55,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,5,70,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,6,80,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,7,85,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,8,90,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,9,,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,10,,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,11,,default@test.com,default
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,12,,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,1,2.04,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,2,2.2,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,3,2.54,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,4,2.17,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,5,3.3,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,6,2.58,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,7,2.04,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,8,0.93,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,9,,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,10,,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,11,,default@test.com,default
+HR,share short tern leave,month,0 <= % <= 100,2023,12,,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,1,2.26,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,2,0.98,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,3,1.47,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,4,1.46,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,5,0,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,6,0,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,7,0.51,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,8,1.01,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,9,,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,10,,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,11,,default@test.com,default
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,12,,default@test.com,default
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,3,46,default@test.com,default
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,6,44.9,default@test.com,default
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,9,43.6,default@test.com,default
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,12,,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,1,158611,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,2,203755,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,3,190560,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,4,164663,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,5,180421,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,6,174107,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,7,164059,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,8,194407,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,9,,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,10,,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,11,,default@test.com,default
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,12,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,1,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,2,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,3,825,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,4,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,5,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,6,276,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,7,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,8,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,9,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,10,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,11,,default@test.com,default
+Programs - Parents -Online,count leads,month,0 <= X,2023,12,,default@test.com,default
+Programs - Parents -Online,net promoter score,year,0 <= X <= 100,2023,12,35,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,1,1369218,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,2,2144446,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,3,1923875,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,4,1274911,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,5,1797114,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,6,1352463,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,7,1359887,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,8,1101047,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,9,,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,10,,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,11,,default@test.com,default
+Fundraising,private donations,month,0 <= X,2023,12,,default@test.com,default
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,3,51000,default@test.com,default
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,6,0,default@test.com,default
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,9,0,default@test.com,default
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,12,,default@test.com,default
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,3,186258,default@test.com,default
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,6,0,default@test.com,default
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,9,26000,default@test.com,default
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,12,,default@test.com,default

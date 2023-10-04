@@ -1,0 +1,86 @@
+circle,kpi,periodicity,range,period_year,period_month,value
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,1,35
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,2,50
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,3,50
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,4,55
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,5,70
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,6,80
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,7,85
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,8,90
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,9,
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,10,
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,11,
+HR,share of teams constituted as circles,month,0 <= % <= 100,2023,12,
+HR,share short tern leave,month,0 <= % <= 100,2023,1,2.04
+HR,share short tern leave,month,0 <= % <= 100,2023,2,2.2
+HR,share short tern leave,month,0 <= % <= 100,2023,3,2.54
+HR,share short tern leave,month,0 <= % <= 100,2023,4,2.17
+HR,share short tern leave,month,0 <= % <= 100,2023,5,3.3
+HR,share short tern leave,month,0 <= % <= 100,2023,6,2.58
+HR,share short tern leave,month,0 <= % <= 100,2023,7,2.04
+HR,share short tern leave,month,0 <= % <= 100,2023,8,0.93
+HR,share short tern leave,month,0 <= % <= 100,2023,9,
+HR,share short tern leave,month,0 <= % <= 100,2023,10,
+HR,share short tern leave,month,0 <= % <= 100,2023,11,
+HR,share short tern leave,month,0 <= % <= 100,2023,12,
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,1,2.26
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,2,0.98
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,3,1.47
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,4,1.46
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,5,0
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,6,0
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,7,0.51
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,8,1.01
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,9,
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,10,
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,11,
+HR,involuntary headcount change (FTE),month,0 <= % <= 100,2023,12,
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,3,46
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,6,44.9
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,9,43.6
+Programs - Children - Counceling,reachability,quarter,0 <= % <= 100,2023,12,
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,1,158611
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,2,203755
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,3,190560
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,4,164663
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,5,180421
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,6,174107
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,7,164059
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,8,194407
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,9,
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,10,
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,11,
+Programs - Parents -Online,count sessions on .projuventute.ch,month,0 <= X,2023,12,
+Programs - Parents -Online,count leads,month,0 <= X,2023,1,
+Programs - Parents -Online,count leads,month,0 <= X,2023,2,
+Programs - Parents -Online,count leads,month,0 <= X,2023,3,825
+Programs - Parents -Online,count leads,month,0 <= X,2023,4,
+Programs - Parents -Online,count leads,month,0 <= X,2023,5,
+Programs - Parents -Online,count leads,month,0 <= X,2023,6,276
+Programs - Parents -Online,count leads,month,0 <= X,2023,7,
+Programs - Parents -Online,count leads,month,0 <= X,2023,8,
+Programs - Parents -Online,count leads,month,0 <= X,2023,9,
+Programs - Parents -Online,count leads,month,0 <= X,2023,10,
+Programs - Parents -Online,count leads,month,0 <= X,2023,11,
+Programs - Parents -Online,count leads,month,0 <= X,2023,12,
+Programs - Parents -Online,net promoter score,year,0 <= X <= 100,2023,12,35
+Fundraising,private donations,month,0 <= X,2023,1,1369218
+Fundraising,private donations,month,0 <= X,2023,2,2144446
+Fundraising,private donations,month,0 <= X,2023,3,1923875
+Fundraising,private donations,month,0 <= X,2023,4,1274911
+Fundraising,private donations,month,0 <= X,2023,5,1797114
+Fundraising,private donations,month,0 <= X,2023,6,1352463
+Fundraising,private donations,month,0 <= X,2023,7,1359887
+Fundraising,private donations,month,0 <= X,2023,8,1101047
+Fundraising,private donations,month,0 <= X,2023,9,
+Fundraising,private donations,month,0 <= X,2023,10,
+Fundraising,private donations,month,0 <= X,2023,11,
+Fundraising,private donations,month,0 <= X,2023,12,
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,3,51000
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,6,0
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,9,0
+Digital,additional monetization/savings from CRM,quarter,0 <= X,2023,12,
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,3,186258
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,6,0
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,9,26000
+Programs,additional monetization/savings from programs,quarter,0 <= X,2023,12,
