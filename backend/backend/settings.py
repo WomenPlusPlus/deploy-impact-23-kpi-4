@@ -36,10 +36,10 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'kpi4-backend-app.fly.dev'
+    'kpi4.fly.dev'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://kpi4-backend-app.fly.dev']
+CSRF_TRUSTED_ORIGINS = ['https://kpi4.fly.dev']
 
 # Application definition
 
