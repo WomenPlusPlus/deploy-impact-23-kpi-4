@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for kpi4-backend-app on 2023-09-26T15:20:49+02:00
+# fly.toml app configuration file generated for kpi4 on 2023-10-03T10:59:45+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "kpi4-backend-app"
+app = "kpi4"
 primary_region = "ams"
 console_command = "/code/manage.py shell"
 
