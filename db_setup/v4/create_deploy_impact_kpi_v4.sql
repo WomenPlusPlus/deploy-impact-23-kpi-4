@@ -1,66 +1,76 @@
--- Create Role Table
-CREATE TABLE IF NOT EXISTS role (
+-- Role Table
+CREATE TABLE Role (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    description VARCHAR(255)
+    name VARCHAR NOT NULL UNIQUE,
+    description VARCHAR
 );
 
--- Create Range Table
-CREATE TABLE IF NOT EXISTS range (
+-- Range Table
+CREATE TABLE Range (
     id SERIAL PRIMARY KEY,
-    range_value VARCHAR(255) UNIQUE NOT NULL
+    min_value DECIMAL NOT NULL,
+    max_value DECIMAL,
+    display_value VARCHAR
 );
 
--- Create Users Table
-CREATE TABLE IF NOT EXISTS users (
+-- Users Table
+CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    role_id INTEGER REFERENCES role(id) ON DELETE CASCADE
+    username VARCHAR NOT NULL UNIQUE,
+    email VARCHAR NOT NULL UNIQUE,
+    role_id INTEGER REFERENCES Role(id)
 );
 
--- Create Circle Table
-CREATE TABLE IF NOT EXISTS circle (
+-- Circle Table
+CREATE TABLE Circle (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR NOT NULL
 );
 
--- Create User_Circle Junction Table
-CREATE TABLE IF NOT EXISTS user_circle (
+-- User_Circle Table
+CREATE TABLE User_Circle (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    circle_id INTEGER REFERENCES circle(id) ON DELETE CASCADE
+    user_id INTEGER REFERENCES Users(id),
+    circle_id INTEGER REFERENCES Circle(id)
 );
 
--- Create KPI Table
-CREATE TABLE IF NOT EXISTS kpi (
+-- Periodicity Table
+CREATE TABLE Periodicity (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    range_id INTEGER REFERENCES range(id) ON DELETE CASCADE,
-    periodicity VARCHAR(255) NOT NULL
+    type VARCHAR NOT NULL UNIQUE,
+    description VARCHAR
 );
 
--- Create Circle_KPI Junction Table
-CREATE TABLE IF NOT EXISTS circle_kpi (
+-- KPI Table
+CREATE TABLE KPI (
     id SERIAL PRIMARY KEY,
-    circle_id INTEGER REFERENCES circle(id) ON DELETE CASCADE,
-    kpi_id INTEGER REFERENCES kpi(id) ON DELETE CASCADE
+    name VARCHAR NOT NULL,
+    range_id INTEGER REFERENCES Range(id),
+    periodicity_id INTEGER REFERENCES Periodicity(id)
 );
 
--- Create Period Table
-CREATE TABLE IF NOT EXISTS period (
+-- Circle_KPI Table
+CREATE TABLE Circle_KPI (
+    id SERIAL PRIMARY KEY,
+    circle_id INTEGER REFERENCES Circle(id),
+    kpi_id INTEGER REFERENCES KPI(id)
+);
+
+-- Period Table
+CREATE TABLE Period (
     id SERIAL PRIMARY KEY,
     year INTEGER NOT NULL,
     month INTEGER,
     quarter INTEGER
 );
 
--- Create Audit Table
-CREATE TABLE IF NOT EXISTS audit (
+-- Audit Table
+CREATE TABLE Audit (
     id SERIAL PRIMARY KEY,
-    circle_kpi_id INTEGER REFERENCES circle_kpi(id) ON DELETE CASCADE,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    period_id INTEGER REFERENCES period(id) ON DELETE CASCADE,
+    circle_kpi_id INTEGER REFERENCES Circle_KPI(id),
+    user_id INTEGER REFERENCES Users(id),
+    period_id INTEGER REFERENCES Period(id),
     value DECIMAL NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT current_timestamp
+    created_timestamp TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    updated_timestamp TIMESTAMP NOT NULL DEFAULT current_timestamp
 );

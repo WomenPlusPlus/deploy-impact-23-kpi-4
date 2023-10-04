@@ -1,0 +1,4 @@
+id,type,description
+1,month,"Data is recorded monthly"
+2,quarter,"Data is recorded quarterly"
+3,year,"Data is recorded annually"
