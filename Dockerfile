@@ -11,8 +11,8 @@ RUN npm run build
 
 # Stage 2/2: Build the Django backend
 FROM python:${PYTHON_VERSION}
-ENV DATABASE_URL=postgresql://postgres:TSjQogRkJRoWjcUx@db.rwgvhztztzdcbwolbkfw.supabase.co:5432/postgres
-
+ARG DATABASE_URL
+ENV DATABASE_URL $DATABASE_URL
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
