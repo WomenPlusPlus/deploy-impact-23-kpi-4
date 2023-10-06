@@ -19,7 +19,7 @@ from dj_database_url import parse as dburl
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent #/deploy_impact
 BASE_BACKEND_DIR = Path(__file__).resolve().parent.parent
-BACKEND_DIR = BASE_BACKEND_DIR / 'backend'  # rename variable for clarity
+BACKEND_DIR = BASE_DIR / 'backend'  # rename variable for clarity
 FRONTEND_BUILD_DIR = BASE_BACKEND_DIR / 'build'   # /backend/backend/build
 
 # Quick-start development settings - unsuitable for production
@@ -36,9 +36,13 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'kpi4.fly.dev',
+    'kpi4-dev.fly.dev',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://kpi4.fly.dev']
+CSRF_TRUSTED_ORIGINS = [
+    'https://kpi4.fly.dev',
+    'https://kpi4-dev.fly.dev',
+]
 
 # Application definition
 
@@ -50,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
+    'rest_framework',
     'kpi_app',
 ]
 
@@ -62,15 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
-STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
-
-STATICFILES_STORAGE = (
-    'whitenoise.storage.CompressedManifestStaticFilesStorage')
-
-STATIC_ROOT = BASE_BACKEND_DIR / 'static'
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -137,9 +134,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-WHITENOISE_ROOT = FRONTEND_BUILD_DIR  / 'root'
+WHITENOISE_ROOT = FRONTEND_BUILD_DIR / 'root'
+
+STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_ROOT = BASE_BACKEND_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# reference to custom User model
+AUTH_USER_MODEL = 'kpi_app.User'

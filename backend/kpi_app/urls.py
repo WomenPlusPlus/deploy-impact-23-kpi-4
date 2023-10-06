@@ -1,6 +1,13 @@
-from django.urls import path, re_path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
 from . import views
 
+router = DefaultRouter()
+router.register(r'circles', views.CircleViewSet, basename='circles')
+router.register(r'kpis', views.KPIViewSet, basename='kpis')
+
 urlpatterns = [
-    re_path(r'', views.catchall),
+    path(r'', views.React.as_view()),
+    path('api/', include(router.urls))
 ]
