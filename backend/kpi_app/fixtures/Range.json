@@ -1,0 +1,20 @@
+[
+    {
+        "model": "kpi_app.range",
+        "id": "1",
+        "fields": {
+            "min_value": "0.0",
+            "max_value": "100.0",
+            "display_value": "0 <= % <= 100"
+        }
+    },
+    {
+        "model": "kpi_app.range",
+        "id": "2",
+        "fields": {
+            "min_value": "0.0",
+            "max_value": "0.0",
+            "display_value": "0 <= X"
+        }
+    }
+]
