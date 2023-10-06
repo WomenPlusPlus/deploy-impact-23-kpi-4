@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --build-arg DATABASE_URL=${{ env.DATABASE_URL }} -- config ./fly.production.toml --dockerfile ./Dockerfile.production
+      - run: flyctl deploy --remote-only --build-arg DATABASE_URL=${{ env.DATABASE_URL }} --config ./fly.production.toml --dockerfile ./Dockerfile.production
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
