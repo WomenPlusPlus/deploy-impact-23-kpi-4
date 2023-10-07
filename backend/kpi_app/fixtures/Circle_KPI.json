@@ -1,0 +1,82 @@
+[
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "1",
+        	"circle_id":  "1",
+        	"kpi_id":  "1"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+       		"id":  "2",
+        	"circle_id":  "1",
+        	"kpi_id":  "2"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "3",
+        	"circle_id":  "1",
+        	"kpi_id":  "3"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "4",
+        	"circle_id":  "2",
+        	"kpi_id":  "4"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "5",
+        	"circle_id":  "3",
+        	"kpi_id":  "5"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "6",
+        	"circle_id":  "3",
+        	"kpi_id":  "6"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "7",
+        	"circle_id":  "3",
+        	"kpi_id":  "7"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "8",
+        	"circle_id":  "4",
+        	"kpi_id":  "8"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "9",
+        	"circle_id":  "5",
+        	"kpi_id":  "9"
+	}
+    },
+    {
+        "model":  "kpi_app.circle_kpi",
+	"fields": {
+        	"id":  "10",
+        	"circle_id":  "6",
+        	"kpi_id":  "10"
+	}
+    }
+]

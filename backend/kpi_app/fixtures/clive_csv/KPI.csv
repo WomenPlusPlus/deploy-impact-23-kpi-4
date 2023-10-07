@@ -1,0 +1,11 @@
+model,id,name,range_id,periodicity_id
+kpi_app.circle,1,share of teams constituted as circles,1,1
+kpi_app.circle,2,share short tern leave,1,1
+kpi_app.circle,3,involuntary headcount change (FTE),1,1
+kpi_app.circle,4,reachability,1,2
+kpi_app.circle,5,count sessions on .projuventute.ch,2,1
+kpi_app.circle,6,count leads,2,1
+kpi_app.circle,7,net promoter score,1,3
+kpi_app.circle,8,private donations,2,1
+kpi_app.circle,9,additional monetization/savings from CRM,2,2
+kpi_app.circle,10,additional monetization/savings from programs,2,2

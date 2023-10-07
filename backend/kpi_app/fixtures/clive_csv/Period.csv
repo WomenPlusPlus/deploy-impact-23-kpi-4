@@ -1,0 +1,17 @@
+model,id,year,month,quarter
+kpi_app.period,1,2023,1,
+kpi_app.period,2,2023,2,
+kpi_app.period,3,2023,3,
+kpi_app.period,4,2023,4,
+kpi_app.period,5,2023,5,
+kpi_app.period,6,2023,6,
+kpi_app.period,7,2023,7,
+kpi_app.period,8,2023,8,
+kpi_app.period,9,2023,9,
+kpi_app.period,10,2023,10,
+kpi_app.period,11,2023,11,
+kpi_app.period,12,2023,12,
+kpi_app.period,13,2023,,1
+kpi_app.period,14,2023,,2
+kpi_app.period,15,2023,,3
+kpi_app.period,16,2023,,4
