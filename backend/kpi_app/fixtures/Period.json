@@ -1,0 +1,146 @@
+[
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "1",
+        	"year":  "2023",
+        	"month":  "1",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "2",
+        	"year":  "2023",
+        	"month":  "2",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "3",
+        	"year":  "2023",
+        	"month":  "3",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "4",
+        	"year":  "2023",
+        	"month":  "4",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "5",
+        	"year":  "2023",
+        	"month":  "5",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "6",
+        	"year":  "2023",
+        	"month":  "6",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "7",
+        	"year":  "2023",
+        	"month":  "7",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "8",
+        	"year":  "2023",
+        	"month":  "8",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "9",
+        	"year":  "2023",
+        	"month":  "9",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "10",
+        	"year":  "2023",
+        	"month":  "10",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "11",
+        	"year":  "2023",
+        	"month":  "11",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "12",
+        	"year":  "2023",
+        	"month":  "12",
+        	"quarter": null
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "13",
+        	"year":  "2023",
+        	"month": null,
+        	"quarter":  "1"
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "14",
+        	"year":  "2023",
+        	"month": null,
+        	"quarter":  "2"
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "15",
+        	"year":  "2023",
+        	"month": null,
+        	"quarter":  "3"
+	}
+    },
+    {
+        "model":  "kpi_app.period",
+	"fields": {
+        	"id":  "16",
+        	"year":  "2023",
+        	"month": null,
+        	"quarter":  "4"
+	}
+    }
+]

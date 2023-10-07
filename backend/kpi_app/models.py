@@ -22,14 +22,27 @@ class Range(models.Model):
         max_length=150
     )
 
+    # defined ranges should be unique
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'min_value',
+                    'max_value',
+                    'display_value'
+                ],
+                name='unique_range_definition'
+            )
+        ]
+
     def __str__(self):
         return self.display_value
 
 
 class Periodicity(models.Model):
-    YEARLY = "Y"
-    QUARTERLY = "Q"
-    MONTHLY = "M"
+    YEARLY = "Yearly"
+    QUARTERLY = "Quarterly"
+    MONTHLY = "Monthly"
 
     PERIODICITY_CHOICES = [
         (YEARLY, "Yearly"),
@@ -57,8 +70,8 @@ class Period(models.Model):
     YEAR = datetime.date.today().year
 
     year = models.IntegerField(default=YEAR)
-    month = models.IntegerField()
-    quarter = models.IntegerField()
+    month = models.IntegerField(null=True)
+    quarter = models.IntegerField(null=True)
 
     def __str__(self):
         return f"Year: {self.year}- Month: {self.month}- Quarter: {self.quarter}"
@@ -80,8 +93,8 @@ class KPI(models.Model):
         unique=True,
         blank=False
     )
-    range_id = models.ForeignKey(Range, on_delete=models.CASCADE)
-    periodicity_id = models.ForeignKey(Periodicity, on_delete=models.CASCADE)
+    range = models.ForeignKey(Range, on_delete=models.CASCADE)
+    periodicity = models.ForeignKey(Periodicity, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -142,13 +155,14 @@ class User_Circle(models.Model):
 
 
 class Audit(models.Model):
-    circle_kpi_id = models.ForeignKey(Circle_KPI, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    period_id = models.ForeignKey(Period, on_delete=models.CASCADE)
+    circle_kpi = models.ForeignKey(Circle_KPI, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    period = models.ForeignKey(Period, on_delete=models.CASCADE)
 
     value = models.DecimalField(
         decimal_places=2,
-        max_digits=8
+        max_digits=16,
+        null=True
     )
 
     # auto_now_add -> sets time when object is 1st created.

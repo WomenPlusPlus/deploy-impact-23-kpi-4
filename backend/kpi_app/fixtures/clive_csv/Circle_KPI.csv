@@ -1,0 +1,11 @@
+model,id,circle_id,kpi_id
+kpi_app.circle_kpi,1,1,1
+kpi_app.circle_kpi,2,1,2
+kpi_app.circle_kpi,3,1,3
+kpi_app.circle_kpi,4,2,4
+kpi_app.circle_kpi,5,3,5
+kpi_app.circle_kpi,6,3,6
+kpi_app.circle_kpi,7,3,7
+kpi_app.circle_kpi,8,4,8
+kpi_app.circle_kpi,9,5,9
+kpi_app.circle_kpi,10,6,10

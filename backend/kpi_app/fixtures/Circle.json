@@ -1,0 +1,44 @@
+[
+    {
+        "model":  "kpi_app.circle",
+	"fields": {
+        	"id":  "1",
+        	"name":  "HR"
+	}
+    },
+    {
+        "model":  "kpi_app.circle",
+	"fields": {
+        	"id":  "2",
+        	"name":  "Programs - Children - Counceling"
+	}
+    },
+    {
+        "model":  "kpi_app.circle",
+	"fields": {
+        	"id":  "3",
+        	"name":  "Programs - Parents -Online"
+	}
+    },
+    {
+        "model":  "kpi_app.circle",
+	"fields": {
+        	"id":  "4",
+        	"name":  "Fundraising"
+	}
+    },
+    {
+        "model":  "kpi_app.circle",
+	"fields": {
+        	"id":  "5",
+        	"name":  "Digital"
+	}
+    },
+    {
+        "model":  "kpi_app.circle",
+	"fields": {
+        	"id":  "6",
+        	"name":  "Programs"
+	}
+    }
+]

@@ -1,0 +1,4 @@
+model,id,type,description
+kpi_app.periodicity,1,M,Data is recorded monthly
+kpi_app.periodicity,2,Q,Data is recorded quarterly
+kpi_app.periodicity,3,Y,Data is recorded annually

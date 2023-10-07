@@ -1,0 +1,92 @@
+[
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "1",
+			"name": "share of teams constituted as circles",
+			"range_id": "1",
+			"periodicity_id": "1"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "2",
+			"name": "share short tern leave",
+			"range_id": "1",
+			"periodicity_id": "1"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "3",
+			"name": "involuntary headcount change (FTE)",
+			"range_id": "1",
+			"periodicity_id": "1"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "4",
+			"name": "reachability",
+			"range_id": "1",
+			"periodicity_id": "2"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "5",
+			"name": "count sessions on .projuventute.ch",
+			"range_id": "2",
+			"periodicity_id": "1"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "6",
+			"name": "count leads",
+			"range_id": "2",
+			"periodicity_id": "1"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "7",
+			"name": "net promoter score",
+			"range_id": "1",
+			"periodicity_id": "3"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "8",
+			"name": "private donations",
+			"range_id": "2",
+			"periodicity_id": "1"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "9",
+			"name": "additional monetization/savings from CRM",
+			"range_id": "2",
+			"periodicity_id": "2"
+		}
+	},
+	{
+		"model": "kpi_app.kpi",
+		"fields": {
+			"id": "10",
+			"name": "additional monetization/savings from programs",
+			"range_id": "2",
+			"periodicity_id": "2"
+		}
+	}
+]
