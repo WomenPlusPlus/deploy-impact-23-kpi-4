@@ -68,3 +68,40 @@ class KPISerializer(serializers.ModelSerializer):
             Circle_KPI.objects.get_or_create(circles=circle, kpi=kpi)
 
         return kpi
+
+    def update(self, instance, validated_data):
+
+        # Update KPI name
+        instance.name = validated_data.get('name', instance.name)
+
+        # Update periodicity
+        periodicity_data = validated_data.get('periodicity')
+
+        if periodicity_data:
+            periodicity_obj, _ = Periodicity.objects.get_or_create(
+                **periodicity_data
+            )
+            instance.periodicity = periodicity_obj
+
+        # Update range
+        range_data = validated_data.get('range')
+
+        if range_data:
+            range_obj, _ = Range.objects.get_or_create(
+                **range_data
+            )
+            instance.range = range_obj
+
+        # Update 'kpi_circles'
+        kpi_circles_data = validated_data.get('kpi_circles')
+
+        if kpi_circles_data:
+            instance.circle.clear()
+
+            for circle in kpi_circles_data:
+                circle = Circle.objects.get(pk=circle.id)
+                instance.circle.add(circle)
+
+        instance.save()
+
+        return instance

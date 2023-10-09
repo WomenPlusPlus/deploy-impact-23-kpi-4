@@ -95,10 +95,9 @@ class KPI(models.Model):
     )
     range = models.ForeignKey(Range, on_delete=models.CASCADE)
     periodicity = models.ForeignKey(Periodicity, on_delete=models.CASCADE)
-    circles = models.ManyToManyField(
+    circle = models.ManyToManyField(
         Circle,
-        through='Circle_KPI',
-        related_name='kpis'
+        through='Circle_KPI'
     )
 
     def __str__(self):
