@@ -95,17 +95,21 @@ class KPI(models.Model):
     )
     range = models.ForeignKey(Range, on_delete=models.CASCADE)
     periodicity = models.ForeignKey(Periodicity, on_delete=models.CASCADE)
+    circle = models.ManyToManyField(
+        Circle,
+        through='Circle_KPI'
+    )
 
     def __str__(self):
         return self.name
 
 
 class Circle_KPI(models.Model):
-    circle_id = models.ForeignKey(Circle, on_delete=models.CASCADE)
-    kpi_id = models.ForeignKey(KPI, on_delete=models.CASCADE)
+    circles = models.ForeignKey(Circle, on_delete=models.CASCADE)
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Circle ID: {self.circle_id} and KPI ID: {self.kpi_id}"
+        return f"Circle ID: {self.circles} and KPI ID: {self.kpi}"
 
 
 class Role(models.Model):
