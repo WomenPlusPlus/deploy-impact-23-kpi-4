@@ -13,7 +13,7 @@ This document provides an overview of the database schema used to store form dat
 7. **Circle_KPI**: Represents the relationship between circles and KPIs.
 8. **Period**: Represents the time period for which data is recorded.
 9. **Audit**: Contains the actual KPI values for specific periods.
-10. **Periodicity**: Represents the frequency with which KPIs are recorded (e.g., monthly, quarterly).
+10. **Frequency**: Represents the frequency with which KPIs are recorded (e.g., monthly, quarterly).
 
 ## Detailed Table Descriptions:
 
@@ -52,8 +52,10 @@ This document provides an overview of the database schema used to store form dat
 
 - **id**: Unique identifier for the KPI.
 - **name**: Name of the KPI (e.g., "share of teams constituted as circles").
+- **sample_value**: Sample value for the KPI.
+- **description**: Description of the KPI.
 - **range_id**: Foreign key referencing the Range table.
-- **periodicity_id**: Foreign key referencing the Periodicity table.
+- **frequency_id**: Foreign key referencing the Frequency table.
 
 ### 7. Circle_KPI
 
@@ -78,11 +80,11 @@ This document provides an overview of the database schema used to store form dat
 - **created_timestamp**: Timestamp when the entry was created.
 - **updated_timestamp**: Timestamp when the entry was last updated.
 
-### 10. Periodicity
+### 10. Frequency
 
-- **id**: Unique identifier for the periodicity.
-- **type**: Type of periodicity (e.g., "month", "quarter").
-- **description**: Description of the periodicity.
+- **id**: Unique identifier for the frequency.
+- **type**: Type of frequency (e.g., "month", "quarter").
+- **description**: Description of the frequency.
 
 ---
 

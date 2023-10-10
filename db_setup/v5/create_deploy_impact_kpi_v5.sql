@@ -34,10 +34,10 @@ CREATE TABLE User_Circle (
     circle_id INTEGER REFERENCES Circle(id)
 );
 
--- Periodicity Table
-CREATE TABLE Periodicity (
+-- Frequency Table
+CREATE TABLE Frequency (
     id SERIAL PRIMARY KEY,
-    type VARCHAR NOT NULL UNIQUE,
+    type VARCHAR UNIQUE NOT NULL,
     description VARCHAR
 );
 
@@ -45,8 +45,10 @@ CREATE TABLE Periodicity (
 CREATE TABLE KPI (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    sample_value DECIMAL NOT NULL,
+    description VARCHAR,
     range_id INTEGER REFERENCES Range(id),
-    periodicity_id INTEGER REFERENCES Periodicity(id)
+    frequency_id INTEGER REFERENCES Frequency(id)
 );
 
 -- Circle_KPI Table

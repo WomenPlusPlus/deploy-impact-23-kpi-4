@@ -1,6 +1,6 @@
 # Data Validation Documentation
 
-_Version: 1.0_  
+_Version: 1.1_  
 _Last Updated: Oct 10, 2023_
 
 This document provides detailed guidelines on how to implement data validation for the provided database schema.
@@ -67,6 +67,16 @@ This document provides detailed guidelines on how to implement data validation f
   - Cannot be null. Ensure value exists before insertion.
   - Maximum length: 255 characters. Check length before insertion.
 
+### `sample_value`
+- **Type**: DECIMAL
+- **Constraints**:
+  - Cannot be null. Ensure value exists before insertion.
+
+### `description`
+- **Type**: VARCHAR
+- **Constraints**:
+  - Maximum length: 255 characters. Check length before insertion.
+
 ## 6. Period Table
 
 ### `year`
@@ -99,7 +109,7 @@ This document provides detailed guidelines on how to implement data validation f
   - Cannot be null. Auto-generate on insertion and update.
   - Valid timestamp format. Use date libraries for validation.
 
-## 8. Periodicity Table
+## 8. Frequency Table
 
 ### `type`
 - **Type**: VARCHAR
@@ -112,7 +122,6 @@ This document provides detailed guidelines on how to implement data validation f
 - **Type**: VARCHAR
 - **Constraints**:
   - Maximum length: 255 characters. Check length before insertion.
-
 ---
 
 **Note**: Always validate data on both frontend and backend for data integrity and security.
