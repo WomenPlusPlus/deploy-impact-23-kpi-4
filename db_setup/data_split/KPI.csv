@@ -1,11 +1,11 @@
-id,name,range_id,periodicity_id
-1,share of teams constituted as circles,1,1
-2,share short tern leave,1,1
-3,involuntary headcount change (FTE),1,1
-4,reachability,1,2
-5,count sessions on .projuventute.ch,2,1
-6,count leads,2,1
-7,net promoter score,1,3
-8,private donations,2,1
-9,additional monetization/savings from CRM,2,2
-10,additional monetization/savings from programs,2,2
+id,name,range_id,frequency_id,sample_value,description
+1,share of teams constituted as circles,1,1,50,The percentage of teams that are a part of circles.
+2,share short tern leave,1,1,2.04,The percentage of employees taking short-term leaves.
+3,involuntary headcount change (FTE),1,1,2.26,The percentage change in full-time employees due to involuntary reasons.
+4,reachability,1,2,44.9,The percentage of children who can access counseling services.
+5,count sessions on .projuventute.ch,2,1,158611,The number of online sessions accessed by parents on the specified website.
+6,count leads,2,1,825,The number of potential customers or inquiries.
+7,net promoter score,1,3,35,A metric measuring the likelihood of customers to recommend the service.
+8,private donations,2,1,1923875,The amount of money donated privately.
+9,additional monetization/savings from CRM,2,2,51000,Additional revenue or savings generated from the Customer Relationship Management system.
+10,additional monetization/savings from programs,2,2,186258,Additional revenue or savings generated from various programs.
