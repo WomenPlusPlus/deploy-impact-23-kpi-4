@@ -1,0 +1,12 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: local('Montserrat'), url(./fonts/Montserrat.ttf) format('ttf');
+}
