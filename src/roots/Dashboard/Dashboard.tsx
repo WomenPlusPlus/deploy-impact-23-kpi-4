@@ -1,8 +1,11 @@
 import { ConfigProvider } from 'antd'
 import './Dashboard.css'
 import Button from '../../components/Button/Button'
+import { useAuth } from '../../hooks/useAuth'
 
 const Dashboard = () => {
+  const  { user } = useAuth()
+
   return (
     <ConfigProvider
       theme={{

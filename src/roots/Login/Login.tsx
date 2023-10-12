@@ -1,19 +1,9 @@
-import Button from '../../components/Button/Button'
-import { Input, Form, ConfigProvider } from 'antd'
+import { ConfigProvider } from 'antd'
 import logo from '../../assets/logo.png'
 import './Login.css'
-import { useAuth } from '../../hooks/useAuth'
-import KpiUser from '../../components/KpiUser'
+import GoogleLogin from '../../components/GoogleLogin/GoogleLogin'
 
 const Login = () => {
-  const { login } = useAuth()
-
-  const loginHandle = (values: { email: string}) => {
-    if (login) {
-      login(values)
-    }
-  }
-
   return (
     <ConfigProvider
       theme={{
@@ -53,24 +43,7 @@ const Login = () => {
         </div>
         <div className="login-box">
           <p className="title">Login with SSO</p>
-          <KpiUser />
-          <p className="description">Please enter your work email</p>
-
-          <Form onFinish={loginHandle}>
-            <Form.Item name='email' rules={[{ type: 'email' }]}>
-              <Input style={{ width: '360px' }} placeholder="user@email.com" />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                text="Login"
-                props={{
-                  htmlType: 'submit',
-                  type: 'primary',
-                  style: { width: '100%' },
-                }}
-              />
-            </Form.Item>
-          </Form>
+          <GoogleLogin />
         </div>
       </div>
     </ConfigProvider>

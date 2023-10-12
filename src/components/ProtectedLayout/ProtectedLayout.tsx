@@ -11,9 +11,9 @@ import {
 
 } from '@ant-design/icons'
 import logo from '../../assets/logo.png'
-import { getMenuItems } from '../../utils'
+import { getMenuItems } from '../../utils/utils'
 import type { MenuProps } from 'antd'
-import './ProtextedLayout.css'
+import './ProtectedLayout.css'
 type MenuItem = Required<MenuProps>['items'][number];
 
 const ProtectedLayout = () => {
@@ -74,7 +74,7 @@ const ProtectedLayout = () => {
                   height: 64,
                 }}
               />
-              <p className='welcome'>Welcome, user</p>
+              <p className='welcome'>Welcome, {user?.email}</p>
             </Header>
             <Content className='content'>
               <Outlet />

@@ -42,16 +42,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm"
-            columns: ["permission_id"]
-            referencedRelation: "auth_permission"
-            referencedColumns: ["id"]
+            foreignKeyName: 'auth_group_permissio_permission_id_84c5c92e_fk_auth_perm'
+            columns: ['permission_id']
+            referencedRelation: 'auth_permission'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id"
-            columns: ["group_id"]
-            referencedRelation: "auth_group"
-            referencedColumns: ["id"]
+            foreignKeyName: 'auth_group_permissions_group_id_b120cbf9_fk_auth_group_id'
+            columns: ['group_id']
+            referencedRelation: 'auth_group'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -76,10 +76,10 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "auth_permission_content_type_id_2f476e4b_fk_django_co"
-            columns: ["content_type_id"]
-            referencedRelation: "django_content_type"
-            referencedColumns: ["id"]
+            foreignKeyName: 'auth_permission_content_type_id_2f476e4b_fk_django_co'
+            columns: ['content_type_id']
+            referencedRelation: 'django_content_type'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -116,16 +116,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "django_admin_log_content_type_id_c4bce8eb_fk_django_co"
-            columns: ["content_type_id"]
-            referencedRelation: "django_content_type"
-            referencedColumns: ["id"]
+            foreignKeyName: 'django_admin_log_content_type_id_c4bce8eb_fk_django_co'
+            columns: ['content_type_id']
+            referencedRelation: 'django_content_type'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "django_admin_log_user_id_c564eba6_fk_kpi_app_user_id"
-            columns: ["user_id"]
-            referencedRelation: "kpi_app_user"
-            referencedColumns: ["id"]
+            foreignKeyName: 'django_admin_log_user_id_c564eba6_fk_kpi_app_user_id'
+            columns: ['user_id']
+            referencedRelation: 'kpi_app_user'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -231,22 +231,22 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_audit_circle_kpi_id_0e19418e_fk_kpi_app_circle_kpi_id"
-            columns: ["circle_kpi_id"]
-            referencedRelation: "kpi_app_circle_kpi"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_audit_circle_kpi_id_0e19418e_fk_kpi_app_circle_kpi_id'
+            columns: ['circle_kpi_id']
+            referencedRelation: 'kpi_app_circle_kpi'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_audit_period_id_2b22ccff_fk_kpi_app_period_id"
-            columns: ["period_id"]
-            referencedRelation: "kpi_app_period"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_audit_period_id_2b22ccff_fk_kpi_app_period_id'
+            columns: ['period_id']
+            referencedRelation: 'kpi_app_period'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_audit_user_id_0c730a00_fk_kpi_app_user_id"
-            columns: ["user_id"]
-            referencedRelation: "kpi_app_user"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_audit_user_id_0c730a00_fk_kpi_app_user_id'
+            columns: ['user_id']
+            referencedRelation: 'kpi_app_user'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -283,16 +283,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_circle_kpi_circle_id_id_b2838ae2_fk_kpi_app_circle_id"
-            columns: ["circle_id_id"]
-            referencedRelation: "kpi_app_circle"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_circle_kpi_circle_id_id_b2838ae2_fk_kpi_app_circle_id'
+            columns: ['circle_id_id']
+            referencedRelation: 'kpi_app_circle'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_circle_kpi_kpi_id_id_cc4b65e9_fk_kpi_app_kpi_id"
-            columns: ["kpi_id_id"]
-            referencedRelation: "kpi_app_kpi"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_circle_kpi_kpi_id_id_cc4b65e9_fk_kpi_app_kpi_id'
+            columns: ['kpi_id_id']
+            referencedRelation: 'kpi_app_kpi'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -317,16 +317,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_kpi_periodicity_id_a8778d2d_fk_kpi_app_periodicity_id"
-            columns: ["periodicity_id"]
-            referencedRelation: "kpi_app_periodicity"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_kpi_periodicity_id_a8778d2d_fk_kpi_app_periodicity_id'
+            columns: ['periodicity_id']
+            referencedRelation: 'kpi_app_periodicity'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_kpi_range_id_8de87dce_fk_kpi_app_range_id"
-            columns: ["range_id"]
-            referencedRelation: "kpi_app_range"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_kpi_range_id_8de87dce_fk_kpi_app_range_id'
+            columns: ['range_id']
+            referencedRelation: 'kpi_app_range'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -453,10 +453,10 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_user_role_id_id_a0e2af70_fk_kpi_app_role_id"
-            columns: ["role_id_id"]
-            referencedRelation: "kpi_app_role"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_role_id_id_a0e2af70_fk_kpi_app_role_id'
+            columns: ['role_id_id']
+            referencedRelation: 'kpi_app_role'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -478,16 +478,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_user_circle_circle_id_id_85c67dc1_fk_kpi_app_circle_id"
-            columns: ["circle_id_id"]
-            referencedRelation: "kpi_app_circle"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_circle_circle_id_id_85c67dc1_fk_kpi_app_circle_id'
+            columns: ['circle_id_id']
+            referencedRelation: 'kpi_app_circle'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_user_circle_user_id_id_1e2561c6_fk_kpi_app_user_id"
-            columns: ["user_id_id"]
-            referencedRelation: "kpi_app_user"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_circle_user_id_id_1e2561c6_fk_kpi_app_user_id'
+            columns: ['user_id_id']
+            referencedRelation: 'kpi_app_user'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -509,16 +509,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_user_groups_group_id_8cb2d405_fk_auth_group_id"
-            columns: ["group_id"]
-            referencedRelation: "auth_group"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_groups_group_id_8cb2d405_fk_auth_group_id'
+            columns: ['group_id']
+            referencedRelation: 'auth_group'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_user_groups_user_id_487911c2_fk_kpi_app_user_id"
-            columns: ["user_id"]
-            referencedRelation: "kpi_app_user"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_groups_user_id_487911c2_fk_kpi_app_user_id'
+            columns: ['user_id']
+            referencedRelation: 'kpi_app_user'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -540,16 +540,16 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "kpi_app_user_user_pe_permission_id_c4e38da0_fk_auth_perm"
-            columns: ["permission_id"]
-            referencedRelation: "auth_permission"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_user_pe_permission_id_c4e38da0_fk_auth_perm'
+            columns: ['permission_id']
+            referencedRelation: 'auth_permission'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "kpi_app_user_user_pe_user_id_dd9f0cc3_fk_kpi_app_u"
-            columns: ["user_id"]
-            referencedRelation: "kpi_app_user"
-            referencedColumns: ["id"]
+            foreignKeyName: 'kpi_app_user_user_pe_user_id_dd9f0cc3_fk_kpi_app_u'
+            columns: ['user_id']
+            referencedRelation: 'kpi_app_user'
+            referencedColumns: ['id']
           }
         ]
       }
