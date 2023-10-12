@@ -1,12 +1,17 @@
-import Button from '../../components/Button'
+import Button from '../../components/Button/Button'
 import { Input, Form, ConfigProvider } from 'antd'
 import logo from '../../assets/logo.png'
 import './Login.css'
+import { useAuth } from '../../hooks/useAuth'
 import KpiUser from '../../components/KpiUser'
 
 const Login = () => {
-  const loginHandle = () => {
-    // Login functionality
+  const { login } = useAuth()
+
+  const loginHandle = (values: { email: string}) => {
+    if (login) {
+      login(values)
+    }
   }
 
   return (
@@ -52,7 +57,7 @@ const Login = () => {
           <p className="description">Please enter your work email</p>
 
           <Form onFinish={loginHandle}>
-            <Form.Item rules={[{ type: 'email' }]}>
+            <Form.Item name='email' rules={[{ type: 'email' }]}>
               <Input style={{ width: '360px' }} placeholder="user@email.com" />
             </Form.Item>
             <Form.Item>

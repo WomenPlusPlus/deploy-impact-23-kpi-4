@@ -1,7 +1,8 @@
 body, html {
   margin: 0;
   padding: 0;
-  height: 100vh;  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
