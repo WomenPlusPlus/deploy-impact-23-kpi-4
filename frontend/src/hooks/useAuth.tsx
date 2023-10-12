@@ -1,17 +1,19 @@
 import React, { createContext, useContext, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLocalStorage } from './useLocalStorage'
+import { supabase } from '../lib/api'
+import { User } from '@supabase/gotrue-js/src/lib/types'
 
 export type ContextType = {
-    user?: object | null;
-    login?: (data: object) => void;
+    user?: User | null;
+    login?: (data: User) => void;
     logout?: () => void;
 }
 
 const AuthContext = createContext<ContextType>({})
 
 type Props = {
-    userData: object | null,
+    userData: User | null,
     children: React.ReactNode
 }
 
@@ -19,13 +21,14 @@ export const AuthProvider: React.FC<Props>  = ({ userData, children }) => {
   const [user, setUser] = useLocalStorage('user', userData)
   const navigate = useNavigate()
 
-  const login = (data: object) => {
+  const login = (data: User) => {
     setUser(data)
     navigate('/dashboard')
   }
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null)
+    await supabase.auth.signOut()
     navigate('/login')
   }
 
