@@ -1,0 +1,34 @@
+.title-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.sider-logo {
+    width: 60px;
+    height: 60px;
+}
+
+.welcome {
+    margin-right: 40px;
+}
+.header {
+    padding: 0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.content {
+    margin: 24px 16px;
+    padding: 24px;
+    height: 100%;
+    background-color: white
+}
