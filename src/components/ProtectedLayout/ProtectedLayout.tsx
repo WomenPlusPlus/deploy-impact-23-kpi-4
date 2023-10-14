@@ -74,7 +74,7 @@ const ProtectedLayout = () => {
                   height: 64,
                 }}
               />
-              <p className='welcome'>Welcome, {user?.email}</p>
+              <p className='welcome'>Welcome, {user?.email} - {user?.role}</p>
             </Header>
             <Content className='content'>
               <Outlet />
