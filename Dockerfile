@@ -1,4 +1,4 @@
-FROM node:15.4 as build 
+FROM node:18.16 as build 
 
 WORKDIR /react-app
 COPY package*.json .
