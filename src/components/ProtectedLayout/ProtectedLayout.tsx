@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { Layout, Menu, Button, ConfigProvider } from 'antd'
@@ -8,7 +8,7 @@ import {
   MenuUnfoldOutlined,
   LogoutOutlined,
   DashboardOutlined,
-
+  UserOutlined,
 } from '@ant-design/icons'
 import logo from '../../assets/logo.png'
 import { getMenuItems } from '../../utils/utils'
@@ -17,6 +17,7 @@ import './ProtectedLayout.css'
 type MenuItem = Required<MenuProps>['items'][number];
 
 const ProtectedLayout = () => {
+  const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
   const { user, logout } = useAuth()
 
@@ -24,9 +25,14 @@ const ProtectedLayout = () => {
     return <Navigate to="/login" />
   }
 
+  const navigateToPage = (page: string) => () => {
+    navigate(`/${page}`)
+  }
+
   const items: MenuItem[] = [
-    getMenuItems('Dashboard', '1', <DashboardOutlined style={{ fontSize: 20 }}/>),
-    getMenuItems('Logout', '2', <LogoutOutlined style={{ fontSize: 20 }} />, logout),
+    getMenuItems('Dashboard', '1', <DashboardOutlined style={{ fontSize: 20 }}/>, navigateToPage('dashboard')),
+    getMenuItems('Users', '2', <UserOutlined style={{ fontSize: 20 }}/>, navigateToPage('users')),
+    getMenuItems('Logout', '3', <LogoutOutlined style={{ fontSize: 20 }} />, logout),
   ]
 
   return (
@@ -49,8 +55,8 @@ const ProtectedLayout = () => {
           }
         }}
       >
-        <Layout style={{ height:'100vh' }}>
-          <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Sider style={{ minHeight: '100vh' }} trigger={null} collapsible collapsed={collapsed}>
             <div className="logo-container">
               <img className='sider-logo' src={logo} alt="Pro Juventute Logo" />
             </div>

@@ -16,6 +16,7 @@ import Login from './roots/Login/Login'
 import ProtectedLayout from './components/ProtectedLayout/ProtectedLayout'
 import PublicLayout from './components/PublicLayout/PublicLayout'
 import AuthLayout from './components/AuthLayout/AuthLayout'
+import Users from './roots/Users/Users'
 
 // this is a fake api to simulate authentication
 const getUserData = ()  =>
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/" element={<ProtectedLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/users" element={<Users />} />
       </Route>
     </Route>
   )
