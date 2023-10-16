@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Table, Tag, Spin } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import { User } from '../../types/users.types'
 import { fetchUsers } from '../../utils/apiRequests'
+
+export type User = {
+  id: string,
+  email: string;
+  role: string
+}
 
 /* Component that displays all the users with their role in a table for the gatekeeper to see */
 const Users = () => {
