@@ -3,17 +3,15 @@ import React  from 'react'
 
 interface Button {
     text: string,
-    props: object
+    onClick: () => void
+    props: object,
 }
 
 /**
  * Custom component for Button that sets ConfigProvider with desired properties from our theme (eg: bgColor) in all the app ...
  * ... so we don't need to add ConfigProvider every time we use the Button component from antd
- * @param text
- * @param props
- * @constructor
  */
-const Button: React.FC<Button> = ({ text, props }) => {
+const Button: React.FC<Button> = ({ text, onClick, props }) => {
   return (
     <ConfigProvider
       theme={{
@@ -29,7 +27,7 @@ const Button: React.FC<Button> = ({ text, props }) => {
       }}
     >
       <div>
-        <Btn {...props}>{text}</Btn>
+        <Btn {...props} onClick={onClick}>{text}</Btn>
       </div>
     </ConfigProvider>
   )

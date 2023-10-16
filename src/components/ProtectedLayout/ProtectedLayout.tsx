@@ -55,8 +55,8 @@ const ProtectedLayout = () => {
           }
         }}
       >
-        <Layout style={{ height:'100vh' }}>
-          <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Sider style={{ minHeight: '100vh' }} trigger={null} collapsible collapsed={collapsed}>
             <div className="logo-container">
               <img className='sider-logo' src={logo} alt="Pro Juventute Logo" />
             </div>

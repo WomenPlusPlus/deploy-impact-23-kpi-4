@@ -21,9 +21,10 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (circle_id)
+        circle (id, name)
       `)
 
+  console.log(data)
   return data && data.map((value) => {
     return {
       key: value.id,
@@ -32,7 +33,7 @@ export const fetchKpis = async () => {
       sampleValue: value.sample_value,
       frequency: value?.frequency?.type || undefined,
       range: value?.range?.display_value || undefined,
-      circle: value?.circle_kpi[0]?.circle_id || undefined
+      circle: value?.circle[0]?.name || undefined
     }
   })
 
