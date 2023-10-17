@@ -11,6 +11,8 @@ kill_timeout = 5
 processes = []
 
 [env]
+REACT_APP_SUPABASE_URL = "https://rwgvhztztzdcbwolbkfw.supabase.co"
+REACT_APP_PUBLIC_SITE_URL = https://kpi4-dev.fly.dev
 
 [experimental]
   allowed_public_ports = []
