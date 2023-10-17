@@ -1,10 +1,11 @@
-import { ConfigProvider, Spin, Table, Modal } from 'antd'
+import { ConfigProvider, Spin, Table } from 'antd'
 import './Dashboard.css'
 import Button from '../../components/Button/Button'
 import { useEffect, useState } from 'react'
 import { fetchKpis } from '../../utils/apiRequests'
 import { ColumnsType } from 'antd/es/table'
-import KPIForm from '../../components/KPIForm/KPIForm'
+import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
+import { useNotifications } from '../../hooks/useNotifications'
 
 export type Kpi = {
   id: number,
@@ -47,25 +48,28 @@ const columns: ColumnsType<Kpi> = [
 const Dashboard = () => {
   const [kpis, setKpis] = useState<Kpi[] | null>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { openNotificationWithIcon, contextHolder }  = useNotifications()
 
   useEffect(() => {
-    const kpisRequest = async () => {
-      const kpisFromRequest = await fetchKpis()
-      setKpis(kpisFromRequest)
+    try {
+      const kpisRequest = async () => {
+        const kpisFromRequest = await fetchKpis()
+        setKpis(kpisFromRequest)
+      }
+
+      kpisRequest()
+    } catch (e) {
+      openNotificationWithIcon(
+        'error',
+        'Fetch KPIs Error',
+        'Error while fetching the KPIs. Please try again later.'
+      )
     }
-    kpisRequest()
+
   }, [])
 
   const showModal = () => {
     setIsModalOpen(true)
-  }
-
-  const handleOk = () => {
-    setIsModalOpen(false)
-  }
-
-  const handleCancel = () => {
-    setIsModalOpen(false)
   }
 
 
@@ -79,13 +83,12 @@ const Dashboard = () => {
         },
       }}
     >
+      { contextHolder }
       <div className='title-button'>
         <p className='title'>All KPIs</p>
         <Button text='Add New KPI' props={{ type: 'primary' }} onClick={showModal}/>
       </div>
-      <Modal title="New KPI Form" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <KPIForm />
-      </Modal>
+      <AddKPIModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
       {
         kpis && kpis.length > 0 ?
           <Table dataSource={kpis} columns={columns} /> : <Spin style={{ display: 'flex', justifyContent: 'center' }} />

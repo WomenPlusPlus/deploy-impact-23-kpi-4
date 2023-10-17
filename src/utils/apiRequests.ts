@@ -24,7 +24,6 @@ export const fetchKpis = async () => {
         circle (id, name)
       `)
 
-  console.log(data)
   return data && data.map((value) => {
     return {
       key: value.id,
@@ -36,6 +35,13 @@ export const fetchKpis = async () => {
       circle: value?.circle[0]?.name || undefined
     }
   })
+}
 
+export const fetchEconomists = async () => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, email, role')
+    .eq('role', 'gatekeeper') // change this in economists - for now we don't have economists and I didn't wanted to have an empty list
 
+  return data
 }

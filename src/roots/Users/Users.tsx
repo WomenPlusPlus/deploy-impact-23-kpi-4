@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Table, Tag, Spin } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { fetchUsers } from '../../utils/apiRequests'
+import { useNotifications } from '../../hooks/useNotifications'
 
 export type User = {
   id: string,
@@ -31,18 +32,28 @@ const columns: ColumnsType<User> = [
 /* Component that displays all the users with their role in a table for the gatekeeper to see */
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>([])
+  const { openNotificationWithIcon, contextHolder }  = useNotifications()
 
   useEffect(() => {
-    const usersRequest = async () =>  {
-      const usersFromSupabase = await fetchUsers()
-      setUsers(usersFromSupabase)
-    }
+    try {
+      const usersRequest = async () =>  {
+        const usersFromSupabase = await fetchUsers()
+        setUsers(usersFromSupabase)
+      }
 
-    usersRequest()
+      usersRequest()
+    } catch (e) {
+      openNotificationWithIcon(
+        'error',
+        'Fetch Users Error',
+        'Error while fetching the users. Please try again later.'
+      )
+    }
   }, [])
 
   return (
     <div>
+      { contextHolder }
       <p className='title'>All Users</p>
       {
         users && users.length > 0 ?
