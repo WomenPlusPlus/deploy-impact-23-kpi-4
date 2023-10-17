@@ -29,6 +29,8 @@ const GoogleLogin: React.FC = () => {
     return () => subscription.unsubscribe()
   }, [])
 
+  console.log(window.location.origin)
+
   return (
     <Auth
       supabaseClient={supabase}
@@ -38,7 +40,7 @@ const GoogleLogin: React.FC = () => {
         access_type: 'offline',
         prompt: 'consent',
       }}
-      redirectTo={getURL() + 'login'}
+      redirectTo={window.location.origin}
       onlyThirdPartyProviders
     />
   )
