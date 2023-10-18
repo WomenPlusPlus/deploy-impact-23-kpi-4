@@ -41,7 +41,7 @@ interface FrequencySelectOptionsI {
 
 const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsModalOpen }) => {
   // Select options state
-  const [economists, setEconomists] = useState<EconomistSelectOptionsI[]>([])
+  const [economistsOptions, setEconomistsOptions] = useState<EconomistSelectOptionsI[]>([])
   const [circlesOptions, setCirclesOptions] = useState<CircleSelectOptionsI[]>([])
   const [frequencyOptions , setFrequencyOptions] = useState<FrequencySelectOptionsI[]>([])
 
@@ -60,11 +60,11 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
   const circles = useSelector((state: RootState) => state.kpis.circles)
 
   /** Function used to fetch the economists when the user focuses on the economists select input */
-  const handleEconomistsSelectFocus = async () => {
+  const handleEconomistsFocus = async () => {
     setEconomistsLoading(true)
 
     try {
-      const economistsFromSupabase = await fetchUsersByRole(roles.ECONOMIST)
+      const economistsFromSupabase = await fetchUsersByRole(roles.GATEKEEPER) // change to economists
       const economistsSelectOptions: EconomistSelectOptionsI[] = []
 
       if (economistsFromSupabase) {
@@ -73,7 +73,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
         }
       }
 
-      setEconomists(economistsSelectOptions)
+      setEconomistsOptions(economistsSelectOptions)
       setEconomistsLoading(false)
     } catch (e) {
       openNotificationWithIcon(
@@ -287,9 +287,9 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
             rules={[{ required: true, message: 'Please select the economist!' }]}
           >
             <Select
-              onFocus={handleEconomistsSelectFocus}
+              onFocus={handleEconomistsFocus}
               loading={economistsLoading}
-              options={economists}
+              options={economistsOptions}
             />
           </Form.Item>
         </Form>
