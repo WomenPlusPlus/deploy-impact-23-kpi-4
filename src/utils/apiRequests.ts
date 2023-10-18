@@ -9,9 +9,7 @@ export const fetchUsers = async () => {
     .from('users')
     .select('id, email, role')
 
-  return data && data.map((item) => {
-    return { ...item, key: item.id }
-  })
+  return data
 }
 
 /* Supabase request for fetching kpis ordered descending by created_at value */
@@ -28,25 +26,15 @@ export const fetchKpis = async () => {
       `)
     .order('created_at', { ascending: false })
 
-  return data && data.map((value) => {
-    return {
-      key: value.id,
-      id: value.id,
-      name: value.name,
-      sampleValue: value.sample_value,
-      frequency: value?.frequency?.type || undefined,
-      range: value?.range?.display_value || undefined,
-      circle: value?.circle[0]?.name || undefined
-    }
-  })
+  return data
 }
 
-/* Supabase request for fetching economists */
-export const fetchEconomists = async () => {
+/* Supabase request for fetching users with specific role */
+export const fetchUsersByRole = async (role: string) => {
   const { data } = await supabase
     .from('users')
     .select('id, email, role')
-    .eq('role', 'gatekeeper') // change this in economists - for now we don't have economists and I didn't wanted to have an empty list
+    .eq('role', role)
 
   return data
 }
@@ -69,7 +57,7 @@ export const fetchFrequency = async () => {
   return data
 }
 
-/* Check if selected range values already exists in supabase
+/* Check if selected range values already exist in supabase
 *  If yes get the range id, otherwise make a supabase upsert with the new range values and get the id */
 const getRangeId = async (minValue: number, maxValue: number, displayValue: string) => {
   let rangeId
@@ -93,8 +81,6 @@ const getRangeId = async (minValue: number, maxValue: number, displayValue: stri
         min_value: Number(minValue),
         max_value: Number(maxValue),
         display_value: displayValue,
-        created_at: undefined,
-        id: undefined
       },
       {
         onConflict: ['min_value', 'max_value', 'display_value'],
@@ -155,5 +141,15 @@ export const addKPI = async (values: FieldType) => {
     await addCircleKpi(newKpi[0].id, values.circle_id)
   }
 
+  return newKpi
 }
 
+/** Supabase request to get a specific range by giving the id as parameter*/
+export const getRangeById = async (id: number) => {
+  const { data: range } = await supabase
+    .from('range')
+    .select()
+    .eq('id', id)
+
+  return range
+}

@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { Form, Input, Modal, Select, Button, Space } from 'antd'
-import { fetchCircles, fetchEconomists, fetchFrequency, addKPI } from '../../utils/apiRequests'
+import { fetchCircles, fetchUsersByRole, fetchFrequency, addKPI, getRangeById } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
+import { useDispatch, useSelector } from 'react-redux'
+import { addStateKpi, setCircles, setFrequencies } from '../../store/kpiSlice'
+import { RootState } from '../../store/store'
+import { KpiSupabase, roles } from '../../types/types'
 
 export type FieldType = {
   circle_id: number;
@@ -36,23 +40,31 @@ interface FrequencySelectOptionsI {
 }
 
 const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsModalOpen }) => {
+  // Select options state
   const [economists, setEconomists] = useState<EconomistSelectOptionsI[]>([])
-  const [circles, setCircles] = useState<CircleSelectOptionsI[]>([])
-  const [frequencies, setFrequencies] = useState<FrequencySelectOptionsI[]>([])
+  const [circlesOptions, setCirclesOptions] = useState<CircleSelectOptionsI[]>([])
+  const [frequencyOptions , setFrequencyOptions] = useState<FrequencySelectOptionsI[]>([])
 
+  // Loading state
   const [economistsLoading, setEconomistsLoading] = useState(false)
   const [circlesLoading, setCirclesLoading] = useState(false)
   const [frequencyLoading, setFrequencyLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
+  // Hooks
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
+  const dispatch = useDispatch()
+
+  // Selectors
+  const frequencies = useSelector((state: RootState) => state.kpis.frequencies)
+  const circles = useSelector((state: RootState) => state.kpis.circles)
 
   /** Function used to fetch the economists when the user focuses on the economists select input */
   const handleEconomistsSelectFocus = async () => {
     setEconomistsLoading(true)
 
     try {
-      const economistsFromSupabase = await fetchEconomists()
+      const economistsFromSupabase = await fetchUsersByRole(roles.ECONOMIST)
       const economistsSelectOptions: EconomistSelectOptionsI[] = []
 
       if (economistsFromSupabase) {
@@ -82,12 +94,13 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
       const circlesSelectOptions: CircleSelectOptionsI[] = []
 
       if (circlesFromSupabase) {
+        dispatch(setCircles(circlesFromSupabase))
         for (let i = 0; i < circlesFromSupabase.length; i++) {
           circlesSelectOptions.push({ label: circlesFromSupabase[i].name, value: circlesFromSupabase[i].id })
         }
-      }
 
-      setCircles(circlesSelectOptions)
+        setCirclesOptions(circlesSelectOptions)
+      }
       setCirclesLoading(false)
     } catch (e) {
       openNotificationWithIcon(
@@ -108,12 +121,14 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
       const frequenciesSelectOptions: FrequencySelectOptionsI[] = []
 
       if (frequenciesFromSupabase) {
+        dispatch(setFrequencies(frequenciesFromSupabase))
+
         for (let i = 0; i < frequenciesFromSupabase.length; i++) {
           frequenciesSelectOptions.push({ label: frequenciesFromSupabase[i].type, value: frequenciesFromSupabase[i].id })
         }
-      }
 
-      setFrequencies(frequenciesSelectOptions)
+        setFrequencyOptions(frequenciesSelectOptions)
+      }
       setFrequencyLoading(false)
     } catch (e) {
       openNotificationWithIcon(
@@ -125,19 +140,43 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
     }
   }
 
+  /** Function that updates the state of Kpis in order to populate the table with newly added kpi */
+  const updateKpiState = async (newKpi: KpiSupabase[], values: FieldType) => {
+    const range = await getRangeById(newKpi[0].range_id)
+    const frequency = frequencies.filter(frequency => frequency.id === values.frequency_id)
+    const circle = circles.filter(circle => circle.id === values.circle_id)
+
+    const stateKpi = {
+      id: newKpi[0].id,
+      key: newKpi[0].id,
+      name: newKpi[0].name,
+      sampleValue: newKpi[0].sample_value,
+      range: range && range[0].display_value,
+      frequency: frequency[0].type,
+      circle: circle[0].name
+    }
+
+    dispatch(addStateKpi(stateKpi))
+  }
+
   const handleSubmit = async (values: FieldType) => {
     setSubmitLoading(true)
     try {
-      await addKPI(values)
+      const newKpi = await addKPI(values)
+      if (newKpi) {
+        await updateKpiState(newKpi, values)
+      }
+
       setIsModalOpen(false)
+
       openNotificationWithIcon(
         'success',
         'KPI Insertion',
         'You successfully added a new KPI!'
       )
+
       setSubmitLoading(false)
     } catch (e) {
-      console.log(e, 'error')
       openNotificationWithIcon(
         'error',
         'KPI Insertion',
@@ -181,7 +220,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
             <Select
               onFocus={handleCirclesFocus}
               loading={circlesLoading}
-              options={circles}
+              options={circlesOptions}
             />
           </Form.Item>
 
@@ -207,7 +246,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
             <Select
               onFocus={handleFrequency}
               loading={frequencyLoading}
-              options={frequencies}
+              options={frequencyOptions}
             />
           </Form.Item>
 
