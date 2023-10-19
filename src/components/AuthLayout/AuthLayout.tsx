@@ -1,24 +1,20 @@
-import { useLoaderData, Outlet, Await } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { AuthProvider } from '../../hooks/useAuth'
-import { Suspense } from 'react'
-import { Spin, Alert } from 'antd'
-const AuthLayout = () => {
+import { useEffect, useState } from 'react'
+import { User } from '@supabase/gotrue-js/src/lib/types'
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const { userPromise } = useLoaderData()
+const AuthLayout = () => {
+  const [ user, setUser ] = useState<User | null>(null)
+
+  useEffect(() => {
+    const userFromLocalStorage = window.localStorage.getItem('user')
+    if (userFromLocalStorage) {
+      setUser(JSON.parse(userFromLocalStorage))
+    }
+  }, [])
 
   return (
-    <Suspense fallback={<Spin />}>
-      <Await
-        resolve={userPromise}
-        errorElement={<Alert type="error" message="Something went wrong" />}
-      >
-        {(user) => {
-          return  <AuthProvider userData={user}><Outlet/></AuthProvider>
-        }}
-      </Await>
-    </Suspense>
+    <AuthProvider userData={user}><Outlet/></AuthProvider>
   )
 }
 
