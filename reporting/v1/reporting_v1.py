@@ -32,8 +32,6 @@ def period_to_label(period_id, frequency_id):
     else:
         return str(period_id)
 
-# ... [Your previous code before plotting]
-
 # Improved Seaborn style
 sns.set_style("whitegrid", {'axes.grid': True, 'grid.linestyle': '--', 'grid.color': '.8'})
 
