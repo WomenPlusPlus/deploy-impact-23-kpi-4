@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLocalStorage } from './useLocalStorage'
 import { supabase } from '../lib/api'
 import { User } from '@supabase/gotrue-js/src/lib/types'
+import { isEconomist, isGatekeeper } from '../utils/utils'
 
 export type ContextType = {
     user?: User | null;
@@ -23,7 +24,12 @@ export const AuthProvider: React.FC<Props>  = ({ userData, children }) => {
 
   const login = (data: User) => {
     setUser(data)
-    navigate('/dashboard')
+
+    if (isGatekeeper(data.role)) {
+      navigate('/dashboard-gatekeeper')
+    } else if (isEconomist(data.role)) {
+      navigate('/dashboard-economist')
+    }
   }
 
   const logout = async () => {

@@ -1,4 +1,5 @@
 import type { MenuProps } from 'antd'
+import { roles } from '../types/types'
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -17,15 +18,6 @@ export const getMenuItems = (
     onClick
   } as MenuItem
 }
+export const isGatekeeper = (role: string | undefined) => role === roles.GATEKEEPER
 
-export const getURL = () => {
-  let url =
-        process.env.REACT_APP_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
-        'http://localhost:3000/'
-  // Make sure to include `https://` when not localhost.
-  url = url.includes('http') ? url : `https://${url}`
-  // Make sure to include a trailing `/`.
-  url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
-
-  return url
-}
+export const isEconomist = (role: string | undefined) => role === roles.ECONOMIST
