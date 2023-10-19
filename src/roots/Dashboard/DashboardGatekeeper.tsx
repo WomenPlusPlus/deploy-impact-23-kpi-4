@@ -9,7 +9,7 @@ import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import { setKpis } from '../../store/kpiSlice'
-import { Kpi, KpiSupabase } from '../../types/types'
+import { Kpi } from '../../types/types'
 
 const columns: ColumnsType<Kpi> = [
   {
@@ -40,7 +40,7 @@ const columns: ColumnsType<Kpi> = [
 ]
 
 
-const Dashboard = () => {
+const DashboardGatekeeper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
 
@@ -107,4 +107,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default DashboardGatekeeper

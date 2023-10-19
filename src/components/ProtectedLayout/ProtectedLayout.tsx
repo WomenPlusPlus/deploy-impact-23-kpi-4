@@ -11,7 +11,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import logo from '../../assets/logo.png'
-import { getMenuItems } from '../../utils/utils'
+import { getMenuItems, isEconomist, isGatekeeper } from '../../utils/utils'
 import type { MenuProps } from 'antd'
 import './ProtectedLayout.css'
 type MenuItem = Required<MenuProps>['items'][number];
@@ -44,11 +44,24 @@ const ProtectedLayout = () => {
     navigate(`/${page}`)
   }
 
-  const items: MenuItem[] = [
-    getMenuItems('Dashboard', '1', <DashboardOutlined style={{ fontSize: 20 }}/>, navigateToPage('dashboard')),
+  const itemsGatekeeper: MenuItem[] = [
+    getMenuItems('Dashboard', '1', <DashboardOutlined style={{ fontSize: 20 }}/>, navigateToPage('dashboard-gatekeeper')),
     getMenuItems('Users', '2', <UserOutlined style={{ fontSize: 20 }}/>, navigateToPage('users')),
     getMenuItems('Logout', '3', <LogoutOutlined style={{ fontSize: 20 }} />, logout),
   ]
+
+  const itemsEconomist: MenuItem[] = [
+    getMenuItems('Dashboard', '1', <DashboardOutlined style={{ fontSize: 20 }}/>, navigateToPage('dashboard-economist')),
+    getMenuItems('Logout', '2', <LogoutOutlined style={{ fontSize: 20 }} />, logout),
+  ]
+
+  const getMenuItemsByRole = () => {
+    if (isEconomist(user.role)) {
+      return itemsEconomist
+    } else if (isGatekeeper(user.role)) {
+      return itemsGatekeeper
+    }
+  }
 
   return (
     <div>
@@ -84,7 +97,7 @@ const ProtectedLayout = () => {
               mode="inline"
               defaultSelectedKeys={['1']}
               style={{ marginTop: '50px' }}
-              items={items}
+              items={getMenuItemsByRole()}
             />
           </Sider>
           <Layout>

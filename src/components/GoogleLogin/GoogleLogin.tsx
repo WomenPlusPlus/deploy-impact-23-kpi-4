@@ -6,7 +6,6 @@ import {
   ThemeSupa,
 } from '@supabase/auth-ui-shared'
 import { useAuth } from '../../hooks/useAuth'
-import { getURL } from '../../utils/utils'
 
 const GoogleLogin: React.FC = () => {
   const { login } = useAuth()
@@ -28,8 +27,6 @@ const GoogleLogin: React.FC = () => {
 
     return () => subscription.unsubscribe()
   }, [])
-
-  console.log(window.location.origin)
 
   return (
     <Auth
