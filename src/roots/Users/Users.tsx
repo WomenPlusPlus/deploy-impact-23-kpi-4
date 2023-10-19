@@ -17,7 +17,7 @@ const columns: ColumnsType<User> = [
     dataIndex: 'role',
     key: 'role',
     render: (text) =>
-      <Tag color='geekblue'>
+      <Tag color='#FECC33'>
         {text}
       </Tag>,
   }

@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { Layout, Menu, Button, ConfigProvider } from 'antd'
+import { Layout, Menu, Button, ConfigProvider, Tag, Select, Space } from 'antd'
 const { Header, Sider, Content } = Layout
 import {
   MenuFoldOutlined,
@@ -15,6 +15,21 @@ import { getMenuItems } from '../../utils/utils'
 import type { MenuProps } from 'antd'
 import './ProtectedLayout.css'
 type MenuItem = Required<MenuProps>['items'][number];
+
+const lgOptions = [
+  {
+    value: 'en',
+    label: 'EN'
+  },
+  {
+    value: 'gn',
+    label: 'GN'
+  },
+  {
+    value: 'fr',
+    label: 'FR'
+  }
+]
 
 const ProtectedLayout = () => {
   const navigate = useNavigate()
@@ -47,10 +62,14 @@ const ProtectedLayout = () => {
           },
           components: {
             Layout: {
-              // siderBg: '#1FA5A6',
+              siderBg: '#FDF7E6',
+              headerHeight: 100
             },
             Menu: {
-              // darkItemBg: '#1FA5A6'
+              darkItemBg: '#FDF7E6',
+              darkItemColor: '#2D373D',
+              darkItemHoverColor: '#2D373D',
+              darkItemSelectedColor: '#2D373D'
             }
           }
         }}
@@ -64,7 +83,7 @@ const ProtectedLayout = () => {
               theme="dark"
               mode="inline"
               defaultSelectedKeys={['1']}
-              style={{ marginTop: '30px' }}
+              style={{ marginTop: '50px' }}
               items={items}
             />
           </Sider>
@@ -80,7 +99,19 @@ const ProtectedLayout = () => {
                   height: 64,
                 }}
               />
-              <p className='welcome'>Welcome, {user?.email} - {user?.role}</p>
+              <Space style={{ marginRight: '40px' }} align={'center'}>
+                <Space.Compact direction="vertical" size={'small'} block>
+                  <h3 className='welcome'>Welcome,</h3>
+                  <p className='welcome'>{user?.email}</p>
+                  <Tag color='#FECC33' style={{ width: 'fit-content' }}>{user?.role}</Tag>
+                </Space.Compact>
+                <Select
+                  bordered={false}
+                  defaultValue="EN"
+                  options={lgOptions}
+                />
+              </Space>
+
             </Header>
             <Content className='content'>
               <Outlet />

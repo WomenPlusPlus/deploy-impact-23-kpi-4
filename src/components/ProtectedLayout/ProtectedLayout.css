@@ -16,7 +16,8 @@
 }
 
 .welcome {
-    margin-right: 40px;
+    margin: 0 0 10px ;
+    line-height: normal;
 }
 .header {
     padding: 0;

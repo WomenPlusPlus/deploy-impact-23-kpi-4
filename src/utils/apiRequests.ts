@@ -22,7 +22,7 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle (id, name)
+        circle!circle_kpi (id, name)
       `)
     .order('created_at', { ascending: false })
 
