@@ -6,15 +6,10 @@ import { fetchKpis } from '../../utils/apiRequests'
 import { ColumnsType } from 'antd/es/table'
 import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 import { useNotifications } from '../../hooks/useNotifications'
-
-export type Kpi = {
-  id: number,
-  name: string;
-  sampleValue: number,
-  frequency: string | undefined,
-  range: string | undefined,
-  circle: string | undefined
-}
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+import { setKpis } from '../../store/kpiSlice'
+import { Kpi, KpiSupabase } from '../../types/types'
 
 const columns: ColumnsType<Kpi> = [
   {
@@ -46,17 +41,33 @@ const columns: ColumnsType<Kpi> = [
 
 
 const Dashboard = () => {
-  const [kpis, setKpis] = useState<Kpi[] | null>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
+
+  const kpis = useSelector((state: RootState) => state.kpis.kpis)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     try {
       const kpisRequest = async () => {
         const kpisFromRequest = await fetchKpis()
-        setKpis(kpisFromRequest)
-      }
 
+        if (kpisFromRequest) {
+          const kpisWithKeyValue = kpisFromRequest.map((value) => {
+            return {
+              key: value.id,
+              id: value.id,
+              name: value.name,
+              sampleValue: value.sample_value,
+              frequency: value?.frequency?.type || undefined,
+              range: value?.range?.display_value || undefined,
+              circle: value?.circle[0]?.name || undefined
+            }
+          })
+
+          dispatch(setKpis(kpisWithKeyValue))
+        }
+      }
       kpisRequest()
     } catch (e) {
       openNotificationWithIcon(
@@ -71,7 +82,6 @@ const Dashboard = () => {
   const showModal = () => {
     setIsModalOpen(true)
   }
-
 
   return (
     <ConfigProvider

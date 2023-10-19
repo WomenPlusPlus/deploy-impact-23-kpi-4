@@ -3,12 +3,7 @@ import { Table, Tag, Spin } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { fetchUsers } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
-
-export type User = {
-  id: string,
-  email: string;
-  role: string
-}
+import { User } from '../../types/types'
 
 const columns: ColumnsType<User> = [
   {
@@ -38,9 +33,14 @@ const Users = () => {
     try {
       const usersRequest = async () =>  {
         const usersFromSupabase = await fetchUsers()
-        setUsers(usersFromSupabase)
-      }
 
+        if (usersFromSupabase) {
+          const usersWithKeyValue = usersFromSupabase.map((item) => {
+            return { ...item, key: item.id }
+          })
+          setUsers(usersWithKeyValue)
+        }
+      }
       usersRequest()
     } catch (e) {
       openNotificationWithIcon(
