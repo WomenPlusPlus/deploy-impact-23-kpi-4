@@ -1,35 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Table, Tag, Spin } from 'antd'
-import type { ColumnsType } from 'antd/es/table'
 import { fetchUsers } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { User } from '../../types/types'
-
-const columns: ColumnsType<User> = [
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-    responsive: ['md']
-  },
-  {
-    title: 'Role',
-    dataIndex: 'role',
-    key: 'role',
-    render: (text) =>
-      <Tag color='#FECC33'>
-        {text}
-      </Tag>,
-  }
-]
+import Column from 'antd/es/table/Column'
 
 
 /* Component that displays all the users with their role in a table for the gatekeeper to see */
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>([])
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
+  const [usersLoading, setUsersLoading] = useState(false)
 
   useEffect(() => {
+    setUsersLoading(true)
     try {
       const usersRequest = async () =>  {
         const usersFromSupabase = await fetchUsers()
@@ -40,9 +24,11 @@ const Users = () => {
           })
           setUsers(usersWithKeyValue)
         }
+        setUsersLoading(false)
       }
       usersRequest()
     } catch (e) {
+      setUsersLoading(false)
       openNotificationWithIcon(
         'error',
         'Fetch Users Error',
@@ -51,14 +37,22 @@ const Users = () => {
     }
   }, [])
 
+  if (usersLoading) {
+    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
+  }
+
   return (
     <div>
       { contextHolder }
       <p className='title'>All Users</p>
-      {
-        users && users.length > 0 ?
-          <Table dataSource={users} columns={columns} /> : <Spin style={{ display: 'flex', justifyContent: 'center' }} />
-      }
+      <Table bordered dataSource={users || []}>
+        <Column title='Email' key='email' dataIndex='email' />
+        <Column title='Role' key='role' dataIndex='role' render={(text) =>
+          <Tag color='#FECC33'>
+            {text}
+          </Tag>}
+        />
+      </Table>
     </div>
   )
 }

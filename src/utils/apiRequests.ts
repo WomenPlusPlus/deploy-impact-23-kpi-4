@@ -114,7 +114,7 @@ const addCircleKpi = async (kpiId: number, circleId: number) => {
 }
 
 /* Supabase request for adding new KPI */
-export const addKPI = async (values: FieldType) => {
+export const addKpi = async (values: FieldType) => {
   const rangeId = await getRangeId(values.min_value, values.max_value, values.display_value)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -146,10 +146,17 @@ export const addKPI = async (values: FieldType) => {
 
 /** Supabase request to get a specific range by giving the id as parameter*/
 export const getRangeById = async (id: number) => {
-  const { data: range } = await supabase
+  const { data } = await supabase
     .from('range')
     .select()
     .eq('id', id)
 
-  return range
+  return data
+}
+
+export const deleteKpi = async (id: number) => {
+  await supabase
+    .from('kpi')
+    .delete()
+    .eq('id', id)
 }

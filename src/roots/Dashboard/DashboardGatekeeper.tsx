@@ -1,53 +1,27 @@
-import { ConfigProvider, Spin, Table } from 'antd'
+import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
 import './Dashboard.css'
-import Button from '../../components/Button/Button'
 import { useEffect, useState } from 'react'
-import { fetchKpis } from '../../utils/apiRequests'
-import { ColumnsType } from 'antd/es/table'
+import { deleteKpi, fetchKpis } from '../../utils/apiRequests'
 import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
-import { setKpis } from '../../store/kpiSlice'
+import { deleteStateKpi, setKpis } from '../../store/kpiSlice'
 import { Kpi } from '../../types/types'
-
-const columns: ColumnsType<Kpi> = [
-  {
-    title: 'Circle',
-    dataIndex: 'circle',
-    key: 'circle',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Sample Value',
-    dataIndex: 'sampleValue',
-    key: 'sampleValue',
-  },
-  {
-    title: 'Frequency',
-    dataIndex: 'frequency',
-    key: 'frequency',
-  },
-  {
-    title: 'Range',
-    dataIndex: 'range',
-    key: 'range',
-  },
-]
+import Button from '../../components/Button/Button'
+import { DeleteOutlined, EditOutlined, DownloadOutlined } from '@ant-design/icons'
+import Column from 'antd/es/table/Column'
 
 
 const DashboardGatekeeper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
-
+  const [kpisLoading, setKpisLoading] = useState(false)
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
   const dispatch = useDispatch()
 
   useEffect(() => {
+    setKpisLoading(true)
     try {
       const kpisRequest = async () => {
         const kpisFromRequest = await fetchKpis()
@@ -66,10 +40,12 @@ const DashboardGatekeeper = () => {
           })
 
           dispatch(setKpis(kpisWithKeyValue))
+          setKpisLoading(false)
         }
       }
       kpisRequest()
     } catch (e) {
+      setKpisLoading(false)
       openNotificationWithIcon(
         'error',
         'Fetch KPIs Error',
@@ -79,8 +55,26 @@ const DashboardGatekeeper = () => {
 
   }, [])
 
+  /** Perform Supabase deletion of selected record and then remove the record from state too */
+  const deleteRecord =  (record: Kpi) => async () => {
+    try {
+      await deleteKpi(record.id)
+      dispatch(deleteStateKpi(record.id))
+    } catch (e) {
+      openNotificationWithIcon(
+        'error',
+        'Delete KPI Error',
+        'Error while deleting the KPIs. Please try again later.'
+      )
+    }
+  }
+
   const showModal = () => {
     setIsModalOpen(true)
+  }
+
+  if (kpisLoading) {
+    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
   }
 
   return (
@@ -96,13 +90,37 @@ const DashboardGatekeeper = () => {
       { contextHolder }
       <div className='title-button'>
         <p className='title'>All KPIs</p>
-        <Button text='Add New KPI' props={{ type: 'primary' }} onClick={showModal}/>
+        <Button text='Add New KPI' btnProps={{ type: 'primary' }} onClick={showModal}/>
       </div>
       <AddKPIModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
-      {
-        kpis && kpis.length > 0 ?
-          <Table dataSource={kpis} columns={columns} /> : <Spin style={{ display: 'flex', justifyContent: 'center' }} />
-      }
+      <Table bordered dataSource={kpis}>
+        <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
+        <Column title='Name' align='center' key='name' dataIndex='name'/>
+        <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
+        <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
+        <Column title='Range' align='center' key='range' dataIndex='range'/>
+        <Column title='Actions' align='center' key='action' dataIndex='actions' render={(_: any, record: Kpi) => (
+          <Space direction="horizontal">
+            <Tooltip title="delete">
+              <Popconfirm
+                title="Delete the KPI"
+                description="Are you sure to delete this KPI?"
+                onConfirm={deleteRecord(record)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <DeleteOutlined /> }} />
+              </Popconfirm>
+            </Tooltip>
+            <Tooltip title="edit">
+              <Button onClick={() => console.log('edit')} btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <EditOutlined /> }} />
+            </Tooltip>
+            <Tooltip title="download">
+              <Button onClick={() => console.log('download')} btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <DownloadOutlined /> }} />
+            </Tooltip>
+          </Space>
+        )} />
+      </Table>
     </ConfigProvider>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Input, Modal, Select, Button, Space } from 'antd'
-import { fetchCircles, fetchUsersByRole, fetchFrequency, addKPI, getRangeById } from '../../utils/apiRequests'
+import { fetchCircles, fetchUsersByRole, fetchFrequency, getRangeById, addKpi } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { addStateKpi, setCircles, setFrequencies } from '../../store/kpiSlice'
@@ -162,7 +162,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
   const handleSubmit = async (values: FieldType) => {
     setSubmitLoading(true)
     try {
-      const newKpi = await addKPI(values)
+      const newKpi = await addKpi(values)
       if (newKpi) {
         await updateKpiState(newKpi, values)
       }

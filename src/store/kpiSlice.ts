@@ -24,6 +24,9 @@ export const kpiSlice = createSlice({
     addStateKpi: (state, action: PayloadAction<Kpi>) => {
       state.kpis.unshift(action.payload)
     },
+    deleteStateKpi: (state, action: PayloadAction<number>) => {
+      state.kpis = state.kpis.filter(kpi => kpi.id !== action.payload)
+    },
     setFrequencies: (state, action: PayloadAction<Frequency[]>) => {
       state.frequencies = action.payload
     },
@@ -37,7 +40,8 @@ export const {
   setKpis,
   addStateKpi,
   setFrequencies,
-  setCircles
+  setCircles,
+  deleteStateKpi
 } = kpiSlice.actions
 
 export default kpiSlice.reducer
