@@ -19,31 +19,31 @@ export type FieldType = {
   economist?: string
 };
 
-interface AddKPIModalAndFormI {
+interface IAddKPIModalAndForm {
   isModalOpen: boolean,
   setIsModalOpen: (b: boolean) => void
 }
 
-interface EconomistSelectOptionsI {
+interface IEconomistSelectOptions {
   label: string;
   value: string;
 }
 
-interface CircleSelectOptionsI {
+interface ICircleSelectOptions {
   label: string;
   value: number;
 }
 
-interface FrequencySelectOptionsI {
+interface IFrequencySelectOptions {
   label: string;
   value: number;
 }
 
-const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsModalOpen }) => {
+const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsModalOpen }) => {
   // Select options state
-  const [economistsOptions, setEconomistsOptions] = useState<EconomistSelectOptionsI[]>([])
-  const [circlesOptions, setCirclesOptions] = useState<CircleSelectOptionsI[]>([])
-  const [frequencyOptions , setFrequencyOptions] = useState<FrequencySelectOptionsI[]>([])
+  const [economistsOptions, setEconomistsOptions] = useState<IEconomistSelectOptions[]>([])
+  const [circlesOptions, setCirclesOptions] = useState<ICircleSelectOptions[]>([])
+  const [frequencyOptions , setFrequencyOptions] = useState<IFrequencySelectOptions[]>([])
 
   // Loading state
   const [economistsLoading, setEconomistsLoading] = useState(false)
@@ -65,7 +65,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
 
     try {
       const economistsFromSupabase = await fetchUsersByRole(roles.GATEKEEPER) // change to economists
-      const economistsSelectOptions: EconomistSelectOptionsI[] = []
+      const economistsSelectOptions: IEconomistSelectOptions[] = []
 
       if (economistsFromSupabase) {
         for (let i = 0; i < economistsFromSupabase.length; i++) {
@@ -91,7 +91,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
 
     try {
       const circlesFromSupabase = await fetchCircles()
-      const circlesSelectOptions: CircleSelectOptionsI[] = []
+      const circlesSelectOptions: ICircleSelectOptions[] = []
 
       if (circlesFromSupabase) {
         dispatch(setCircles(circlesFromSupabase))
@@ -118,7 +118,7 @@ const AddKPIModalAndForm: React.FC<AddKPIModalAndFormI> = ({ isModalOpen, setIsM
 
     try {
       const frequenciesFromSupabase = await fetchFrequency()
-      const frequenciesSelectOptions: FrequencySelectOptionsI[] = []
+      const frequenciesSelectOptions: IFrequencySelectOptions[] = []
 
       if (frequenciesFromSupabase) {
         dispatch(setFrequencies(frequenciesFromSupabase))
