@@ -5,9 +5,6 @@ import {
 } from './constants'
 import { Database } from '../types/database.types'
 
-console.log(REACT_APP_SUPABASE_URL)
-console.log(REACT_APP_SUPABASE_ANON_KEY)
-
 export const supabase = createClient<Database>(
   REACT_APP_SUPABASE_URL as string,
   REACT_APP_SUPABASE_ANON_KEY as string

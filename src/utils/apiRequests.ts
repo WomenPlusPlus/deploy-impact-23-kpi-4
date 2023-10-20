@@ -107,7 +107,7 @@ const addCircleKpi = async (kpiId: number, circleId: number) => {
         circle_id: circleId
       },
       {
-        onConflict: ['id', 'kpi_id', 'circle_id'],
+        onConflict: ['kpi_id', 'circle_id'],
         ignoreDuplicates: true
       }
     )
