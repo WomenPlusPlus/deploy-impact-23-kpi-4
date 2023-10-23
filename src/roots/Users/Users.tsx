@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Table, Tag, Spin } from 'antd'
+import { Spin, Table, Tag, Tooltip } from 'antd'
 import { fetchUsers } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { User } from '../../types/types'
 import Column from 'antd/es/table/Column'
+import Button from '../../components/Button/Button'
+import EditUserModalAndForm from '../../components/EditUserModalAndForm/EditUserModalAndForm'
+import { EditOutlined } from '@ant-design/icons'
 
 
 /* Component that displays all the users with their role in a table for the gatekeeper to see */
@@ -11,6 +14,8 @@ const Users = () => {
   const [users, setUsers] = useState<User[] | null>([])
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
   const [usersLoading, setUsersLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User>({ email: '', id: '', role: '' })
 
   useEffect(() => {
     setUsersLoading(true)
@@ -37,6 +42,11 @@ const Users = () => {
     }
   }, [])
 
+  const showModal = (record: User) => () => {
+    setSelectedUser(record)
+    setIsModalOpen(true)
+  }
+
   if (usersLoading) {
     return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
   }
@@ -45,12 +55,22 @@ const Users = () => {
     <div>
       { contextHolder }
       <p className='title'>All Users</p>
+      <EditUserModalAndForm setUsers={setUsers} users={users} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedUser={selectedUser} />
       <Table bordered dataSource={users || []}>
         <Column title='Email' key='email' dataIndex='email' />
         <Column title='Role' key='role' dataIndex='role' render={(text) =>
           <Tag color='#FECC33'>
             {text}
           </Tag>}
+        />
+        <Column title='Actions' key='actions' align='center' dataIndex='actions' render={(_:any, record:User) => (
+          <Tooltip title="edit">
+            <Button
+              onClick={showModal(record)}
+              btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <EditOutlined /> }}
+            />
+          </Tooltip>
+        )}
         />
       </Table>
     </div>

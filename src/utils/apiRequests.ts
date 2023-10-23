@@ -1,5 +1,6 @@
-import { supabase } from '../lib/api'
+import { supabase, supabaseAdmin } from '../lib/api'
 import { FieldType } from '../components/AddKPIModalAndForm/AddKPIModalAndForm'
+import { roles } from '../types/types'
 
 /* File for all Supabase requests */
 
@@ -22,7 +23,7 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (circle(name))
+        circle_kpi (id, circle(name))
       `)
     .order('created_at', { ascending: false })
 
@@ -154,9 +155,25 @@ export const getRangeById = async (id: number) => {
   return data
 }
 
+/** Supabase request to  delete a KPI */
 export const deleteKpi = async (id: number) => {
   await supabase
     .from('kpi')
     .delete()
     .eq('id', id)
+}
+
+/** Supabase request to change the role of a user
+ * For this functionality we needed a different supabase client with a service_role key*/
+export const changeUserRole = async(role: string, id: string) => {
+  const adminAuthClient = supabaseAdmin.auth.admin
+  const { data: user, error } = await adminAuthClient.updateUserById(
+    id,
+    { role: role }
+  )
+
+  return {
+    data: user.user,
+    error
+  }
 }
