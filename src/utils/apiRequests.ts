@@ -15,7 +15,7 @@ export const fetchUsers = async () => {
 
 /* Supabase request for fetching kpis ordered descending by created_at value */
 export const fetchKpis = async () => {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('kpi')
     .select(`
         id,
@@ -23,7 +23,8 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (id, circle(name))
+        circle_kpi (id, circle(name)),
+        kpi_period (id, period( year, month, quarter))
       `)
     .order('created_at', { ascending: false })
 
@@ -176,4 +177,19 @@ export const changeUserRole = async(role: string, id: string) => {
     data: user.user,
     error
   }
+}
+
+/** Supabase request for adding new value to a KPI (by economist) */
+export const addNewValue = async (userId: string, periodId: number, circleId: number, value: number) => {
+  const { data: auditData, error: auditError } = await supabase
+    .from('audit')
+    .upsert({
+      user_id: userId,    // should be authenticated user
+      period_kpi_id: periodId,
+      circle_kpi_id: circleId,
+      value: value
+    })
+    .select()
+  console.log(auditData)
+  console.log(auditError)
 }

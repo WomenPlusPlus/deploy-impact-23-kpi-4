@@ -4,7 +4,8 @@ export type Kpi = {
   sampleValue: number,
   frequency: string | undefined,
   range: string | null | undefined,
-  circle: string | undefined
+  circle: string | undefined,
+  period: string | undefined,
 }
 
 export type KpiSupabase = {
@@ -35,4 +36,9 @@ export type User = {
   id: string,
   email: string;
   role: string
+}
+export enum frequency {
+  MONTHLY = 'Monthly',
+  QUARTERLY = 'Quarterly',
+  YEARLY = 'Yearly'
 }
