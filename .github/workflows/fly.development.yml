@@ -18,11 +18,11 @@ jobs:
 
       - name: Create environment file
         run: |
-          echo "REACT_APP_SUPABASE_URL=${{ secrets.REACT_APP_SUPABASE_URL }}" > .env.local
-          echo "REACT_APP_SUPABASE_ANON_KEY=${{ secrets.REACT_APP_SUPABASE_ANON_KEY }}" >> .env.local
-          echo "REACT_APP_SUPABASE_ADMIN_KEY=${{ secrets.REACT_APP_SUPABASE_ADMIN_KEY }}" >> .env.local
-          echo "REACT_APP_PUBLIC_SITE_URL=${{ secrets.REACT_APP_PUBLIC_SITE_URL }}" >> .env.local
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.local
+          echo "REACT_APP_SUPABASE_URL=${{ secrets.REACT_APP_SUPABASE_URL }}" > .env
+          echo "REACT_APP_SUPABASE_ANON_KEY=${{ secrets.REACT_APP_SUPABASE_ANON_KEY }}" >> .env
+          echo "REACT_APP_SUPABASE_ADMIN_KEY=${{ secrets.REACT_APP_SUPABASE_ADMIN_KEY }}" >> .env
+          echo "REACT_APP_PUBLIC_SITE_URL=${{ secrets.REACT_APP_PUBLIC_SITE_URL }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
         env:
           REACT_APP_SUPABASE_URL: ${{ secrets.REACT_APP_SUPABASE_URL }}
           REACT_APP_SUPABASE_ANON_KEY: ${{ secrets.REACT_APP_SUPABASE_ANON_KEY }}
@@ -38,4 +38,4 @@ jobs:
 
       - name: Clean up environment file
         run: |
-          rm .env.local
+          rm .env
