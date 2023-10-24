@@ -35,7 +35,8 @@ const DashboardGatekeeper = () => {
               frequency: value?.frequency?.type || undefined,
               range: value?.range?.display_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
-              period: ''
+              period: undefined,
+              newValue: undefined
             }
           })
 
@@ -58,8 +59,10 @@ const DashboardGatekeeper = () => {
   /** Perform Supabase deletion of selected record and then remove the record from state too */
   const deleteRecord =  (record: Kpi) => async () => {
     try {
-      await deleteKpi(record.id)
-      dispatch(deleteStateKpi(record.id))
+      if (record.id) {
+        await deleteKpi(record.id)
+        dispatch(deleteStateKpi(record.id))
+      }
     } catch (e) {
       openNotificationWithIcon(
         'error',

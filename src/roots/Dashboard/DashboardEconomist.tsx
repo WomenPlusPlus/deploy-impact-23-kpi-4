@@ -2,28 +2,28 @@ import { ConfigProvider, Spin, Table } from 'antd'
 import './Dashboard.css'
 import Button from '../../components/Button/Button'
 import { useEffect, useState } from 'react'
-import { fetchKpis } from '../../utils/apiRequests'
+import { fetchKpis, fetchSingleKpi } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import { setKpis } from '../../store/kpiSlice'
-import { frequency, Kpi } from '../../types/types'
+import { Kpi, kpiFromSupabase } from '../../types/types'
 import Time from '../../assets/Time.svg'
 import Column from 'antd/es/table/Column'
 import AddValueModalAndForm from '../../components/AddValueModalAndForm/AddValueModalAndForm'
+import CompletedKpisTable from '../../components/CompletedKpisTable/CompletedKpisTable'
+import { getDisplayedKpiPeriod } from '../../utils/utils'
 
+/**
+ * TODO:
+ ** Change request for kpis to get only the uncompleted
+ ** Remove a Kpi from the state once you add the value
+ ** Implement information boxes
+ */
 const DashboardEconomist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
-  const [selectedRecord, setSelectedRecord] = useState<Kpi>({
-    circle: undefined,
-    frequency: undefined,
-    id: 0,
-    name: '',
-    period: undefined,
-    range: undefined,
-    sampleValue: 0
-  })
+  const [selectedRecord, setSelectedRecord] = useState<kpiFromSupabase | null>(null)
   const [kpisLoading, setKpisLoading] = useState(false)
 
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
@@ -34,21 +34,6 @@ const DashboardEconomist = () => {
   const currentQuarter = Math.floor(currentMonth / 3) + 1
   const currentYear = currentDate.getFullYear()
 
-  const getDisplayedKpiPeriod = (value: any) => {
-    let displayedPeriod = ''
-    switch (value.frequency.type) {
-    case frequency.MONTHLY:
-      displayedPeriod = `${currentMonth.toString().padStart(2, '0')} / ${value.kpi_period[0].period.year}`
-      break
-    case frequency.QUARTERLY:
-      displayedPeriod = `Q${currentQuarter} / ${value.kpi_period[0].period.year}`
-      break
-    case frequency.YEARLY:
-      displayedPeriod = value.kpi_period[0].period.year.toString()
-    }
-
-    return displayedPeriod
-  }
 
   useEffect(() => {
     setKpisLoading(true)
@@ -87,7 +72,8 @@ const DashboardEconomist = () => {
               frequency: value?.frequency?.type || undefined,
               range: value?.range?.display_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
-              period: getDisplayedKpiPeriod(value)
+              period: getDisplayedKpiPeriod(value?.frequency?.type, value?.kpi_period[0]?.period?.year ),
+              newValue: undefined
             }
           })
 
@@ -107,8 +93,16 @@ const DashboardEconomist = () => {
 
   }, [])
 
-  const showModal = (record: Kpi) => () => {
-    setSelectedRecord(record)
+  const showModal = (record: Kpi) => async () => {
+    if (record.id) {
+      const fetchedKpi = await fetchSingleKpi(record.id)
+      if (fetchedKpi) {
+        setSelectedRecord({
+          ...fetchedKpi[0]
+        })
+      }
+    }
+
     setIsModalOpen(true)
   }
 
@@ -128,7 +122,7 @@ const DashboardEconomist = () => {
     >
       { contextHolder }
       <p className='title'>Dashboard</p>
-      <p className='subtitle'>Your list of KPIs to which you need to add values</p>
+      <p className='subtitle'>KPIs to update</p>
       <div className='info-cards'>
         <div className='card' style={{ backgroundColor: 'rgba(83,111,200, 0.3)', width: 'fit-content', padding: '8px 15px 8px 15px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', }}>
@@ -150,6 +144,9 @@ const DashboardEconomist = () => {
           <Button text='Add Value' btnProps={{ type: 'primary' }} onClick={showModal(record)} />
         )}/>
       </Table>
+
+      <p className='subtitle'>KPIs history record</p>
+      <CompletedKpisTable />
     </ConfigProvider>
   )
 }

@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Form, Input, Modal, Button } from 'antd'
 import { useNotifications } from '../../hooks/useNotifications'
-import { Kpi } from '../../types/types'
+import { frequency, Kpi, kpiFromSupabase } from '../../types/types'
 import Info from '../../assets/Info.svg'
 import { addNewValue } from '../../utils/apiRequests'
 import { useAuth } from '../../hooks/useAuth'
+import { getDisplayedKpiPeriod } from '../../utils/utils'
+import { addStateCompletedKpi } from '../../store/kpiSlice'
+import { useDispatch } from 'react-redux'
 
 export type FieldType = {
   name: string;
@@ -13,21 +16,59 @@ export type FieldType = {
 interface AddValueModalAndForm {
   isModalOpen: boolean,
   setIsModalOpen: (b: boolean) => void,
-  record: Kpi
+  record: kpiFromSupabase | null
 }
 
 const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, setIsModalOpen, record }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
   const  { user } = useAuth()
+  const dispatch = useDispatch()
+
+  const currentDate = new Date()
+  const currentMonth = currentDate.getMonth() + 1
+  const currentQuarter = Math.floor(currentMonth / 3) + 1
+
+  const getPeriodKpiId = () => {
+    let periodKpiId
+    switch (record?.frequency?.type) {
+    case frequency.QUARTERLY:
+      periodKpiId = record?.kpi_period.filter(item => item?.period?.quarter === currentQuarter)[0].id
+      break
+    case frequency.MONTHLY:
+      periodKpiId = record?.kpi_period.filter(item => item?.period?.month === currentMonth)[0].id
+      break
+    case frequency.YEARLY:
+      periodKpiId = record?.kpi_period[0].id
+    }
+
+    return periodKpiId
+  }
 
   const handleSubmit = async (values: FieldType) => {
-    console.log(values)
     setSubmitLoading(true)
     try {
       setIsModalOpen(false)
 
-      // addNewValue(user?.id)
+      const periodKpiId = getPeriodKpiId()
+
+      if (user && periodKpiId && record) {
+        await addNewValue(user.id, periodKpiId, record?.circle_kpi[0].id, Number(values.name))
+
+        const updatedState = {
+          id: record.id,
+          name: record.name,
+          sampleValue: record.sample_value,
+          frequency: record.frequency?.type,
+          range: record.range?.display_value,
+          circle: record.circle_kpi[0].circle?.name,
+          period: getDisplayedKpiPeriod(record.frequency?.type, record.kpi_period[0].period?.year),
+          newValue: Number(values.name)
+        }
+
+        dispatch(addStateCompletedKpi(updatedState))
+      }
+
       openNotificationWithIcon(
         'success',
         'KPI Insertion',
@@ -53,7 +94,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
     <div>
       {contextHolder}
       <Modal
-        title={`${record.name} - period`}
+        title={`${record?.name} - period`}
         okText='Submit KPI'
         open={isModalOpen}
         onCancel={handleCancel}
@@ -67,10 +108,10 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
         ]}
       >
         <div style={{ marginBottom: '40px' }}>
-          <p><strong>KPI name</strong>: {record.name}</p>
-          <p><strong>Circle</strong>: {record.circle}</p>
-          <p><strong>Frequency</strong>: {record.frequency}</p>
-          <p><strong>Range</strong>: {record.range}</p>
+          <p><strong>KPI name</strong>: {record?.name}</p>
+          <p><strong>Circle</strong>: {record?.circle_kpi[0]?.circle?.name}</p>
+          <p><strong>Frequency</strong>: {record?.frequency?.type}</p>
+          <p><strong>Range</strong>: {record?.range?.display_value}</p>
           <p><strong>Last KPI Value</strong>: ? we don`t have this in db</p>
         </div>
         <Form
@@ -83,7 +124,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
             name="name"
             rules={[{ required: true, message: 'Please input the new KPI value!' }]}
           >
-            <Input placeholder={`Example: ${String(record.sampleValue)}`} />
+            <Input type='number' placeholder={`Example: ${String(record?.sample_value)}`} />
           </Form.Item>
         </Form>
         <div className='flex flex-row'>

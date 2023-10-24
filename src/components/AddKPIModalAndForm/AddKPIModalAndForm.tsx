@@ -155,7 +155,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
       frequency: frequency[0].type,
       circle: circle[0].name,
       description: newKpi[0].description,
-      period: ''
+      period: undefined,
+      newValue: undefined
     }
 
     dispatch(addStateKpi(stateKpi))
