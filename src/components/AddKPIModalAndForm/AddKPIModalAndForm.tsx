@@ -5,7 +5,7 @@ import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { addStateKpi, setCircles, setFrequencies } from '../../store/kpiSlice'
 import { RootState } from '../../store/store'
-import { KpiSupabase, roles } from '../../types/types'
+import { KpiSupabase, roles, Kpi } from '../../types/types'
 
 export type FieldType = {
   circle_id: number;
@@ -17,11 +17,13 @@ export type FieldType = {
   display_value: string;
   frequency_id: number;
   economist?: string
-};
+  id?: number
+}
 
 interface IAddKPIModalAndForm {
   isModalOpen: boolean,
   setIsModalOpen: (b: boolean) => void
+  initialData?: FieldType
 }
 
 interface IEconomistSelectOptions {
@@ -39,7 +41,11 @@ interface IFrequencySelectOptions {
   value: number;
 }
 
-const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsModalOpen }) => {
+const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
+  isModalOpen,
+  setIsModalOpen,
+  initialData,
+}) => {
   // Select options state
   const [economistsOptions, setEconomistsOptions] = useState<IEconomistSelectOptions[]>([])
   const [circlesOptions, setCirclesOptions] = useState<ICircleSelectOptions[]>([])
@@ -153,7 +159,9 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
       sampleValue: newKpi[0].sample_value,
       range: range && range[0].display_value,
       frequency: frequency[0].type,
-      circle: circle[0].name
+      circle: circle[0].name,
+      frequency_id:newKpi[0].frequency_id,
+      description:newKpi[0].description
     }
 
     dispatch(addStateKpi(stateKpi))
@@ -194,23 +202,31 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
     <div>
       {contextHolder}
       <Modal
-        title="New KPI Form"
-        okText='Submit KPI'
+        title={
+          initialData?.id ? 'Editing KPI ' + initialData.id : 'New KPI Form'
+        }
         open={isModalOpen}
         onCancel={handleCancel}
         footer={[
           <Button key="cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button loading={submitLoading} type="primary" form="AddKPI" key="submit" htmlType="submit">
-            Submit KPI
-          </Button>
+          <Button
+            loading={submitLoading}
+            type="primary"
+            form="AddKPI"
+            key="submit"
+            htmlType="submit"
+          >
+            {initialData?.id ? 'Save KPI' : 'Submit KPI'}
+          </Button>,
         ]}
       >
         <Form
           id='AddKPI'
           layout="vertical"
           onFinish={handleSubmit}
+          initialValues={initialData}
         >
           <Form.Item<FieldType>
             label="Circle"

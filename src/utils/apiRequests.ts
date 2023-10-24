@@ -23,9 +23,32 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (id, circle(name))
+        circle_kpi (id, circle(name)),
+        description,
+        frequency_id
       `)
     .order('created_at', { ascending: false })
+
+  return data
+}
+
+/* Supabase request for fetching Kpi with id */
+export const fetchKpi = async (id: number) => {
+  const { data } = await supabase
+    .from('kpi')
+    .select(
+      `
+        id,
+        name,
+        sample_value,
+        frequency (type),
+        range (min_value, max_value, display_value),
+        circle_kpi (id, circle(name)),
+        description,
+        frequency_id
+      `
+    )
+    .eq('id', id)
 
   return data
 }

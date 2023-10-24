@@ -4,7 +4,9 @@ export type Kpi = {
   sampleValue: number,
   frequency: string | undefined,
   range: string | null | undefined,
-  circle: string | undefined
+  circle: string | undefined,
+  description: string | null,
+  frequency_id: number | null
 }
 
 export type KpiSupabase = {
