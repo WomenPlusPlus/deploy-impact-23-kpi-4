@@ -22,6 +22,7 @@ const DashboardGatekeeper = () => {
   const dispatch = useDispatch()
 
   const [kpiData, setKpiData] = useState<FieldType | undefined>(undefined)
+
   useEffect(() => {
     setKpisLoading(true)
     try {
@@ -74,15 +75,17 @@ const DashboardGatekeeper = () => {
     }
   }
 
-  const editKpi = (record: Kpi) => async() => {
+  const editKpi = (record: Kpi) => async () => {
+    setIsModalOpen(true)
     try {
       const kpiDt = await fetchKpi(record.id)
-      if(kpiDt?.length) {
+      if(kpiDt) {
         setKpiData({
+          id: kpiDt[0].id,
           circle_id: kpiDt[0].circle_kpi[0].id,
           name: kpiDt[0].name,
           sample_value: kpiDt[0].sample_value,
-          min_value: kpiDt[0].range?.min_value,
+          min_value: kpiDt[0]?.range?.min_value,
           max_value: kpiDt[0].range?.max_value,
           description: kpiDt[0].description,
           display_value: kpiDt[0].range?.display_value,
@@ -100,9 +103,6 @@ const DashboardGatekeeper = () => {
   }
 
   const showModal = () => {
-    // if (kpiId) {
-    //   fetchKpi()
-    // }
     setIsModalOpen(true)
   }
 

@@ -10,11 +10,11 @@ import { KpiSupabase, roles, Kpi } from '../../types/types'
 export type FieldType = {
   circle_id: number;
   name: string;
-  description?: string;
+  description?: string | undefined | null;
   sample_value: number;
-  min_value: number;
-  max_value: number;
-  display_value: string;
+  min_value: number | undefined | null;
+  max_value: number | undefined | null;
+  display_value: string | undefined | null;
   frequency_id: number;
   economist?: string
   id?: number

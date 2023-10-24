@@ -31,7 +31,6 @@ export const fetchKpis = async () => {
 
   return data
 }
-
 /* Supabase request for fetching Kpi with id */
 export const fetchKpi = async (id: number) => {
   const { data } = await supabase
@@ -139,7 +138,10 @@ const addCircleKpi = async (kpiId: number, circleId: number) => {
 
 /* Supabase request for adding new KPI */
 export const addKpi = async (values: FieldType) => {
-  const rangeId = await getRangeId(values.min_value, values.max_value, values.display_value)
+  let rangeId
+  if (values.min_value && values.max_value && values.display_value) {
+    rangeId = await getRangeId(values.min_value, values.max_value, values.display_value)
+  }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
