@@ -14,11 +14,6 @@ import AddValueModalAndForm from '../../components/AddValueModalAndForm/AddValue
 import CompletedKpisTable from '../../components/CompletedKpisTable/CompletedKpisTable'
 import { getDisplayedKpiPeriod } from '../../utils/utils'
 
-/**
- * TODO:
- ** Remove a Kpi from the state once you add the value
- ** Implement information boxes
- */
 const DashboardEconomist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
@@ -33,15 +28,14 @@ const DashboardEconomist = () => {
   const currentQuarter = Math.floor(currentMonth / 3) + 1
   const currentYear = currentDate.getFullYear()
 
-
   useEffect(() => {
     setKpisLoading(true)
     try {
       const kpisRequest = async () => {
         const kpisFromRequest = await fetchUncompletedKpis()
 
+        // Display the kpis only from the current month
         if (kpisFromRequest) {
-          // const filteredKpis = filterCurrentKpis(kpisFromRequest)
           const filteredData = kpisFromRequest.filter(item => {
             // Check if at least one KPI period matches the current month
             return item.kpi_period.some(period => {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Form, Input, Modal, Button } from 'antd'
 import { useNotifications } from '../../hooks/useNotifications'
-import { frequency, Kpi, kpiFromSupabase } from '../../types/types'
+import { frequency, kpiFromSupabase } from '../../types/types'
 import Info from '../../assets/Info.svg'
 import { addNewValue } from '../../utils/apiRequests'
 import { useAuth } from '../../hooks/useAuth'
 import { getDisplayedKpiPeriod } from '../../utils/utils'
-import { addStateCompletedKpi } from '../../store/kpiSlice'
+import { addStateCompletedKpi, deleteStateKpi } from '../../store/kpiSlice'
 import { useDispatch } from 'react-redux'
 
 export type FieldType = {
@@ -55,6 +55,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
       if (user && periodKpiId && record) {
         await addNewValue(user.id, periodKpiId, record?.circle_kpi[0].id, Number(values.name))
 
+        // Update the state of completed KPIs with the record which has the new value
         const updatedState = {
           id: record.id,
           name: record.name,
@@ -65,8 +66,10 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           period: getDisplayedKpiPeriod(record.frequency?.type, record.kpi_period[0].period?.year),
           newValue: Number(values.name)
         }
-
         dispatch(addStateCompletedKpi(updatedState))
+
+        // After adding the record in "history record" table we need to remove it from "KPI to update" table
+        dispatch(deleteStateKpi(record.id))
       }
 
       openNotificationWithIcon(

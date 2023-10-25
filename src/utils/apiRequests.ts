@@ -213,6 +213,7 @@ export const addNewValue = async (userId: string, periodId: number, circleId: nu
     .select()
 }
 
+/** Supabase request for fetching just a single a KPI by id */
 export const fetchSingleKpi = async (id: number) => {
   const { data, error } = await supabase
     .from('kpi')
@@ -230,6 +231,7 @@ export const fetchSingleKpi = async (id: number) => {
   return data
 }
 
+/** Supabase request for fetching the kpis that have value (economists added value to them) */
 export const fetchCompletedKpis = async () => {
   const { data, error: auditError } = await supabase
     .from('audit')
