@@ -1,13 +1,13 @@
 export type Kpi = {
-  id: number,
-  name: string;
-  sampleValue: number,
-  frequency: string | undefined,
-  range: string | null | undefined,
-  circle: string | undefined,
-  description: string | null,
+  id: number | undefined
+  name: string | undefined
+  sampleValue: number | undefined
+  frequency: string | undefined
+  range: string | null | undefined
+  circle: string | undefined
+  description: string | null
   frequency_id: number | null
-  period: string | undefined,
+  period: string | undefined
   newValue: number | undefined
 }
 

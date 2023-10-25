@@ -230,6 +230,26 @@ export const fetchSingleKpi = async (id: number) => {
         frequency (type),
         range (min_value, max_value, display_value),
         circle_kpi (id, circle(id, name)),
+        kpi_period (id, completed, period( year, month, quarter))
+      `
+    )
+    .eq('id', id)
+
+  return data
+}
+
+/** Supabase request for fetching just a single a KPI by id */
+export const fetchSingleKpiWithDescFreq = async (id: number) => {
+  const { data, error } = await supabase
+    .from('kpi')
+    .select(
+      `
+        id,
+        name,
+        sample_value,
+        frequency (type),
+        range (min_value, max_value, display_value),
+        circle_kpi (id, circle(id, name)),
         kpi_period (id, completed, period( year, month, quarter)),
         description,
         frequency_id

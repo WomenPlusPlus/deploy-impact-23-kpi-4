@@ -1,7 +1,11 @@
 import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
 import './Dashboard.css'
 import { useEffect, useState } from 'react'
-import { deleteKpi, fetchKpis, fetchSingleKpi } from '../../utils/apiRequests'
+import {
+  deleteKpi,
+  fetchKpis,
+  fetchSingleKpiWithDescFreq,
+} from '../../utils/apiRequests'
 import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
@@ -78,12 +82,16 @@ const DashboardGatekeeper = () => {
   }
 
   const editKpi = (record: Kpi) => async () => {
+    if (!record.id) {
+      return
+    }
     try {
-      const kpiDt = await fetchSingleKpi(record.id)
+      setIsModalOpen(true)
+      const kpiDt = await fetchSingleKpiWithDescFreq(record.id)
       if(kpiDt) {
         setKpiData({
           id: kpiDt[0].id,
-          circle_id: kpiDt[0].circle_kpi[0].id,
+          circle_id: kpiDt[0].circle_kpi[0].circle?.id || 0,
           name: kpiDt[0].name,
           sample_value: kpiDt[0].sample_value,
           min_value: kpiDt[0]?.range?.min_value,
@@ -92,7 +100,6 @@ const DashboardGatekeeper = () => {
           display_value: kpiDt[0].range?.display_value,
           frequency_id: kpiDt[0].frequency_id
         })
-        setIsModalOpen(true)
       }
 
     } catch (e) {

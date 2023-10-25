@@ -99,6 +99,29 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
     getCircleOptions()
   }, [])
 
+  useEffect(() => {
+    const getFrequencyOptions = async () => {
+      const frequenciesFromSupabase = await fetchFrequency()
+      const frequenciesSelectOptions: IFrequencySelectOptions[] = []
+      if (frequenciesFromSupabase) {
+        dispatch(setFrequencies(frequenciesFromSupabase))
+        for (let i = 0; i < frequenciesFromSupabase.length; i++) {
+          frequenciesSelectOptions.push({
+            label: frequenciesFromSupabase[i].type,
+            value: frequenciesFromSupabase[i].id,
+          })
+        }
+
+        setFrequencyOptions(frequenciesSelectOptions)
+      }
+    }
+
+    getFrequencyOptions()
+  }, [])
+
+  useEffect(() => {
+    form.setFieldsValue(initialData)
+  }, [form, initialData])
 
   /** Function used to fetch the economists when the user focuses on the economists select input */
   const handleEconomistsFocus = async () => {
@@ -244,6 +267,9 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   }
 
   const resetForm = () => {
+    // form.resetFields()
+    // initialData = undefined
+
     form.setFieldsValue({
       circle_id: undefined,
       name: '',
@@ -298,8 +324,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
             rules={[{ required: true, message: 'Please select the circle!' }]}
           >
             <Select
-              // onFocus={handleCirclesFocus}
-              // loading={circlesLoading}
               options={circlesOptions}
             />
           </Form.Item>
@@ -325,10 +349,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
               { required: true, message: 'Please select the frequency!' },
             ]}
           >
-            <Select
-              onFocus={handleFrequency}
-              loading={frequencyLoading}
-              options={frequencyOptions}
+            <Select options={frequencyOptions}
             />
           </Form.Item>
 
