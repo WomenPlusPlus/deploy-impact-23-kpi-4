@@ -1,7 +1,7 @@
 import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
 import './Dashboard.css'
 import { useEffect, useState } from 'react'
-import { deleteKpi, fetchKpis, fetchKpi } from '../../utils/apiRequests'
+import { deleteKpi, fetchKpis, fetchSingleKpi } from '../../utils/apiRequests'
 import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,7 +11,6 @@ import { Kpi } from '../../types/types'
 import Button from '../../components/Button/Button'
 import { DeleteOutlined, EditOutlined, DownloadOutlined } from '@ant-design/icons'
 import Column from 'antd/es/table/Column'
-
 import { FieldType } from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 
 const DashboardGatekeeper = () => {
@@ -40,8 +39,9 @@ const DashboardGatekeeper = () => {
               range: value?.range?.display_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
               description: value?.description,
-              frequency_id: value.frequency_id
-
+              frequency_id: value.frequency_id,
+              period: undefined,
+              newValue: undefined
             }
           })
 
@@ -64,8 +64,10 @@ const DashboardGatekeeper = () => {
   /** Perform Supabase deletion of selected record and then remove the record from state too */
   const deleteRecord =  (record: Kpi) => async () => {
     try {
-      await deleteKpi(record.id)
-      dispatch(deleteStateKpi(record.id))
+      if (record.id) {
+        await deleteKpi(record.id)
+        dispatch(deleteStateKpi(record.id))
+      }
     } catch (e) {
       openNotificationWithIcon(
         'error',
@@ -76,9 +78,8 @@ const DashboardGatekeeper = () => {
   }
 
   const editKpi = (record: Kpi) => async () => {
-    setIsModalOpen(true)
     try {
-      const kpiDt = await fetchKpi(record.id)
+      const kpiDt = await fetchSingleKpi(record.id)
       if(kpiDt) {
         setKpiData({
           id: kpiDt[0].id,
@@ -91,13 +92,14 @@ const DashboardGatekeeper = () => {
           display_value: kpiDt[0].range?.display_value,
           frequency_id: kpiDt[0].frequency_id
         })
+        setIsModalOpen(true)
       }
 
     } catch (e) {
       openNotificationWithIcon(
         'error',
-        'Delete KPI Error',
-        'Error while deleting the KPIs. Please try again later.'
+        'Error retreiving KPI',
+        `Error while retrieving the KPI id ${record.id}: ${e}`
       )
     }
   }

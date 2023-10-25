@@ -18,9 +18,15 @@
     box-shadow: 13px 17px 20px -5px rgba(0,0,0,0.12);
 }
 .title {
-    font-size: 28px;
+    font-size: 36px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
 }
 
 .description {
@@ -33,4 +39,13 @@
     justify-content: center;
     margin-left: 5%;
     margin-right: 5%;
+}
+
+.info-cards {
+    margin-bottom: 25px;
+}
+
+.card {
+    /*height: 72px;*/
+    border-radius: 8px;
 }

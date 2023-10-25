@@ -1,5 +1,5 @@
 import type { MenuProps } from 'antd'
-import { roles } from '../types/types'
+import { frequency, roles } from '../types/types'
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -21,3 +21,24 @@ export const getMenuItems = (
 export const isGatekeeper = (role: string | undefined) => role === roles.GATEKEEPER
 
 export const isEconomist = (role: string | undefined) => role === roles.ECONOMIST
+
+const currentDate = new Date()
+const currentMonth = currentDate.getMonth() + 1
+const currentQuarter = Math.floor(currentMonth / 3) + 1
+const currentYear = currentDate.getFullYear()
+
+export const getDisplayedKpiPeriod = (name: string | undefined, year: number | undefined) => {
+  let displayedPeriod = ''
+  switch (name) {
+  case frequency.MONTHLY:
+    displayedPeriod = `${currentMonth.toString().padStart(2, '0')} / ${year}`
+    break
+  case frequency.QUARTERLY:
+    displayedPeriod = `Q${currentQuarter} / ${year}`
+    break
+  case frequency.YEARLY:
+    displayedPeriod = year?.toString() || ''
+  }
+
+  return displayedPeriod
+}

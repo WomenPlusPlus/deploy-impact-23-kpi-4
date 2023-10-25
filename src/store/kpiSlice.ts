@@ -5,11 +5,13 @@ import { Circle, Frequency, Kpi } from '../types/types'
 export interface KpiState {
   kpis: Kpi[],
   frequencies: Frequency[],
-  circles: Circle[]
+  circles: Circle[],
+  completedKpis: Kpi[]
 }
 
 const initialState: KpiState = {
   kpis: [],
+  completedKpis: [],
   frequencies: [],
   circles: []
 }
@@ -33,6 +35,12 @@ export const kpiSlice = createSlice({
     setCircles: (state, action: PayloadAction<Circle[]>) => {
       state.circles = action.payload
     },
+    setCompletedKpis: (state, action: PayloadAction<Kpi[]>) => {
+      state.completedKpis = action.payload
+    },
+    addStateCompletedKpi: (state, action: PayloadAction<Kpi>) => {
+      state.completedKpis.unshift(action.payload)
+    },
   }
 })
 
@@ -41,7 +49,9 @@ export const {
   addStateKpi,
   setFrequencies,
   setCircles,
-  deleteStateKpi
+  deleteStateKpi,
+  setCompletedKpis,
+  addStateCompletedKpi
 } = kpiSlice.actions
 
 export default kpiSlice.reducer
