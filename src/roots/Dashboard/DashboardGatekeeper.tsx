@@ -12,7 +12,6 @@ import Button from '../../components/Button/Button'
 import { DeleteOutlined, EditOutlined, DownloadOutlined } from '@ant-design/icons'
 import Column from 'antd/es/table/Column'
 
-
 const DashboardGatekeeper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
@@ -35,7 +34,9 @@ const DashboardGatekeeper = () => {
               sampleValue: value.sample_value,
               frequency: value?.frequency?.type || undefined,
               range: value?.range?.display_value || undefined,
-              circle: value?.circle_kpi[0]?.circle?.name || undefined
+              circle: value?.circle_kpi[0]?.circle?.name || undefined,
+              period: undefined,
+              newValue: undefined
             }
           })
 
@@ -58,8 +59,10 @@ const DashboardGatekeeper = () => {
   /** Perform Supabase deletion of selected record and then remove the record from state too */
   const deleteRecord =  (record: Kpi) => async () => {
     try {
-      await deleteKpi(record.id)
-      dispatch(deleteStateKpi(record.id))
+      if (record.id) {
+        await deleteKpi(record.id)
+        dispatch(deleteStateKpi(record.id))
+      }
     } catch (e) {
       openNotificationWithIcon(
         'error',

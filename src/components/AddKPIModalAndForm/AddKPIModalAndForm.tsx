@@ -153,7 +153,10 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
       sampleValue: newKpi[0].sample_value,
       range: range && range[0].display_value,
       frequency: frequency[0].type,
-      circle: circle[0].name
+      circle: circle[0].name,
+      description: newKpi[0].description,
+      period: undefined,
+      newValue: undefined
     }
 
     dispatch(addStateKpi(stateKpi))

@@ -17,12 +17,11 @@ const Button: React.FC<Button> = ({ text, onClick, btnProps, ...props }) => {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#FECC33', // bg color
-          colorText: '#333333'
+          colorPrimary: '#1FA5A6', // bg color
         },
         components: {
           Button: {
-            primaryColor: '#333333', // text color
+            primaryColor: '#fff', // text color
           },
         },
       }}

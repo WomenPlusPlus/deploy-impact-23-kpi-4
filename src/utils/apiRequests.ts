@@ -15,7 +15,7 @@ export const fetchUsers = async () => {
 
 /* Supabase request for fetching kpis ordered descending by created_at value */
 export const fetchKpis = async () => {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('kpi')
     .select(`
         id,
@@ -23,8 +23,28 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (id, circle(name))
+        circle_kpi (id, circle(name)),
+        kpi_period (id, completed,  period( year, month, quarter))
       `)
+    .order('created_at', { ascending: false })
+
+  console.log(data)
+  return data
+}
+
+export const fetchUncompletedKpis = async () => {
+  const { data, error } = await supabase
+    .from('kpi')
+    .select(`
+        id,
+        name,
+        sample_value,
+        frequency (type),
+        range (min_value, max_value, display_value),
+        circle_kpi (id, circle(name)),
+        kpi_period (id, completed,  period( year, month, quarter))
+      `)
+    .eq('kpi_period.completed', false)
     .order('created_at', { ascending: false })
 
   return data
@@ -176,4 +196,50 @@ export const changeUserRole = async(role: string, id: string) => {
     data: user.user,
     error
   }
+}
+
+/** Supabase request for adding new value to a KPI (by economist) */
+export const addNewValue = async (userId: string, periodId: number, circleId: number, value: number) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const { data: auditData, error: auditError } = await supabase
+    .from('audit')
+    .upsert({
+      user_id: userId,    // should be authenticated user
+      kpi_period_id: periodId,
+      circle_kpi_id: circleId,
+      value: value
+    })
+    .select()
+}
+
+/** Supabase request for fetching just a single a KPI by id */
+export const fetchSingleKpi = async (id: number) => {
+  const { data, error } = await supabase
+    .from('kpi')
+    .select(`
+        id,
+        name,
+        sample_value,
+        frequency (type),
+        range (min_value, max_value, display_value),
+        circle_kpi (id, circle(name)),
+        kpi_period (id, completed, period( year, month, quarter))
+      `)
+    .eq('id', id)
+
+  return data
+}
+
+/** Supabase request for fetching the kpis that have value (economists added value to them) */
+export const fetchCompletedKpis = async () => {
+  const { data, error: auditError } = await supabase
+    .from('audit')
+    .select(`
+      value,
+      circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(display_value))),
+      kpi_period (id, completed, period( year, month, quarter))
+    `)
+
+  return data
 }

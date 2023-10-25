@@ -1,10 +1,10 @@
 export type Json =
-    | string
-    | number
-    | boolean
-    | null
-    | { [key: string]: Json | undefined }
-    | Json[]
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export interface Database {
     graphql_public: {
@@ -39,25 +39,25 @@ export interface Database {
                     circle_kpi_id: number
                     created_at: string
                     id: number
-                    period_id: number
+                    kpi_period_id: number
                     user_id: string
-                    value: number | null
+                    value: number
                 }
                 Insert: {
                     circle_kpi_id: number
                     created_at?: string
                     id?: number
-                    period_id: number
+                    kpi_period_id: number
                     user_id: string
-                    value?: number | null
+                    value: number
                 }
                 Update: {
                     circle_kpi_id?: number
                     created_at?: string
                     id?: number
-                    period_id?: number
+                    kpi_period_id?: number
                     user_id?: string
-                    value?: number | null
+                    value?: number
                 }
                 Relationships: [
                     {
@@ -67,9 +67,9 @@ export interface Database {
                         referencedColumns: ['id']
                     },
                     {
-                        foreignKeyName: 'audit_period_id_fkey'
-                        columns: ['period_id']
-                        referencedRelation: 'period'
+                        foreignKeyName: 'audit_kpi_period_id_fkey'
+                        columns: ['kpi_period_id']
+                        referencedRelation: 'kpi_period'
                         referencedColumns: ['id']
                     },
                     {
@@ -100,22 +100,19 @@ export interface Database {
             }
             circle_kpi: {
                 Row: {
-                    circle_id: number | null
-                    created_at: string
+                    circle_id: number
                     id: number
-                    kpi_id: number | null
+                    kpi_id: number
                 }
                 Insert: {
-                    circle_id?: number | null
-                    created_at?: string
+                    circle_id: number
                     id?: number
-                    kpi_id?: number | null
+                    kpi_id: number
                 }
                 Update: {
-                    circle_id?: number | null
-                    created_at?: string
+                    circle_id?: number
                     id?: number
-                    kpi_id?: number | null
+                    kpi_id?: number
                 }
                 Relationships: [
                     {
@@ -196,6 +193,40 @@ export interface Database {
                     }
                 ]
             }
+            kpi_period: {
+                Row: {
+                    completed: boolean
+                    id: number
+                    kpi_id: number
+                    period_id: number
+                }
+                Insert: {
+                    completed?: boolean
+                    id?: number
+                    kpi_id: number
+                    period_id: number
+                }
+                Update: {
+                    completed?: boolean
+                    id?: number
+                    kpi_id?: number
+                    period_id?: number
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: 'kpi_period_kpi_id_fkey'
+                        columns: ['kpi_id']
+                        referencedRelation: 'kpi'
+                        referencedColumns: ['id']
+                    },
+                    {
+                        foreignKeyName: 'kpi_period_period_id_fkey'
+                        columns: ['period_id']
+                        referencedRelation: 'period'
+                        referencedColumns: ['id']
+                    }
+                ]
+            }
             period: {
                 Row: {
                     created_at: string
@@ -248,19 +279,16 @@ export interface Database {
                 Row: {
                     circle_id: number
                     created_at: string
-                    id: number
                     user_id: string
                 }
                 Insert: {
                     circle_id: number
                     created_at?: string
-                    id?: number
                     user_id: string
                 }
                 Update: {
                     circle_id?: number
                     created_at?: string
-                    id?: number
                     user_id?: string
                 }
                 Relationships: [
@@ -320,6 +348,24 @@ export interface Database {
                     kpi_id: number
                 }
                 Returns: boolean
+            }
+            get_kpi: {
+                Args: {
+                    circle_kpi_id: number
+                }
+                Returns: number
+            }
+            insert_new_periods: {
+                Args: {
+                    new_year: number
+                }
+                Returns: undefined
+            }
+            insert_new_year_periods: {
+                Args: {
+                    new_year: number
+                }
+                Returns: undefined
             }
             test: {
                 Args: {
