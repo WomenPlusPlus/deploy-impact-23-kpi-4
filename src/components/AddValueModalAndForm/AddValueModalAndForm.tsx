@@ -63,8 +63,12 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           frequency: record.frequency?.type,
           range: record.range?.display_value,
           circle: record.circle_kpi[0].circle?.name,
-          period: getDisplayedKpiPeriod(record.frequency?.type, record.kpi_period[0].period?.year),
-          newValue: Number(values.name)
+          circle_id: record.circle_kpi[0].circle?.id,
+          period: getDisplayedKpiPeriod(
+            record.frequency?.type,
+            record.kpi_period[0].period?.year
+          ),
+          newValue: Number(values.name),
         }
         dispatch(addStateCompletedKpi(updatedState))
 

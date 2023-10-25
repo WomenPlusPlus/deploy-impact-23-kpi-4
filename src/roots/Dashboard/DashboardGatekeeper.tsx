@@ -35,8 +35,9 @@ const DashboardGatekeeper = () => {
               frequency: value?.frequency?.type || undefined,
               range: value?.range?.display_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
+              circle_id: value?.circle_kpi[0]?.circle?.id || undefined,
               period: undefined,
-              newValue: undefined
+              newValue: undefined,
             }
           })
 

@@ -23,7 +23,7 @@ export const fetchKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (id, circle(name)),
+        circle_kpi (id, circle(id, name)),
         kpi_period (id, completed,  period( year, month, quarter))
       `)
     .order('created_at', { ascending: false })
@@ -41,7 +41,7 @@ export const fetchUncompletedKpis = async () => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (id, circle(name)),
+        circle_kpi (id, circle(id, name)),
         kpi_period (id, completed,  period( year, month, quarter))
       `)
     .eq('kpi_period.completed', false)
@@ -223,9 +223,10 @@ export const fetchSingleKpi = async (id: number) => {
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
-        circle_kpi (id, circle(name)),
+        circle_kpi (id, circle(id, name)),
         kpi_period (id, completed, period( year, month, quarter))
-      `)
+      `
+    )
     .eq('id', id)
 
   return data
@@ -237,7 +238,7 @@ export const fetchCompletedKpis = async () => {
     .from('audit')
     .select(`
       value,
-      circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(display_value))),
+      circle_kpi (id, circle(id, name), kpi (id, name, sample_value, frequency(type), range(display_value))),
       kpi_period (id, completed, period( year, month, quarter))
     `)
 

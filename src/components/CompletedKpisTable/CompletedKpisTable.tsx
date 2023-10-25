@@ -27,7 +27,11 @@ const CompletedKpisTable = () => {
               frequency: item?.circle_kpi?.kpi?.frequency?.type,
               range: item?.circle_kpi?.kpi?.range?.display_value,
               circle: item?.circle_kpi?.circle?.name,
-              period: getDisplayedKpiPeriod(item?.circle_kpi?.kpi?.frequency?.type, item?.kpi_period?.period?.year)
+              circle_id: item?.circle_kpi?.circle?.id,
+              period: getDisplayedKpiPeriod(
+                item?.circle_kpi?.kpi?.frequency?.type,
+                item?.kpi_period?.period?.year
+              ),
             }
           })
           dispatch(setCompletedKpis(tableValues))
