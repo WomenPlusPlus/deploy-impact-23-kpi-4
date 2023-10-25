@@ -59,6 +59,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
   const frequencies = useSelector((state: RootState) => state.kpis.frequencies)
   const circles = useSelector((state: RootState) => state.kpis.circles)
 
+  const [form] = Form.useForm()
+
   /** Function used to fetch the economists when the user focuses on the economists select input */
   const handleEconomistsFocus = async () => {
     setEconomistsLoading(true)
@@ -187,10 +189,25 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
       )
       setSubmitLoading(false)
     }
+    resetForm()
+  }
+
+  const resetForm = () => {
+    form.setFieldsValue({
+      circle_id: undefined,
+      name: '',
+      description: '',
+      frequency_id: undefined,
+      sample_value: undefined,
+      min_value: undefined,
+      max_value: undefined,
+      display_value: undefined,
+    })
   }
 
   const handleCancel = () => {
     setIsModalOpen(false)
+    resetForm()
   }
 
   return (
@@ -211,7 +228,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
         ]}
       >
         <Form
-          id='AddKPI'
+          form={form}
+          id="AddKPI"
           layout="vertical"
           onFinish={handleSubmit}
         >
