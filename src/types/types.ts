@@ -58,6 +58,7 @@ export type kpiFromSupabase = {
   circle_kpi: {
     id: number,
     circle: {
+      id: number,
       name: string
     } | null
   }[],
