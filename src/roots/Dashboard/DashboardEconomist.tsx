@@ -2,7 +2,7 @@ import { ConfigProvider, Spin, Table } from 'antd'
 import './Dashboard.css'
 import Button from '../../components/Button/Button'
 import { useEffect, useState } from 'react'
-import { fetchKpis, fetchSingleKpi } from '../../utils/apiRequests'
+import { fetchSingleKpi, fetchUncompletedKpis } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
@@ -16,7 +16,6 @@ import { getDisplayedKpiPeriod } from '../../utils/utils'
 
 /**
  * TODO:
- ** Change request for kpis to get only the uncompleted
  ** Remove a Kpi from the state once you add the value
  ** Implement information boxes
  */
@@ -39,7 +38,7 @@ const DashboardEconomist = () => {
     setKpisLoading(true)
     try {
       const kpisRequest = async () => {
-        const kpisFromRequest = await fetchKpis()
+        const kpisFromRequest = await fetchUncompletedKpis()
 
         if (kpisFromRequest) {
           // const filteredKpis = filterCurrentKpis(kpisFromRequest)
@@ -76,7 +75,6 @@ const DashboardEconomist = () => {
               newValue: undefined
             }
           })
-
           dispatch(setKpis(kpisWithKeyValue))
         }
         setKpisLoading(false)

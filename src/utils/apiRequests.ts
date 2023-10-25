@@ -24,8 +24,27 @@ export const fetchKpis = async () => {
         frequency (type),
         range (min_value, max_value, display_value),
         circle_kpi (id, circle(name)),
-        kpi_period (id, period( year, month, quarter))
+        kpi_period (id, completed,  period( year, month, quarter))
       `)
+    .order('created_at', { ascending: false })
+
+  console.log(data)
+  return data
+}
+
+export const fetchUncompletedKpis = async () => {
+  const { data, error } = await supabase
+    .from('kpi')
+    .select(`
+        id,
+        name,
+        sample_value,
+        frequency (type),
+        range (min_value, max_value, display_value),
+        circle_kpi (id, circle(name)),
+        kpi_period (id, completed,  period( year, month, quarter))
+      `)
+    .eq('kpi_period.completed', false)
     .order('created_at', { ascending: false })
 
   return data
@@ -204,7 +223,7 @@ export const fetchSingleKpi = async (id: number) => {
         frequency (type),
         range (min_value, max_value, display_value),
         circle_kpi (id, circle(name)),
-        kpi_period (id, period( year, month, quarter))
+        kpi_period (id, completed, period( year, month, quarter))
       `)
     .eq('id', id)
 
@@ -217,7 +236,7 @@ export const fetchCompletedKpis = async () => {
     .select(`
       value,
       circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(display_value))),
-      kpi_period (id, period( year, month, quarter))
+      kpi_period (id, completed, period( year, month, quarter))
     `)
 
   return data
