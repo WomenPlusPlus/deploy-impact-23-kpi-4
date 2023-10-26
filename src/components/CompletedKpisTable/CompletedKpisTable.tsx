@@ -9,10 +9,22 @@ import { setCompletedKpis } from '../../store/kpiSlice'
 import Button from '../Button/Button'
 import { DownloadOutlined, AreaChartOutlined } from '@ant-design/icons'
 
+import TableauChartModal from '../TableauDashboards/TableauDashboard'
+
 const CompletedKpisTable = () => {
   const completedKpis = useSelector((state: RootState) => state.kpis.completedKpis)
   const dispatch = useDispatch()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   useEffect(() => {
     try {
@@ -59,18 +71,22 @@ const CompletedKpisTable = () => {
       <div className='flex items-center justify-between mt-8'>
         <p className='text-2xl '>KPIs history record</p>
         <div className='flex'>
-          <Button onClick={() => console.log('charts')} btnProps={{ size: 'small', icon: <AreaChartOutlined /> }} text='Charts' />
+          <Button onClick={openModal} btnProps={{ size: 'small', icon: <AreaChartOutlined /> }} text='Charts' />
+          <TableauChartModal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+          />
           <Button onClick={() => console.log('download')} btnProps={{ size: 'small', icon: <DownloadOutlined />, className: 'ml-2' }} text='Download' />
         </div>
       </div>
 
       <Table rowSelection={rowSelection} bordered dataSource={completedKpis}>
-        <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
-        <Column title='New Value' align='center' key='newValue' dataIndex='newValue'/>
-        <Column title='Name' align='center' key='name' dataIndex='name'/>
-        <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
-        <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
-        <Column title='Period' align='center' key='period' dataIndex='period'/>
+        <Column title='Circle' align='center' key='circle' dataIndex='circle' />
+        <Column title='New Value' align='center' key='newValue' dataIndex='newValue' />
+        <Column title='Name' align='center' key='name' dataIndex='name' />
+        <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue' />
+        <Column title='Frequency' align='center' key='frequency' dataIndex='frequency' />
+        <Column title='Period' align='center' key='period' dataIndex='period' />
       </Table>
     </div>
 
