@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Form, Input, Modal, Select, Button, Space } from 'antd'
 import {
   fetchCircles,
-  fetchUsersByRole,
   fetchFrequency,
   getRangeById,
   addKpi,
@@ -17,7 +16,7 @@ import {
   setFrequencies,
 } from '../../store/kpiSlice'
 import { RootState } from '../../store/store'
-import { KpiSupabase, roles, Kpi } from '../../types/types'
+import { KpiSupabase } from '../../types/types'
 
 export type FieldType = {
   kpi_id: number
@@ -114,7 +113,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
 
   useEffect(() => {
     form.setFieldsValue(initialData)
-  }, [form, initialData, isModalOpen])
+  }, [initialData])
 
 
   /** Function that updates the state of Kpis in order to populate the table with newly added kpi */
@@ -167,26 +166,24 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
 
       openNotificationWithIcon(
         'success',
-        'KPI Insertion',
-        'You successfully added a new KPI!'
+        isEditMode ? 'KPI Update' : 'KPI Insertion',
+        isEditMode
+          ? 'You successfully saved KPI !' + values.kpi_id
+          : 'You successfully added a new KPI!'
       )
-      setSubmitLoading(false)
     }
     catch (e) {
       openNotificationWithIcon(
         'error',
-        'KPI Insertion',
-        'Error while adding a new KPI. Please try again.'
+        isEditMode? 'KPI Update' : 'KPI Insertion',
+        'Error while updating/adding a new KPI. Please try again.'
       )
-      setSubmitLoading(false)
     }
+    setSubmitLoading(false)
     resetForm()
   }
 
   const resetForm = () => {
-    // form.resetFields()
-    // initialData = undefined
-
     form.setFieldsValue({
       kpi_id: undefined,
       circle_id: undefined,
