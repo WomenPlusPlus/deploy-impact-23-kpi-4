@@ -90,7 +90,8 @@ const DashboardGatekeeper = () => {
       const kpiDt = await fetchSingleKpiWithDescFreq(record.id)
       if(kpiDt) {
         setKpiData({
-          id: kpiDt[0].id,
+          kpi_id: kpiDt[0].id,
+          kpi_circle_id: kpiDt[0].circle_kpi[0].id,
           circle_id: kpiDt[0].circle_kpi[0].circle?.id || 0,
           name: kpiDt[0].name,
           sample_value: kpiDt[0].sample_value,

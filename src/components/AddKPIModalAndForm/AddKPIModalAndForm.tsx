@@ -6,23 +6,31 @@ import {
   fetchFrequency,
   getRangeById,
   addKpi,
+  updateKpi,
 } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
-import { addStateKpi, setCircles, setFrequencies } from '../../store/kpiSlice'
+import {
+  addStateKpi,
+  updateStateKpi,
+  setCircles,
+  setFrequencies,
+} from '../../store/kpiSlice'
 import { RootState } from '../../store/store'
 import { KpiSupabase, roles, Kpi } from '../../types/types'
 
 export type FieldType = {
-  circle_id: number;
-  name: string;
-  description?: string;
-  sample_value: number;
-  min_value: number;
-  max_value: number;
-  display_value: string;
-  frequency_id: number;
-};
+  kpi_id: number
+  kpi_circle_id: number
+  circle_id: number
+  name: string
+  description?: string | null | undefined
+  sample_value: number
+  min_value: number | null | undefined
+  max_value: number | null | undefined
+  display_value: string | null | undefined
+  frequency_id: number
+}
 
 interface IAddKPIModalAndForm {
   isModalOpen: boolean
@@ -64,14 +72,10 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
 
   const [form] = Form.useForm()
 
-  /** Function used to fetch the circles when the user focuses on the circles select input */
-  const handleCirclesFocus = async () => {
-    setCirclesLoading(true)
-
-    try {
+  useEffect(() => {
+    const getCircleOptions = async () => {
       const circlesFromSupabase = await fetchCircles()
       const circlesSelectOptions: ICircleSelectOptions[] = []
-
       if (circlesFromSupabase) {
         dispatch(setCircles(circlesFromSupabase))
         for (let i = 0; i < circlesFromSupabase.length; i++) {
@@ -83,28 +87,17 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
 
         setCirclesOptions(circlesSelectOptions)
       }
-      setCirclesLoading(false)
-    } catch (e) {
-      openNotificationWithIcon(
-        'error',
-        'Fetch Circles Error',
-        'Error while fetching the circles. Please try again.'
-      )
-      setCirclesLoading(false)
     }
-  }
 
-  /** Function used to fetch the frequencies when the user focuses on the frequencies select input */
-  const handleFrequency = async () => {
-    setFrequencyLoading(true)
+    getCircleOptions()
+  }, [])
 
-    try {
+  useEffect(() => {
+    const getFrequencyOptions = async () => {
       const frequenciesFromSupabase = await fetchFrequency()
       const frequenciesSelectOptions: IFrequencySelectOptions[] = []
-
       if (frequenciesFromSupabase) {
         dispatch(setFrequencies(frequenciesFromSupabase))
-
         for (let i = 0; i < frequenciesFromSupabase.length; i++) {
           frequenciesSelectOptions.push({
             label: frequenciesFromSupabase[i].type,
@@ -114,48 +107,60 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
 
         setFrequencyOptions(frequenciesSelectOptions)
       }
-      setFrequencyLoading(false)
-    } catch (e) {
-      openNotificationWithIcon(
-        'error',
-        'Fetch frequencies Error',
-        'Error while fetching the frequencies. Please try again.'
-      )
-      setCirclesLoading(false)
     }
-  }
+
+    getFrequencyOptions()
+  }, [])
+
+  useEffect(() => {
+    form.setFieldsValue(initialData)
+  }, [form, initialData, isModalOpen])
+
 
   /** Function that updates the state of Kpis in order to populate the table with newly added kpi */
-  const updateKpiState = async (newKpi: KpiSupabase[], values: FieldType) => {
-    const range = await getRangeById(newKpi[0].range_id)
+  const updateKpiState = async (
+    kpi: KpiSupabase[],
+    values: FieldType,
+    existingKpi = false
+  ) => {
+    const range = await getRangeById(kpi[0].range_id)
     const frequency = frequencies.filter(
       (frequency) => frequency.id === values.frequency_id
     )
     const circle = circles.filter((circle) => circle.id === values.circle_id)
 
     const stateKpi = {
-      id: newKpi[0].id,
-      key: newKpi[0].id,
-      name: newKpi[0].name,
-      sampleValue: newKpi[0].sample_value,
+      id: kpi[0].id,
+      key: kpi[0].id,
+      name: kpi[0].name,
+      sampleValue: kpi[0].sample_value,
       range: range && range[0].display_value,
       frequency: frequency[0].type,
       circle: circle[0].name,
-      frequency_id: newKpi[0].frequency_id,
-      description: newKpi[0].description,
+      frequency_id: kpi[0].frequency_id,
+      description: kpi[0].description,
       period: undefined,
       newValue: undefined,
     }
 
-    dispatch(addStateKpi(stateKpi))
+    if (existingKpi) dispatch(updateStateKpi(stateKpi))
+    else dispatch(addStateKpi(stateKpi))
   }
 
   const handleSubmit = async (values: FieldType) => {
     setSubmitLoading(true)
+    const isEditMode = values.kpi_id ? true : false
     try {
-      const newKpi = await addKpi(values)
-      if (newKpi) {
-        await updateKpiState(newKpi, values)
+      if (isEditMode) {
+        const kpiData = await updateKpi(values)
+        if (kpiData) {
+          await updateKpiState([kpiData], values, true)
+        }
+      } else {
+        const newKpi = await addKpi(values)
+        if (newKpi) {
+          await updateKpiState([newKpi], values)
+        }
       }
 
       setIsModalOpen(false)
@@ -165,9 +170,9 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
         'KPI Insertion',
         'You successfully added a new KPI!'
       )
-
       setSubmitLoading(false)
-    } catch (e) {
+    }
+    catch (e) {
       openNotificationWithIcon(
         'error',
         'KPI Insertion',
@@ -183,6 +188,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
     // initialData = undefined
 
     form.setFieldsValue({
+      kpi_id: undefined,
       circle_id: undefined,
       name: '',
       description: '',
@@ -204,7 +210,9 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       {contextHolder}
       <Modal
         title={
-          initialData?.id ? 'Editing KPI ' + initialData.id : 'New KPI Form'
+          initialData?.kpi_id
+            ? 'Editing KPI ' + initialData.kpi_id
+            : 'New KPI Form'
         }
         open={isModalOpen}
         onCancel={handleCancel}
@@ -219,7 +227,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
             key="submit"
             htmlType="submit"
           >
-            {initialData?.id ? 'Save KPI' : 'Submit KPI'}
+            {initialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
           </Button>,
         ]}
       >
@@ -230,14 +238,14 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
           onFinish={handleSubmit}
           initialValues={initialData}
         >
+          <Form.Item<FieldType> name="kpi_id" hidden={true}></Form.Item>
+          <Form.Item<FieldType> name="kpi_circle_id" hidden={true}></Form.Item>
           <Form.Item<FieldType>
             label="Circle"
             name="circle_id"
             rules={[{ required: true, message: 'Please select the circle!' }]}
           >
-            <Select
-              options={circlesOptions}
-            />
+            <Select options={circlesOptions} />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -261,8 +269,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
               { required: true, message: 'Please select the frequency!' },
             ]}
           >
-            <Select options={frequencyOptions}
-            />
+            <Select options={frequencyOptions} />
           </Form.Item>
 
           <Form.Item<FieldType>
