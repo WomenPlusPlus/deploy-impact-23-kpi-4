@@ -123,6 +123,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
       frequency: frequency[0].type,
       circle: circle[0].name,
       description: newKpi[0].description,
+      minValue: range && range[0].min_value,
+      maxValue: range && range[0].max_value,
       period: undefined,
       newValue: undefined
     }
@@ -236,15 +238,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
               options={frequencyOptions}
             />
           </Form.Item>
-
-          <Form.Item<FieldType>
-            label="Sample Value"
-            name="sample_value"
-            rules={[{ required: true, message: 'Please input the sample value!' }]}
-          >
-            <Input type='number' />
-          </Form.Item>
-          <div style={{ paddingBottom: '12px' }}><strong>Range Inputs:</strong></div>
           <Space direction="horizontal" size="middle">
             <Form.Item<FieldType>
               label="Min Value"
@@ -261,11 +254,11 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
               <Input type='number' />
             </Form.Item>
             <Form.Item<FieldType>
-              label="Displayed Value"
-              name="display_value"
-              rules={[{ required: true, message: 'Please input the displayed value!' }]}
+              label="Sample Value"
+              name="sample_value"
+              rules={[{ required: true, message: 'Please input the sample value!' }]}
             >
-              <Input />
+              <Input type='number' />
             </Form.Item>
           </Space>
         </Form>

@@ -6,7 +6,9 @@ export type Kpi = {
   range: string | null | undefined
   circle: string | undefined
   period: string | undefined,
-  newValue: number | undefined
+  newValue: number | undefined,
+  minValue: number | null | undefined,
+  maxValue: number | null | undefined
 }
 
 export type KpiSupabase = {
