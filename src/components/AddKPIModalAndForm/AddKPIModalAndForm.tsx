@@ -16,17 +16,11 @@ export type FieldType = {
   max_value: number;
   display_value: string;
   frequency_id: number;
-  economist?: string
 };
 
 interface IAddKPIModalAndForm {
   isModalOpen: boolean,
   setIsModalOpen: (b: boolean) => void
-}
-
-interface IEconomistSelectOptions {
-  label: string;
-  value: string;
 }
 
 interface ICircleSelectOptions {
@@ -41,12 +35,10 @@ interface IFrequencySelectOptions {
 
 const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsModalOpen }) => {
   // Select options state
-  const [economistsOptions, setEconomistsOptions] = useState<IEconomistSelectOptions[]>([])
   const [circlesOptions, setCirclesOptions] = useState<ICircleSelectOptions[]>([])
   const [frequencyOptions , setFrequencyOptions] = useState<IFrequencySelectOptions[]>([])
 
   // Loading state
-  const [economistsLoading, setEconomistsLoading] = useState(false)
   const [circlesLoading, setCirclesLoading] = useState(false)
   const [frequencyLoading, setFrequencyLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -60,32 +52,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
   const circles = useSelector((state: RootState) => state.kpis.circles)
 
   const [form] = Form.useForm()
-
-  /** Function used to fetch the economists when the user focuses on the economists select input */
-  const handleEconomistsFocus = async () => {
-    setEconomistsLoading(true)
-
-    try {
-      const economistsFromSupabase = await fetchUsersByRole(roles.GATEKEEPER) // change to economists
-      const economistsSelectOptions: IEconomistSelectOptions[] = []
-
-      if (economistsFromSupabase) {
-        for (let i = 0; i < economistsFromSupabase.length; i++) {
-          economistsSelectOptions.push({ label: economistsFromSupabase[i].email, value: economistsFromSupabase[i].email })
-        }
-      }
-
-      setEconomistsOptions(economistsSelectOptions)
-      setEconomistsLoading(false)
-    } catch (e) {
-      openNotificationWithIcon(
-        'error',
-        'Fetch Economists Error',
-        'Error while fetching the economists. Please try again.'
-      )
-      setEconomistsLoading(false)
-    }
-  }
 
   /** Function used to fetch the circles when the user focuses on the circles select input */
   const handleCirclesFocus = async () => {
@@ -107,8 +73,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
     } catch (e) {
       openNotificationWithIcon(
         'error',
-        'Fetch Economists Error',
-        'Error while fetching the economists. Please try again.'
+        'Fetch Circles Error',
+        'Error while fetching the circles. Please try again.'
       )
       setCirclesLoading(false)
     }
@@ -135,8 +101,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
     } catch (e) {
       openNotificationWithIcon(
         'error',
-        'Fetch Economists Error',
-        'Error while fetching the economists. Please try again.'
+        'Fetch frequencies Error',
+        'Error while fetching the frequencies. Please try again.'
       )
       setCirclesLoading(false)
     }
@@ -302,17 +268,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
               <Input />
             </Form.Item>
           </Space>
-          <Form.Item<FieldType>
-            label="Economist"
-            name='economist'
-            rules={[{ required: true, message: 'Please select the economist!' }]}
-          >
-            <Select
-              onFocus={handleEconomistsFocus}
-              loading={economistsLoading}
-              options={economistsOptions}
-            />
-          </Form.Item>
         </Form>
       </Modal>
     </div>
