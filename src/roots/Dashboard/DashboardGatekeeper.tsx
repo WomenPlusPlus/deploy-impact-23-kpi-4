@@ -48,6 +48,7 @@ const DashboardGatekeeper = () => {
               frequency_id: value.frequency_id,
               minValue: value?.range?.min_value,
               maxValue: value?.range?.max_value,
+              units: value?.unit_of_measurement,
               period: undefined,
               newValue: undefined
             }
@@ -86,31 +87,31 @@ const DashboardGatekeeper = () => {
   }
 
   const editKpi = (record: Kpi) => async () => {
-    if (!record.id) {
-      return
-    }
+    if (!record.id) return
+
     try {
       setIsModalOpen(true)
-      const kpiDt = await fetchSingleKpiWithDescFreq(record.id)
-      if(kpiDt) {
+      const kpiData = await fetchSingleKpiWithDescFreq(record.id)
+      if (kpiData) {
         setKpiData({
-          kpi_id: kpiDt[0].id,
-          kpi_circle_id: kpiDt[0].circle_kpi[0].id,
-          circle_id: kpiDt[0].circle_kpi[0].circle?.id || 0,
-          name: kpiDt[0].name,
-          sample_value: kpiDt[0].sample_value,
-          min_value: kpiDt[0]?.range?.min_value,
-          max_value: kpiDt[0].range?.max_value,
-          description: kpiDt[0].description,
-          display_value: kpiDt[0].range?.display_value,
-          frequency_id: kpiDt[0].frequency_id
+          kpi_id: kpiData[0].id,
+          kpi_circle_id: kpiData[0].circle_kpi[0].id,
+          circle_id: kpiData[0].circle_kpi[0].circle?.id || 0,
+          name: kpiData[0].name,
+          sample_value: kpiData[0].sample_value,
+          min_value: kpiData[0]?.range?.min_value,
+          max_value: kpiData[0].range?.max_value,
+          description: kpiData[0].description,
+          display_value: kpiData[0].range?.display_value,
+          frequency_id: kpiData[0].frequency_id,
+          units: kpiData[0].unit_of_measurement
         })
       }
 
     } catch (e) {
       openNotificationWithIcon(
         'error',
-        'Error retreiving KPI',
+        'Error retrieving KPI',
         `Error while retrieving the KPI id ${record.id}: ${e}`
       )
     }
@@ -158,6 +159,7 @@ const DashboardGatekeeper = () => {
         <Column title='Name' align='center' key='name' dataIndex='name'/>
         <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
         <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
+        <Column title='Units' align='center' key='units' dataIndex='units'/>
         <Column title='Min Value' align='center' key='minValue' dataIndex='minValue'/>
         <Column title='Max Value' align='center' key='maxValue' dataIndex='maxValue' />
         <Column title='Actions' align='center' key='action' dataIndex='actions' render={(_: any, record: Kpi) => (

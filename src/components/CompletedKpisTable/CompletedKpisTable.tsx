@@ -31,6 +31,7 @@ const CompletedKpisTable = () => {
               range: item?.circle_kpi?.kpi?.range?.display_value,
               minValue: item?.circle_kpi?.kpi?.range?.min_value,
               maxValue: item?.circle_kpi?.kpi?.range?.max_value,
+              units: item?.circle_kpi?.kpi?.unit_of_measurement,
               circle: item?.circle_kpi?.circle?.name,
               period: getDisplayedKpiPeriod(
                 item?.circle_kpi?.kpi?.frequency?.type,
@@ -72,6 +73,7 @@ const CompletedKpisTable = () => {
       <Table rowSelection={rowSelection} bordered dataSource={completedKpis}>
         <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
         <Column title='New Value' align='center' key='newValue' dataIndex='newValue'/>
+        <Column title='Units' align='center' key='units' dataIndex='units'/>
         <Column title='Name' align='center' key='name' dataIndex='name'/>
         <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
         <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>

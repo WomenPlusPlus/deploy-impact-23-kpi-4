@@ -23,9 +23,10 @@ export const fetchKpis = async () => {
         frequency (type),
         range (min_value, max_value, display_value),
         circle_kpi (id, circle(name)),
+        kpi_period (id, completed,  period( year, month, quarter)),
         description,
         frequency_id,
-        kpi_period (id, completed,  period( year, month, quarter))
+        unit_of_measurement
       `)
     .order('created_at', { ascending: false })
 
@@ -42,7 +43,8 @@ export const fetchUncompletedKpis = async () => {
         frequency (type),
         range (min_value, max_value, display_value),
         circle_kpi (id, circle(name)),
-        kpi_period (id, completed,  period( year, month, quarter))
+        kpi_period (id, completed,  period( year, month, quarter)),
+        unit_of_measurement
       `)
     .eq('kpi_period.completed', false)
     .order('created_at', { ascending: false })
@@ -83,7 +85,6 @@ export const fetchFrequency = async () => {
 const getRangeId = async (
   minValue: number | null | undefined,
   maxValue: number | null | undefined,
-  displayValue: string | null | undefined
 ) => {
   let rangeId
 
@@ -92,7 +93,6 @@ const getRangeId = async (
     .select()
     .eq('min_value', Number(minValue))
     .eq('max_value', Number(maxValue))
-    .eq('display_value', displayValue || '')
 
   if (existingRange && existingRange.length > 0) {
     rangeId = existingRange[0].id
@@ -105,7 +105,6 @@ const getRangeId = async (
         {
           min_value: Number(minValue),
           max_value: Number(maxValue),
-          display_value: displayValue,
         },
         {
           onConflict: ['min_value', 'max_value', 'display_value'],
@@ -119,35 +118,6 @@ const getRangeId = async (
 
   return rangeId
 }
-
-const getFrequencyId = async (
-  type: string
-) => {
-  let frequencyId
-
-  const { data: existingFrequency } = await supabase
-    .from('frequency')
-    .select('id')
-    .eq('type', type)
-    .maybeSingle()
-
-  if (existingFrequency) return existingFrequency
-
-  const { data: newFrequency } = await supabase
-    .from('frequency')
-    .upsert(
-      {
-        type: type,
-      },
-      {
-        ignoreDuplicates: true,
-      }
-    )
-    .select()
-
-  return frequencyId
-}
-
 
 /* Supabase request for adding circle (circle/kpi relationship) */
 const addCircleKpi = async (kpiId: number, circleId: number) => {
@@ -184,8 +154,8 @@ const updateCircleKpi = async(kpiCircleId: number, kpiId: number, circleId: numb
 /* Supabase request for adding new KPI */
 export const addKpi = async (values: FieldType) => {
   let rangeId
-  if (values.min_value && values.max_value && values.display_value) {
-    rangeId = await getRangeId(values.min_value, values.max_value, values.display_value)
+  if (values.min_value && values.max_value) {
+    rangeId = await getRangeId(values.min_value, values.max_value)
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -198,7 +168,8 @@ export const addKpi = async (values: FieldType) => {
         description: values.description,
         sample_value: Number(values.sample_value),
         range_id: rangeId,
-        frequency_id: values.frequency_id
+        frequency_id: values.frequency_id,
+        unit_of_measurement: values.units
       },
       {
         onConflict: 'name',
@@ -218,8 +189,7 @@ export const addKpi = async (values: FieldType) => {
 
 export const updateKpi = async (values: FieldType) => {
   // KPI data available from user selected KPI
-  const rangeId = await getRangeId(values.min_value, values.max_value, values.display_value)
-  // let frequency_id = await getFrequencyId()
+  const rangeId = await getRangeId(values.min_value, values.max_value)
 
   // update KPI
   const { data: kpiData, error: kpiError } = await supabase
@@ -230,12 +200,13 @@ export const updateKpi = async (values: FieldType) => {
       description: values.description,
       range_id: rangeId || 0,
       frequency_id: values.frequency_id,
+      unit_of_measurement: values.units
     })
     .eq('id', values.kpi_id)
     .select()
     .maybeSingle()
 
-  const kpiCircleData = await updateCircleKpi(
+  await updateCircleKpi(
     values.kpi_circle_id,
     values.kpi_id,
     values.circle_id)
@@ -295,15 +266,15 @@ export const addNewValue = async (userId: string, periodId: number, circleId: nu
 export const fetchSingleKpi = async (id: number) => {
   const { data, error } = await supabase
     .from('kpi')
-    .select(
-      `
+    .select(`
         id,
         name,
         sample_value,
         frequency (type),
         range (min_value, max_value, display_value),
         circle_kpi (id, circle(id, name)),
-        kpi_period (id, completed, period( year, month, quarter))
+        kpi_period (id, completed, period( year, month, quarter)),
+        unit_of_measurement
       `
     )
     .eq('id', id)
@@ -325,7 +296,8 @@ export const fetchSingleKpiWithDescFreq = async (id: number) => {
         circle_kpi (id, circle(id, name)),
         kpi_period (id, completed, period( year, month, quarter)),
         description,
-        frequency_id
+        frequency_id,
+        unit_of_measurement
       `
     )
     .eq('id', id)
@@ -339,7 +311,7 @@ export const fetchCompletedKpis = async () => {
     .from('audit')
     .select(`
       value,
-      circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(min_value, max_value, display_value))),
+      circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(min_value, max_value, display_value), unit_of_measurement)),
       kpi_period (id, completed, period( year, month, quarter))
     `)
 

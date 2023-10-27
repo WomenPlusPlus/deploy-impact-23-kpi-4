@@ -1,14 +1,13 @@
 import { ConfigProvider, Spin, Table } from 'antd'
 import './Dashboard.css'
 import Button from '../../components/Button/Button'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchSingleKpi, fetchUncompletedKpis } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import { setKpis } from '../../store/kpiSlice'
 import { Kpi, kpiFromSupabase } from '../../types/types'
-import Time from '../../assets/Time.svg'
 import Column from 'antd/es/table/Column'
 import AddValueModalAndForm from '../../components/AddValueModalAndForm/AddValueModalAndForm'
 import CompletedKpisTable from '../../components/CompletedKpisTable/CompletedKpisTable'
@@ -74,6 +73,7 @@ const DashboardEconomist = () => {
               newValue: undefined,
               description: null,
               frequency_id: null,
+              units: value.unit_of_measurement,
             }
           })
           dispatch(setKpis(kpisWithKeyValue))
@@ -129,8 +129,9 @@ const DashboardEconomist = () => {
         <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
         <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
         <Column title='Period' align='center' key='period' dataIndex='period'/>
+        <Column title='Units' align='center' key='units' dataIndex='units'/>
         <Column title='Actions' align='center' key='actions' dataIndex='action' render={(_: any, record: Kpi) => (
-          <Button text='Add Value' btnProps={{ type: 'primary' }} onClick={showModal(record)} />
+          <Button text='Add Value' btnProps={{ type: 'primary', size: 'small' }} onClick={showModal(record)} />
         )}/>
       </Table>
       <CompletedKpisTable />

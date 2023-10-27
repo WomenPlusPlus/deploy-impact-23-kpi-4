@@ -28,7 +28,8 @@ export type FieldType = {
   min_value: number | null | undefined
   max_value: number | null | undefined
   display_value: string | null | undefined
-  frequency_id: number
+  frequency_id: number,
+  units: string;
 }
 
 interface IAddKPIModalAndForm {
@@ -142,6 +143,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       description: kpi[0].description,
       minValue: range && range[0].min_value,
       maxValue: range && range[0].max_value,
+      units: kpi[0].unit_of_measurement,
       period: undefined,
       newValue: undefined,
     }
@@ -152,15 +154,18 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
 
   const handleSubmit = async (values: FieldType) => {
     setSubmitLoading(true)
-    const isEditMode = values.kpi_id ? true : false
+    const isEditMode = !!values.kpi_id
+
     try {
       if (isEditMode) {
         const kpiData = await updateKpi(values)
+
         if (kpiData) {
           await updateKpiState([kpiData], values, true)
         }
       } else {
         const newKpi = await addKpi(values)
+
         if (newKpi) {
           await updateKpiState([newKpi], values)
         }
@@ -199,6 +204,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       min_value: undefined,
       max_value: undefined,
       display_value: undefined,
+      units: undefined
     })
   }
 
@@ -277,20 +283,16 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
             <Form.Item<FieldType>
               label="Min Value"
               name="min_value"
-              rules={[
-                { required: true, message: 'Please input the range min val!' },
-              ]}
+              rules={[{ required: true, message: 'Please input the range min val!' }]}
             >
-              <Input type="number" />
+              <Input type='number' />
             </Form.Item>
             <Form.Item<FieldType>
               label="Max Value"
               name="max_value"
-              rules={[
-                { required: true, message: 'Please input the range max val!' },
-              ]}
+              rules={[{ required: true, message: 'Please input the range max val!' }]}
             >
-              <Input type="number" />
+              <Input type='number' />
             </Form.Item>
             <Form.Item<FieldType>
               label="Sample Value"
@@ -300,6 +302,13 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
               <Input type='number' />
             </Form.Item>
           </Space>
+          <Form.Item<FieldType>
+            label="Units"
+            name="units"
+            rules={[{ required: true, message: 'Please input units!' }]}
+          >
+            <Input />
+          </Form.Item>
         </Form>
       </Modal>
     </div>
