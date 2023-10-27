@@ -57,8 +57,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   const [frequencyOptions , setFrequencyOptions] = useState<IFrequencySelectOptions[]>([])
 
   // Loading state
-  const [circlesLoading, setCirclesLoading] = useState(false)
-  const [frequencyLoading, setFrequencyLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
   // Hooks
@@ -70,6 +68,9 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   const circles = useSelector((state: RootState) => state.kpis.circles)
 
   const [form] = Form.useForm()
+
+  // Local states
+  const [localInitialData, setLocalInitialData] = useState(initialData)
 
   useEffect(() => {
     const getCircleOptions = async () => {
@@ -112,6 +113,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   }, [])
 
   useEffect(() => {
+    setLocalInitialData(initialData)
     form.setFieldsValue(initialData)
   }, [initialData])
 
@@ -170,7 +172,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
         'success',
         isEditMode ? 'KPI Update' : 'KPI Insertion',
         isEditMode
-          ? 'You successfully saved KPI !' + values.kpi_id
+          ? 'You successfully saved KPI !'
           : 'You successfully added a new KPI!'
       )
     }
@@ -186,6 +188,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   }
 
   const resetForm = () => {
+    setLocalInitialData({} as FieldType)
     form.setFieldsValue({
       kpi_id: undefined,
       circle_id: undefined,
@@ -209,8 +212,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       {contextHolder}
       <Modal
         title={
-          initialData?.kpi_id
-            ? 'Editing KPI ' + initialData.kpi_id
+          localInitialData?.kpi_id
+            ? 'Editing KPI'
             : 'New KPI Form'
         }
         open={isModalOpen}
@@ -226,7 +229,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
             key="submit"
             htmlType="submit"
           >
-            {initialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
+            {localInitialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
           </Button>,
         ]}
       >
@@ -235,7 +238,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
           id="AddKPI"
           layout="vertical"
           onFinish={handleSubmit}
-          initialValues={initialData}
+          initialValues={localInitialData}
         >
           <Form.Item<FieldType> name="kpi_id" hidden={true}></Form.Item>
           <Form.Item<FieldType> name="kpi_circle_id" hidden={true}></Form.Item>
