@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react'
-import { Form, Input, Modal, Button, FormInstance } from 'antd'
+import React, { useState } from 'react'
+import { Form, Input, Modal, Button, Divider } from 'antd'
 import { useNotifications } from '../../hooks/useNotifications'
 import { frequency, kpiFromSupabase } from '../../types/types'
 import Info from '../../assets/Info.svg'
@@ -67,7 +67,11 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           maxValue: record.range?.max_value,
           circle: record.circle_kpi[0].circle?.name,
           period: getDisplayedKpiPeriod(record.frequency?.type, record.kpi_period[0].period?.year),
-          newValue: Number(values.name)
+          newValue: Number(values.name),
+          description: null,
+          frequency_id: null,
+          units: record.unit_of_measurement
+
         }
         dispatch(addStateCompletedKpi(updatedState))
 
@@ -99,25 +103,25 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
   const recordMin = record?.range?.min_value
   const recordMax = record?.range?.max_value
 
-  const validateNumberInput = async (_: any, value: number | undefined) => {
-    if (!(recordMin || recordMin === 0) || !(recordMax || recordMax === 0) || !(value || value === 0) || value < recordMin || value > recordMax) {
+  const validateNumberInput = async (_: any, value: string) => {
+    if (!(recordMin || recordMin === 0) || !(recordMax || recordMax === 0) || !value || Number(value) < recordMin || Number(value) > recordMax) {
       return Promise.reject(`Number must be between ${recordMin} and ${recordMax}`)
     }
 
     return Promise.resolve()
   }
 
-  const handleInputChange = (value: number | undefined) => {
+  const handleInputChange = (value: string) => {
     form.setFieldsValue({ name: value })
 
-    if (!(recordMin || recordMin === 0) || !(recordMax || recordMax === 0) || !(value || value === 0) || value < recordMin || value > recordMax) {
+    if (!(recordMin || recordMin === 0) || !(recordMax || recordMax === 0) || !value || Number(value) < recordMin || Number(value) > recordMax) {
       form.validateFields(['name'])
     }
   }
 
   const displayRangeMessage = () => {
     if ((recordMin || recordMin === 0) && (recordMax || recordMax === 0)) {
-      return <p className='text-xs'>{`The new value should be between [${record?.range?.min_value}, ${record?.range?.max_value}]`}</p>
+      return <div className='text-sm mb-2'>{`The new value should be between ${record?.range?.min_value} and ${record?.range?.max_value}.`}</div>
     }
   }
 
@@ -144,12 +148,13 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           </Button>
         ]}
       >
+        <Divider />
         <div className='mb-10'>
-          <p><strong>KPI name</strong>: {record?.name}</p>
-          <p><strong>Circle</strong>: {record?.circle_kpi[0]?.circle?.name}</p>
-          <p><strong>Frequency</strong>: {record?.frequency?.type}</p>
-          <p><strong>Range</strong>: {record?.range?.display_value}</p>
-          <p><strong>Sample Value</strong>: {record?.sample_value}</p>
+          <div className='text-sm leading-none mb-2'><strong>KPI name</strong>: {record?.name}</div>
+          <div className='text-sm leading-none mb-2'><strong>Circle</strong>: {record?.circle_kpi[0]?.circle?.name}</div>
+          <div className='text-sm leading-none mb-2'><strong>Frequency</strong>: {record?.frequency?.type}</div>
+          <div className='text-sm leading-none mb-2'><strong>Units</strong>: {record?.unit_of_measurement}</div>
+          <div className='text-sm leading-none mb-2 font-bold text-[#536FC8] bg-[rgb(83,111,200)]/30 w-fit rounded-sm px-5 py-1 border border-solid border-[#536FC8]'>sample value: {record?.sample_value}</div>
         </div>
         <Form
           form={form}
@@ -158,8 +163,12 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           onFinish={handleSubmit}
           autoComplete='off'
         >
+          <div className='flex items-center mb-2'>
+            <div className='text-rose-700 mr-1'>*</div>
+            <div className='text-base leading-none'>New KPI Value</div>
+          </div>
+          {displayRangeMessage()}
           <Form.Item<FieldType>
-            label="New KPI Value"
             name="name"
             rules={[
               {
@@ -171,14 +180,14 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
               }
             ]}
           >
-            {displayRangeMessage()}
-            <Input type='number' onChange={(value) => handleInputChange(Number(value.target.value))} placeholder={`Example: ${String(record?.sample_value)}`} />
+            <Input type='number' onChange={(value) => handleInputChange(value.target.value)} />
           </Form.Item>
         </Form>
         <div className='flex flex-row'>
           <img src={Info} alt='Info icon' />
-          <p className={'ml-2'}>You can see the new added value on the history record table.</p>
+          <p className='text-sm ml-2'>You can see the new added value on the history record table.</p>
         </div>
+        <Divider />
       </Modal>
     </div>
   )

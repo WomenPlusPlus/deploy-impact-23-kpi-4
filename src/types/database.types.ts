@@ -159,6 +159,7 @@ export interface Database {
                     name: string
                     range_id: number
                     sample_value: number
+                    unit_of_measurement: string
                 }
                 Insert: {
                     created_at?: string
@@ -168,6 +169,7 @@ export interface Database {
                     name: string
                     range_id: number
                     sample_value: number
+                    unit_of_measurement?: string
                 }
                 Update: {
                     created_at?: string
@@ -177,6 +179,7 @@ export interface Database {
                     name?: string
                     range_id?: number
                     sample_value?: number
+                    unit_of_measurement?: string
                 }
                 Relationships: [
                     {

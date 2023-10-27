@@ -1,14 +1,17 @@
 export type Kpi = {
-  id: number | undefined,
+  id: number | undefined
   name: string | undefined
   sampleValue: number | undefined
   frequency: string | undefined
   range: string | null | undefined
   circle: string | undefined
-  period: string | undefined,
+  description: string | null
+  frequency_id: number | null
+  period: string | undefined
   newValue: number | undefined,
   minValue: number | null | undefined,
-  maxValue: number | null | undefined
+  maxValue: number | null | undefined,
+  units: string | undefined
 }
 
 export type KpiSupabase = {
@@ -17,7 +20,8 @@ export type KpiSupabase = {
   description: string | null,
   sample_value: number,
   frequency_id: number,
-  range_id: number
+  range_id: number,
+  unit_of_measurement: string
 }
 
 export type Frequency = {
@@ -49,6 +53,7 @@ export type kpiFromSupabase = {
   id: number,
   name: string,
   sample_value: number,
+  unit_of_measurement: string,
   frequency: { type: string } | null,
   range: {
     min_value: number | null,
@@ -58,6 +63,7 @@ export type kpiFromSupabase = {
   circle_kpi: {
     id: number,
     circle: {
+      id: number,
       name: string
     } | null
   }[],
