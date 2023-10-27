@@ -1,15 +1,19 @@
 import React, { useEffect, useRef } from 'react'
 
-const { tableau } = window
+declare global {
+  interface Window {
+    tableau: any
+  }
+}
 
-function TableauReact() {
+function Tableau() {
   const url = 'https://public.tableau.com/views/ImpactTrackers/shareofteamsdashb'
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement | null>(null)
 
   const initViz = () => {
-    const viz = new tableau.Viz(ref.current, url, {
+    const viz = new window.tableau.Viz(ref.current, url, {
       width: '100%',
-      height: '100vh'
+      height: '80vh'
     })
 
     return () => {
@@ -24,4 +28,4 @@ function TableauReact() {
   )
 }
 
-export default TableauReact
+export default Tableau

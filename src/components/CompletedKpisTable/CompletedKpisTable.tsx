@@ -9,7 +9,7 @@ import { setCompletedKpis } from '../../store/kpiSlice'
 import Button from '../Button/Button'
 import { DownloadOutlined, AreaChartOutlined } from '@ant-design/icons'
 
-import TableauChartModal from '../TableauDashboards/TableauDashboard'
+import TableauChartModal from '../TableauDashboards/TableauChartModal'
 
 const CompletedKpisTable = () => {
   const completedKpis = useSelector((state: RootState) => state.kpis.completedKpis)
@@ -73,8 +73,8 @@ const CompletedKpisTable = () => {
         <div className='flex'>
           <Button onClick={openModal} btnProps={{ size: 'small', icon: <AreaChartOutlined /> }} text='Charts' />
           <TableauChartModal
-            isOpen={isModalOpen}
-            onRequestClose={closeModal}
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
           />
           <Button onClick={() => console.log('download')} btnProps={{ size: 'small', icon: <DownloadOutlined />, className: 'ml-2' }} text='Download' />
         </div>
