@@ -1,11 +1,12 @@
 import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
 import './Dashboard.css'
-import { useEffect, useState } from 'react'
 import {
   deleteKpi,
   fetchKpis,
   fetchSingleKpiWithDescFreq,
 } from '../../utils/apiRequests'
+import React, { useEffect, useState } from 'react'
+
 import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,7 +14,7 @@ import { RootState } from '../../store/store'
 import { deleteStateKpi, setKpis } from '../../store/kpiSlice'
 import { Kpi } from '../../types/types'
 import Button from '../../components/Button/Button'
-import { DeleteOutlined, EditOutlined, DownloadOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, DownloadOutlined, PlusOutlined } from '@ant-design/icons'
 import Column from 'antd/es/table/Column'
 import { FieldType } from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 
@@ -23,6 +24,7 @@ const DashboardGatekeeper = () => {
   const [kpisLoading, setKpisLoading] = useState(false)
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
   const dispatch = useDispatch()
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
   const [kpiData, setKpiData] = useState<FieldType | undefined>(undefined)
 
@@ -44,6 +46,8 @@ const DashboardGatekeeper = () => {
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
               description: value?.description,
               frequency_id: value.frequency_id,
+              minValue: value?.range?.min_value,
+              maxValue: value?.range?.max_value,
               period: undefined,
               newValue: undefined
             }
@@ -120,11 +124,20 @@ const DashboardGatekeeper = () => {
     return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
   }
 
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys)
+  }
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  }
+
   return (
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#FECC33',
+          colorPrimary: '#1FA5A6',
           borderRadius: 2,
           controlHeight: 40
         },
@@ -132,16 +145,21 @@ const DashboardGatekeeper = () => {
     >
       { contextHolder }
       <div className='title-button'>
-        <p className='title'>All KPIs</p>
-        <Button text='Add New KPI' btnProps={{ type: 'primary' }} onClick={showModal}/>
+        <div className='flex items-center'>
+          <p className='text-4xl font-semibold mr-6'>All KPIs</p>
+          <Button text='Add New KPI' btnProps={{ type: 'primary', size: 'small', icon: <PlusOutlined /> }} onClick={showModal}/>
+        </div>
+        <Button onClick={() => console.log('download')} btnProps={{ size: 'small', icon: <DownloadOutlined /> }} text='Download' />
       </div>
+
       <AddKPIModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} initialData={kpiData}/>
-      <Table bordered dataSource={kpis}>
+      <Table rowSelection={rowSelection} bordered dataSource={kpis}>
         <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
         <Column title='Name' align='center' key='name' dataIndex='name'/>
         <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
         <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
-        <Column title='Range' align='center' key='range' dataIndex='range'/>
+        <Column title='Min Value' align='center' key='minValue' dataIndex='minValue'/>
+        <Column title='Max Value' align='center' key='maxValue' dataIndex='maxValue' />
         <Column title='Actions' align='center' key='action' dataIndex='actions' render={(_: any, record: Kpi) => (
           <Space direction="horizontal">
             <Tooltip title="delete">
@@ -152,14 +170,11 @@ const DashboardGatekeeper = () => {
                 okText="Yes"
                 cancelText="No"
               >
-                <Button btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <DeleteOutlined /> }} />
+                <Button btnProps={{ shape: 'circle', size: 'small', icon: <DeleteOutlined /> }} />
               </Popconfirm>
             </Tooltip>
             <Tooltip title="edit">
-              <Button onClick={editKpi(record)} btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <EditOutlined /> }} />
-            </Tooltip>
-            <Tooltip title="download">
-              <Button onClick={() => console.log('download')} btnProps={{ type: 'primary', shape: 'circle', size: 'small', icon: <DownloadOutlined /> }} />
+              <Button onClick={editKpi(record)} btnProps={{  shape: 'circle', size: 'small', icon: <EditOutlined /> }} />
             </Tooltip>
           </Space>
         )} />

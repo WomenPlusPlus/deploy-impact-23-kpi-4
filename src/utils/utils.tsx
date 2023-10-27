@@ -25,13 +25,12 @@ export const isEconomist = (role: string | undefined) => role === roles.ECONOMIS
 const currentDate = new Date()
 const currentMonth = currentDate.getMonth() + 1
 const currentQuarter = Math.floor(currentMonth / 3) + 1
-const currentYear = currentDate.getFullYear()
 
 export const getDisplayedKpiPeriod = (name: string | undefined, year: number | undefined) => {
   let displayedPeriod = ''
   switch (name) {
   case frequency.MONTHLY:
-    displayedPeriod = `${currentMonth.toString().padStart(2, '0')} / ${year}`
+    displayedPeriod = `M${currentMonth.toString().padStart(2, '0')} / ${year}`
     break
   case frequency.QUARTERLY:
     displayedPeriod = `Q${currentQuarter} / ${year}`

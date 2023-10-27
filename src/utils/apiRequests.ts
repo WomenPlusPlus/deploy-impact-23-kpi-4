@@ -1,6 +1,5 @@
 import { supabase, supabaseAdmin } from '../lib/api'
 import { FieldType } from '../components/AddKPIModalAndForm/AddKPIModalAndForm'
-import { roles } from '../types/types'
 
 /* File for all Supabase requests */
 
@@ -30,7 +29,6 @@ export const fetchKpis = async () => {
       `)
     .order('created_at', { ascending: false })
 
-  console.log(data)
   return data
 }
 
@@ -341,7 +339,11 @@ export const fetchCompletedKpis = async () => {
     .from('audit')
     .select(`
       value,
+<<<<<<< HEAD
       circle_kpi (id, circle(id, name), kpi (id, name, sample_value, frequency(type), range(display_value))),
+=======
+      circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(min_value, max_value, display_value))),
+>>>>>>> dev01
       kpi_period (id, completed, period( year, month, quarter))
     `)
 

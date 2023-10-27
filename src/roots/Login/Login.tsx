@@ -18,7 +18,7 @@ const Login = () => {
       <img className="logo" src={logo} alt="React Logo" />
       <div className="container">
         <div className="info-text">
-          <p className="title">How to start</p>
+          <p className='text-4xl font-semibold mr-6'>How to start</p>
           <p>
             {' '}
             Borem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
@@ -42,7 +42,7 @@ const Login = () => {
           </p>
         </div>
         <div className="login-box">
-          <p className="title">Login with SSO</p>
+          <p className='text-4xl font-semibold mr-6'>Login with SSO</p>
           <GoogleLogin />
         </div>
       </div>

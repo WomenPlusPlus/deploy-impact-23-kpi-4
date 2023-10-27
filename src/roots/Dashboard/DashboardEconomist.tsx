@@ -1,7 +1,7 @@
 import { ConfigProvider, Spin, Table } from 'antd'
 import './Dashboard.css'
 import Button from '../../components/Button/Button'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchSingleKpi, fetchUncompletedKpis } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
@@ -64,6 +64,8 @@ const DashboardEconomist = () => {
               sampleValue: value.sample_value,
               frequency: value?.frequency?.type || undefined,
               range: value?.range?.display_value || undefined,
+              minValue: value?.range?.min_value || undefined,
+              maxValue: value?.range?.max_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
               period: getDisplayedKpiPeriod(
                 value?.frequency?.type,
@@ -111,38 +113,26 @@ const DashboardEconomist = () => {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#FECC33',
+          colorPrimary: '#1FA5A6',
           borderRadius: 2,
           controlHeight: 40
         },
       }}
     >
       { contextHolder }
-      <p className='title'>Dashboard</p>
-      <p className='subtitle'>KPIs to update</p>
-      <div className='info-cards'>
-        <div className='card' style={{ backgroundColor: 'rgba(83,111,200, 0.3)', width: 'fit-content', padding: '8px 15px 8px 15px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', }}>
-            <p><strong>3</strong></p>
-            <img src={Time} />
-          </div>
-          <p>KPI values to update</p>
-        </div>
-      </div>
+      <p className='text-4xl font-semibold mr-6'>Dashboard</p>
+      <p className='text-2xl'>KPIs to update</p>
       <AddValueModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} record={selectedRecord} />
-      <Table dataSource={kpis}>
+      <Table bordered dataSource={kpis}>
         <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
         <Column title='Name' align='center' key='name' dataIndex='name'/>
         <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
         <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
-        <Column title='Range' align='center' key='range' dataIndex='range'/>
         <Column title='Period' align='center' key='period' dataIndex='period'/>
         <Column title='Actions' align='center' key='actions' dataIndex='action' render={(_: any, record: Kpi) => (
           <Button text='Add Value' btnProps={{ type: 'primary' }} onClick={showModal(record)} />
         )}/>
       </Table>
-
-      <p className='subtitle'>KPIs history record</p>
       <CompletedKpisTable />
     </ConfigProvider>
   )

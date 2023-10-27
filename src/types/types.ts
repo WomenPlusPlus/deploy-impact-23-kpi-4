@@ -8,7 +8,9 @@ export type Kpi = {
   description: string | null
   frequency_id: number | null
   period: string | undefined
-  newValue: number | undefined
+  newValue: number | undefined,
+  minValue: number | null | undefined,
+  maxValue: number | null | undefined
 }
 
 export type KpiSupabase = {
