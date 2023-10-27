@@ -27,7 +27,7 @@ export const fetchKpis = async () => {
       `)
     .order('created_at', { ascending: false })
 
-  return data
+  return { data, error }
 }
 
 export const fetchUncompletedKpis = async () => {
@@ -46,25 +46,25 @@ export const fetchUncompletedKpis = async () => {
     .eq('kpi_period.completed', false)
     .order('created_at', { ascending: false })
 
-  return data
+  return { data, error }
 }
 
 /* Supabase request for fetching circles */
 export const fetchCircles = async () => {
-  const { data } = await supabase
+  const { data: circlesData , error } = await supabase
     .from('circle')
     .select('id, name')
 
-  return data
+  return { circlesData, error }
 }
 
 /* Supabase request for fetching frequencies */
 export const fetchFrequency = async () => {
-  const { data } = await supabase
+  const { data: frequencyData, error } = await supabase
     .from('frequency')
     .select('id, type')
 
-  return data
+  return { frequencyData, error }
 }
 
 /* Check if selected range values already exist in supabase
@@ -213,10 +213,12 @@ export const getRangeById = async (id: number) => {
 
 /** Supabase request to  delete a KPI */
 export const deleteKpi = async (id: number) => {
-  await supabase
+  const { data, error } = await supabase
     .from('kpi')
     .delete()
     .eq('id', id)
+
+  return { data, error }
 }
 
 /** Supabase request to change the role of a user
@@ -229,7 +231,7 @@ export const changeUserRole = async(role: string, id: string) => {
   )
 
   return {
-    data: user.user,
+    user: user.user,
     error
   }
 }
@@ -238,7 +240,7 @@ export const changeUserRole = async(role: string, id: string) => {
 export const addNewValue = async (userId: string, periodId: number, circleId: number, value: number) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { data: auditData, error: auditError } = await supabase
+  const { data, error } = await supabase
     .from('audit')
     .upsert({
       user_id: userId,    // should be authenticated user
@@ -247,11 +249,13 @@ export const addNewValue = async (userId: string, periodId: number, circleId: nu
       value: value
     })
     .select()
+
+  return { data, error }
 }
 
 /** Supabase request for fetching just a single a KPI by id */
 export const fetchSingleKpi = async (id: number) => {
-  const { data, error } = await supabase
+  const { data: kpiData, error } = await supabase
     .from('kpi')
     .select(`
         id,
@@ -266,12 +270,12 @@ export const fetchSingleKpi = async (id: number) => {
     )
     .eq('id', id)
 
-  return data
+  return { kpiData, error }
 }
 
 /** Supabase request for fetching just a single a KPI by id */
 export const fetchSingleKpiWithDescFreq = async (id: number) => {
-  const { data, error } = await supabase
+  const { data: kpiData, error } = await supabase
     .from('kpi')
     .select(
       `
@@ -289,12 +293,12 @@ export const fetchSingleKpiWithDescFreq = async (id: number) => {
     )
     .eq('id', id)
 
-  return data
+  return { kpiData, error }
 }
 
 /** Supabase request for fetching the kpis that have value (economists added value to them) */
 export const fetchCompletedKpis = async () => {
-  const { data, error: auditError } = await supabase
+  const { data: completedKpis, error } = await supabase
     .from('audit')
     .select(`
       value,
@@ -302,5 +306,5 @@ export const fetchCompletedKpis = async () => {
       kpi_period (id, completed, period( year, month, quarter))
     `)
 
-  return data
+  return { completedKpis, error }
 }

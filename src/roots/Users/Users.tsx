@@ -17,19 +17,19 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User>({ email: '', id: '', role: '' })
 
   const usersRequest = async () =>  {
-    const usersFromSupabase = await fetchUsers()
+    const { users, error } = await fetchUsers()
 
-    if (usersFromSupabase.error) {
+    if (error) {
       openNotificationWithIcon(
         'error',
         'Fetch Users Error',
-        `Error while fetching the users. ${usersFromSupabase.error.message}.`
+        `Error while fetching the users. ${error.message}.`
       )
       return
     }
 
-    if (usersFromSupabase.users) {
-      const usersWithKeyValue = usersFromSupabase.users.map((item) => {
+    if (users) {
+      const usersWithKeyValue = users.map((item) => {
         return { ...item, key: item.id }
       })
 

@@ -21,99 +21,110 @@ import { FieldType } from '../../components/AddKPIModalAndForm/AddKPIModalAndFor
 const DashboardGatekeeper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
-  const [kpisLoading, setKpisLoading] = useState(false)
+  const [kpisLoading, setKpisLoading] = useState(true)
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
   const dispatch = useDispatch()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
   const [kpiData, setKpiData] = useState<FieldType | undefined>(undefined)
 
-  useEffect(() => {
-    setKpisLoading(true)
-    try {
-      const kpisRequest = async () => {
-        const kpisFromRequest = await fetchKpis()
+  const kpisRequest = async () => {
+    const { data, error } = await fetchKpis()
 
-        if (kpisFromRequest) {
-          const kpisWithKeyValue = kpisFromRequest.map((value) => {
-            return {
-              key: value.id,
-              id: value.id,
-              name: value.name,
-              sampleValue: value.sample_value,
-              frequency: value?.frequency?.type || undefined,
-              range: value?.range?.display_value || undefined,
-              circle: value?.circle_kpi[0]?.circle?.name || undefined,
-              description: value?.description,
-              frequency_id: value.frequency_id,
-              minValue: value?.range?.min_value,
-              maxValue: value?.range?.max_value,
-              units: value?.unit_of_measurement,
-              period: undefined,
-              newValue: undefined
-            }
-          })
-
-          dispatch(setKpis(kpisWithKeyValue))
-          setKpisLoading(false)
-        }
-      }
-      kpisRequest()
-    } catch (e) {
-      setKpisLoading(false)
+    if (error) {
       openNotificationWithIcon(
         'error',
         'Fetch KPIs Error',
-        'Error while fetching the KPIs. Please try again later.'
+        `Error while fetching the KPIs. ${error.message}.`
       )
+      return
     }
 
+    if (data) {
+      const kpisWithKeyValue = data.map((value) => {
+        return {
+          key: value.id,
+          id: value.id,
+          name: value.name,
+          sampleValue: value.sample_value,
+          frequency: value?.frequency?.type || undefined,
+          range: value?.range?.display_value || undefined,
+          circle: value?.circle_kpi[0]?.circle?.name || undefined,
+          description: value?.description,
+          frequency_id: value.frequency_id,
+          minValue: value?.range?.min_value,
+          maxValue: value?.range?.max_value,
+          units: value?.unit_of_measurement,
+          period: undefined,
+          newValue: undefined
+        }
+      })
+
+      dispatch(setKpis(kpisWithKeyValue))
+      setKpisLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    kpisRequest().then(() => setKpisLoading(false))
   }, [])
 
   /** Perform Supabase deletion of selected record and then remove the record from state too */
   const deleteRecord =  (record: Kpi) => async () => {
-    try {
-      if (record.id) {
-        await deleteKpi(record.id)
-        dispatch(deleteStateKpi(record.id))
+    if (record.id) {
+      const { error } = await deleteKpi(record.id)
+
+      if (error) {
+        openNotificationWithIcon(
+          'error',
+          'Delete KPI Error',
+          'Error while deleting the KPIs. Please try again later.'
+        )
+
+        return
       }
-    } catch (e) {
+
+      dispatch(deleteStateKpi(record.id))
       openNotificationWithIcon(
-        'error',
-        'Delete KPI Error',
-        'Error while deleting the KPIs. Please try again later.'
+        'success',
+        'Success!',
+        `You successfully deleted KPI - ${record.name}`
       )
     }
+
   }
 
   const editKpi = (record: Kpi) => async () => {
     if (!record.id) return
 
-    try {
-      setIsModalOpen(true)
-      const kpiData = await fetchSingleKpiWithDescFreq(record.id)
-      if (kpiData) {
-        setKpiData({
-          kpi_id: kpiData[0].id,
-          kpi_circle_id: kpiData[0].circle_kpi[0].id,
-          circle_id: kpiData[0].circle_kpi[0].circle?.id || 0,
-          name: kpiData[0].name,
-          sample_value: kpiData[0].sample_value,
-          min_value: kpiData[0]?.range?.min_value,
-          max_value: kpiData[0].range?.max_value,
-          description: kpiData[0].description,
-          display_value: kpiData[0].range?.display_value,
-          frequency_id: kpiData[0].frequency_id,
-          units: kpiData[0].unit_of_measurement
-        })
-      }
+    setIsModalOpen(true)
 
-    } catch (e) {
+    const { kpiData, error } = await fetchSingleKpiWithDescFreq(record.id)
+
+    if (error) {
       openNotificationWithIcon(
         'error',
-        'Error retrieving KPI',
-        `Error while retrieving the KPI id ${record.id}: ${e}`
+        'KPI Fetching Error',
+        `Error while fetching the KPI ${record.name}. ${error.message}.`
       )
+
+      return
+    }
+
+    if (kpiData) {
+      setKpiData({
+        kpi_id: kpiData[0].id,
+        kpi_circle_id: kpiData[0].circle_kpi[0].id,
+        circle_id: kpiData[0].circle_kpi[0].circle?.id || 0,
+        name: kpiData[0].name,
+        sample_value: kpiData[0].sample_value,
+        min_value: kpiData[0]?.range?.min_value,
+        max_value: kpiData[0].range?.max_value,
+        description: kpiData[0].description,
+        display_value: kpiData[0].range?.display_value,
+        frequency_id: kpiData[0].frequency_id,
+        units: kpiData[0].unit_of_measurement
+      })
     }
   }
 

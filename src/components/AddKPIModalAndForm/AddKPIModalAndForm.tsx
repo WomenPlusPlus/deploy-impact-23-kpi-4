@@ -53,9 +53,10 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   setIsModalOpen,
   initialData,
 }) => {
-  // Select options state
+  // Local states
   const [circlesOptions, setCirclesOptions] = useState<ICircleSelectOptions[]>([])
   const [frequencyOptions , setFrequencyOptions] = useState<IFrequencySelectOptions[]>([])
+  const [localInitialData, setLocalInitialData] = useState(initialData)
 
   // Loading state
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -63,53 +64,70 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   // Hooks
   const { openNotificationWithIcon, contextHolder } = useNotifications()
   const dispatch = useDispatch()
+  const [form] = Form.useForm()
 
   // Selectors
   const frequencies = useSelector((state: RootState) => state.kpis.frequencies)
   const circles = useSelector((state: RootState) => state.kpis.circles)
 
-  const [form] = Form.useForm()
+  const getCircleOptions = async () => {
+    const { circlesData, error } = await fetchCircles()
 
-  // Local states
-  const [localInitialData, setLocalInitialData] = useState(initialData)
-
-  useEffect(() => {
-    const getCircleOptions = async () => {
-      const circlesFromSupabase = await fetchCircles()
-      const circlesSelectOptions: ICircleSelectOptions[] = []
-      if (circlesFromSupabase) {
-        dispatch(setCircles(circlesFromSupabase))
-        for (let i = 0; i < circlesFromSupabase.length; i++) {
-          circlesSelectOptions.push({
-            label: circlesFromSupabase[i].name,
-            value: circlesFromSupabase[i].id,
-          })
-        }
-
-        setCirclesOptions(circlesSelectOptions)
-      }
+    if (error) {
+      openNotificationWithIcon(
+        'error',
+        'Circles Error',
+        `Error while fetching circles. ${error.message}.`
+      )
+      return
     }
 
+    const circlesSelectOptions: ICircleSelectOptions[] = []
+
+    if (circlesData) {
+      dispatch(setCircles(circlesData))
+
+      for (let i = 0; i < circlesData.length; i++) {
+        circlesSelectOptions.push({
+          label: circlesData[i].name,
+          value: circlesData[i].id,
+        })
+      }
+
+      setCirclesOptions(circlesSelectOptions)
+    }
+  }
+
+  const getFrequencyOptions = async () => {
+    const { frequencyData, error } = await fetchFrequency()
+
+    if (error) {
+      openNotificationWithIcon(
+        'error',
+        'Circles Error',
+        `Error while fetching circles. ${error.message}.`
+      )
+      return
+    }
+
+    const frequenciesSelectOptions: IFrequencySelectOptions[] = []
+    if (frequencyData) {
+      dispatch(setFrequencies(frequencyData))
+
+      for (let i = 0; i < frequencyData.length; i++) {
+        frequenciesSelectOptions.push({
+          label: frequencyData[i].type,
+          value: frequencyData[i].id,
+        })
+      }
+
+      setFrequencyOptions(frequenciesSelectOptions)
+    }
+  }
+
+
+  useEffect(() => {
     getCircleOptions()
-  }, [])
-
-  useEffect(() => {
-    const getFrequencyOptions = async () => {
-      const frequenciesFromSupabase = await fetchFrequency()
-      const frequenciesSelectOptions: IFrequencySelectOptions[] = []
-      if (frequenciesFromSupabase) {
-        dispatch(setFrequencies(frequenciesFromSupabase))
-        for (let i = 0; i < frequenciesFromSupabase.length; i++) {
-          frequenciesSelectOptions.push({
-            label: frequenciesFromSupabase[i].type,
-            value: frequenciesFromSupabase[i].id,
-          })
-        }
-
-        setFrequencyOptions(frequenciesSelectOptions)
-      }
-    }
-
     getFrequencyOptions()
   }, [])
 
@@ -188,6 +206,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
         'Error while updating/adding a new KPI. Please try again.'
       )
     }
+
     setSubmitLoading(false)
     resetForm()
   }

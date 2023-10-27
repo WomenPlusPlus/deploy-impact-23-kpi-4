@@ -35,35 +35,29 @@ const EditUserModalAndForm: React.FC<IModal> = ({ isModalOpen, setIsModalOpen, s
 
   const handleSubmit = async (values: { role: roles }) => {
     setSubmitLoading(true)
-    try {
-      const response = await changeUserRole(values.role, selectedUser.id)
-      setSubmitLoading(false)
 
-      if (response.error) {
-        return openNotificationWithIcon(
-          'error',
-          'Add New User',
-          response.error.message
-        )
-      }
+    const { user, error } = await changeUserRole(values.role, selectedUser.id)
 
-      updateUserState(values.role)
-
-      openNotificationWithIcon(
-        'success',
-        'Add New User',
-        'You successfully changed user`s role'
-      )
-      setIsModalOpen(false)
-
-    } catch (e) {
-      setSubmitLoading(false)
+    if (error) {
       openNotificationWithIcon(
         'error',
-        'Add New User',
-        'Error while adding a new user. Please try again later.'
+        'Edit user error',
+        error.message
       )
+
+      setSubmitLoading(false)
+      return
     }
+
+    updateUserState(values.role)
+    openNotificationWithIcon(
+      'success',
+      'Edit user',
+      'You successfully changed user`s role'
+    )
+
+    setSubmitLoading(false)
+    setIsModalOpen(false)
   }
 
   return (

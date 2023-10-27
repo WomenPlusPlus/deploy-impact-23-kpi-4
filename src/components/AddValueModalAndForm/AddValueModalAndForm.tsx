@@ -48,51 +48,52 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
 
   const handleSubmit = async (values: FieldType) => {
     setSubmitLoading(true)
-    try {
-      setIsModalOpen(false)
+    const periodKpiId = getPeriodKpiId()
 
-      const periodKpiId = getPeriodKpiId()
+    if (user && periodKpiId && record) {
+      const { error } = await addNewValue(user.id, periodKpiId, record?.circle_kpi[0].id, Number(values.name))
 
-      if (user && periodKpiId && record) {
-        await addNewValue(user.id, periodKpiId, record?.circle_kpi[0].id, Number(values.name))
+      if (error) {
+        openNotificationWithIcon(
+          'error',
+          'Adding Value',
+          `Error while adding Value to ${record.name} KPI. ${error.message}.`
+        )
 
-        // Update the state of completed KPIs with the record which has the new value
-        const updatedState = {
-          id: record.id,
-          name: record.name,
-          sampleValue: record.sample_value,
-          frequency: record.frequency?.type,
-          range: record.range?.display_value,
-          minValue: record.range?.min_value,
-          maxValue: record.range?.max_value,
-          circle: record.circle_kpi[0].circle?.name,
-          period: getDisplayedKpiPeriod(record.frequency?.type, record.kpi_period[0].period?.year),
-          newValue: Number(values.name),
-          description: null,
-          frequency_id: null,
-          units: record.unit_of_measurement
-
-        }
-        dispatch(addStateCompletedKpi(updatedState))
-
-        // After adding the record in "history record" table we need to remove it from "KPI to update" table
-        dispatch(deleteStateKpi(record.id))
+        setSubmitLoading(false)
+        setIsModalOpen(false)
+        return
       }
 
+      // Update the state of completed KPIs with the record which has the new value
+      const updatedState = {
+        id: record.id,
+        name: record.name,
+        sampleValue: record.sample_value,
+        frequency: record.frequency?.type,
+        range: record.range?.display_value,
+        minValue: record.range?.min_value,
+        maxValue: record.range?.max_value,
+        circle: record.circle_kpi[0].circle?.name,
+        period: getDisplayedKpiPeriod(record.frequency?.type, record.kpi_period[0].period?.year),
+        newValue: Number(values.name),
+        description: null,
+        frequency_id: null,
+        units: record.unit_of_measurement
+
+      }
+
+      dispatch(addStateCompletedKpi(updatedState))
+      // After adding the record in "history record" table we need to remove it from "KPI to update" table
+      dispatch(deleteStateKpi(record.id))
+
+      setIsModalOpen(false)
+      setSubmitLoading(false)
       openNotificationWithIcon(
         'success',
-        'KPI Insertion',
-        'You successfully added a new KPI!'
+        'Adding Value Success',
+        `You successfully added value for ${record.name} KPI!`
       )
-
-      setSubmitLoading(false)
-    } catch (e) {
-      openNotificationWithIcon(
-        'error',
-        'KPI Insertion',
-        'Error while adding a new KPI. Please try again.'
-      )
-      setSubmitLoading(false)
     }
   }
 

@@ -17,7 +17,7 @@ const DashboardEconomist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
   const [selectedRecord, setSelectedRecord] = useState<kpiFromSupabase | null>(null)
-  const [kpisLoading, setKpisLoading] = useState(false)
+  const [kpisLoading, setKpisLoading] = useState(true)
 
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
   const dispatch = useDispatch()
@@ -27,82 +27,92 @@ const DashboardEconomist = () => {
   const currentQuarter = Math.floor(currentMonth / 3) + 1
   const currentYear = currentDate.getFullYear()
 
-  useEffect(() => {
-    setKpisLoading(true)
-    try {
-      const kpisRequest = async () => {
-        const kpisFromRequest = await fetchUncompletedKpis()
+  const kpisRequest = async () => {
+    const { data, error } = await fetchUncompletedKpis()
 
-        // Display the kpis only from the current month
-        if (kpisFromRequest) {
-          const filteredData = kpisFromRequest.filter(item => {
-            // Check if at least one KPI period matches the current month
-            return item.kpi_period.some(period => {
-              const month = period?.period?.month
-              const quarter = period?.period?.quarter
-              const year = period?.period?.year
-              const frequency = item?.frequency?.type
-
-              if (frequency === 'Monthly') {
-                return month === currentMonth
-              } else if (frequency === 'Quarterly') {
-                return quarter === currentQuarter
-              } else if (frequency === 'Yearly') {
-                return year === currentYear
-              }
-
-              return false
-            })
-          })
-
-          const kpisWithKeyValue = filteredData.map((value) => {
-            return {
-              key: value.id,
-              id: value.id,
-              name: value.name,
-              sampleValue: value.sample_value,
-              frequency: value?.frequency?.type || undefined,
-              range: value?.range?.display_value || undefined,
-              minValue: value?.range?.min_value || undefined,
-              maxValue: value?.range?.max_value || undefined,
-              circle: value?.circle_kpi[0]?.circle?.name || undefined,
-              period: getDisplayedKpiPeriod(
-                value?.frequency?.type,
-                value?.kpi_period[0]?.period?.year
-              ),
-              newValue: undefined,
-              description: null,
-              frequency_id: null,
-              units: value.unit_of_measurement,
-            }
-          })
-          dispatch(setKpis(kpisWithKeyValue))
-        }
-        setKpisLoading(false)
-      }
-      kpisRequest()
-    } catch (e) {
-      setKpisLoading(false)
+    if (error) {
       openNotificationWithIcon(
         'error',
         'Fetch KPIs Error',
-        'Error while fetching the KPIs. Please try again later.'
+        `Error while fetching the KPIs. ${error.message}.`
       )
+      return
     }
 
+    // Display the kpis only from the current month
+    if (data) {
+      const filteredData = data.filter(item => {
+        // Check if at least one KPI period matches the current month
+        return item.kpi_period.some(period => {
+          const month = period?.period?.month
+          const quarter = period?.period?.quarter
+          const year = period?.period?.year
+          const frequency = item?.frequency?.type
+
+          if (frequency === 'Monthly') {
+            return month === currentMonth
+          } else if (frequency === 'Quarterly') {
+            return quarter === currentQuarter
+          } else if (frequency === 'Yearly') {
+            return year === currentYear
+          }
+
+          return false
+        })
+      })
+
+      const kpisWithKeyValue = filteredData.map((value) => {
+        return {
+          key: value.id,
+          id: value.id,
+          name: value.name,
+          sampleValue: value.sample_value,
+          frequency: value?.frequency?.type || undefined,
+          range: value?.range?.display_value || undefined,
+          minValue: value?.range?.min_value || undefined,
+          maxValue: value?.range?.max_value || undefined,
+          circle: value?.circle_kpi[0]?.circle?.name || undefined,
+          period: getDisplayedKpiPeriod(
+            value?.frequency?.type,
+            value?.kpi_period[0]?.period?.year
+          ),
+          newValue: undefined,
+          description: null,
+          frequency_id: null,
+          units: value.unit_of_measurement,
+        }
+      })
+
+      dispatch(setKpis(kpisWithKeyValue))
+    }
+  }
+
+  useEffect(() => {
+    kpisRequest().then(() => setKpisLoading(false))
   }, [])
 
   const showModal = (record: Kpi) => async () => {
+    setIsModalOpen(true)
+
     if (record.id) {
-      const fetchedKpi = await fetchSingleKpi(record.id)
-      if (fetchedKpi) {
+      const { kpiData, error } = await fetchSingleKpi(record.id)
+
+      if (error) {
+        openNotificationWithIcon(
+          'error',
+          `Error Fetching KPI ${record}`,
+          `${error.message}`
+        )
+        return
+      }
+
+      if (kpiData) {
         setSelectedRecord({
-          ...fetchedKpi[0]
+          ...kpiData[0]
         })
       }
     }
 
-    setIsModalOpen(true)
   }
 
   if (kpisLoading) {
