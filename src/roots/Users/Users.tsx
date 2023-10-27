@@ -12,33 +12,33 @@ import { EditOutlined } from '@ant-design/icons'
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>([])
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
-  const [usersLoading, setUsersLoading] = useState(false)
+  const [usersLoading, setUsersLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User>({ email: '', id: '', role: '' })
 
-  useEffect(() => {
-    setUsersLoading(true)
-    try {
-      const usersRequest = async () =>  {
-        const usersFromSupabase = await fetchUsers()
+  const usersRequest = async () =>  {
+    const usersFromSupabase = await fetchUsers()
 
-        if (usersFromSupabase) {
-          const usersWithKeyValue = usersFromSupabase.map((item) => {
-            return { ...item, key: item.id }
-          })
-          setUsers(usersWithKeyValue)
-        }
-        setUsersLoading(false)
-      }
-      usersRequest()
-    } catch (e) {
-      setUsersLoading(false)
+    if (usersFromSupabase.error) {
       openNotificationWithIcon(
         'error',
         'Fetch Users Error',
-        'Error while fetching the users. Please try again later.'
+        `Error while fetching the users. ${usersFromSupabase.error.message}.`
       )
+      return
     }
+
+    if (usersFromSupabase.users) {
+      const usersWithKeyValue = usersFromSupabase.users.map((item) => {
+        return { ...item, key: item.id }
+      })
+
+      setUsers(usersWithKeyValue)
+    }
+  }
+
+  useEffect(() => {
+    usersRequest().then(() => setUsersLoading(false))
   }, [])
 
   const showModal = (record: User) => () => {

@@ -5,11 +5,8 @@ import { FieldType } from '../components/AddKPIModalAndForm/AddKPIModalAndForm'
 
 /* Supabase request for fetching users */
 export const fetchUsers = async () => {
-  const { data } = await supabase
-    .from('users')
-    .select('id, email, role')
-
-  return data
+  const { data: { users }, error } = await supabaseAdmin.auth.admin.listUsers()
+  return { users, error }
 }
 
 /* Supabase request for fetching kpis ordered descending by created_at value */
@@ -48,16 +45,6 @@ export const fetchUncompletedKpis = async () => {
       `)
     .eq('kpi_period.completed', false)
     .order('created_at', { ascending: false })
-
-  return data
-}
-
-/* Supabase request for fetching users with specific role */
-export const fetchUsersByRole = async (role: string) => {
-  const { data } = await supabase
-    .from('users')
-    .select('id, email, role')
-    .eq('role', role)
 
   return data
 }

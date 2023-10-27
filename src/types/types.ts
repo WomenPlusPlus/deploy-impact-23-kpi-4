@@ -41,8 +41,8 @@ export enum roles {
 
 export type User = {
   id: string,
-  email: string;
-  role: string
+  email?: string | undefined;
+  role?: string | undefined
 }
 export enum frequency {
   MONTHLY = 'Monthly',
