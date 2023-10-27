@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Before Running The App
+
+Before you start running the app, make sure to create an `.env` file in the project directory, following the format of `.sample.env` . Be sure to include the correct environment variables and their values in the `.env` file to ensure the app functions correctly.
+
 ## Available Scripts
 
 In the project directory, you can run:
