@@ -9,10 +9,22 @@ import { setCompletedKpis } from '../../store/kpiSlice'
 import Button from '../Button/Button'
 import { DownloadOutlined, AreaChartOutlined } from '@ant-design/icons'
 
+import TableauChartModal from '../TableauDashboards/TableauChartModal'
+
 const CompletedKpisTable = () => {
   const completedKpis = useSelector((state: RootState) => state.kpis.completedKpis)
   const dispatch = useDispatch()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   useEffect(() => {
     try {
@@ -65,7 +77,11 @@ const CompletedKpisTable = () => {
       <div className='flex items-center justify-between mt-8'>
         <p className='text-2xl '>KPIs history record</p>
         <div className='flex'>
-          <Button onClick={() => console.log('charts')} btnProps={{ size: 'small', icon: <AreaChartOutlined /> }} text='Charts' />
+          <Button onClick={openModal} btnProps={{ size: 'small', icon: <AreaChartOutlined /> }} text='Charts' />
+          <TableauChartModal
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+          />
           <Button onClick={() => console.log('download')} btnProps={{ size: 'small', icon: <DownloadOutlined />, className: 'ml-2' }} text='Download' />
         </div>
       </div>
