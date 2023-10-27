@@ -1,11 +1,13 @@
 export type Kpi = {
-  id: number | undefined,
+  id: number | undefined
   name: string | undefined
   sampleValue: number | undefined
   frequency: string | undefined
   range: string | null | undefined
   circle: string | undefined
-  period: string | undefined,
+  description: string | null
+  frequency_id: number | null
+  period: string | undefined
   newValue: number | undefined,
   minValue: number | null | undefined,
   maxValue: number | null | undefined
@@ -58,6 +60,7 @@ export type kpiFromSupabase = {
   circle_kpi: {
     id: number,
     circle: {
+      id: number,
       name: string
     } | null
   }[],

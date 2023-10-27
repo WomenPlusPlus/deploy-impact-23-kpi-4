@@ -67,8 +67,13 @@ const DashboardEconomist = () => {
               minValue: value?.range?.min_value || undefined,
               maxValue: value?.range?.max_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
-              period: getDisplayedKpiPeriod(value?.frequency?.type, value?.kpi_period[0]?.period?.year ),
-              newValue: undefined
+              period: getDisplayedKpiPeriod(
+                value?.frequency?.type,
+                value?.kpi_period[0]?.period?.year
+              ),
+              newValue: undefined,
+              description: null,
+              frequency_id: null,
             }
           })
           dispatch(setKpis(kpisWithKeyValue))

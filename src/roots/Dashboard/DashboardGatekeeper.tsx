@@ -1,7 +1,12 @@
 import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
 import './Dashboard.css'
+import {
+  deleteKpi,
+  fetchKpis,
+  fetchSingleKpiWithDescFreq,
+} from '../../utils/apiRequests'
 import React, { useEffect, useState } from 'react'
-import { deleteKpi, fetchKpis } from '../../utils/apiRequests'
+
 import AddKPIModalAndForm from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,6 +16,7 @@ import { Kpi } from '../../types/types'
 import Button from '../../components/Button/Button'
 import { DeleteOutlined, EditOutlined, DownloadOutlined, PlusOutlined } from '@ant-design/icons'
 import Column from 'antd/es/table/Column'
+import { FieldType } from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
 
 const DashboardGatekeeper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -19,6 +25,8 @@ const DashboardGatekeeper = () => {
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
   const dispatch = useDispatch()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+
+  const [kpiData, setKpiData] = useState<FieldType | undefined>(undefined)
 
   useEffect(() => {
     setKpisLoading(true)
@@ -36,6 +44,8 @@ const DashboardGatekeeper = () => {
               frequency: value?.frequency?.type || undefined,
               range: value?.range?.display_value || undefined,
               circle: value?.circle_kpi[0]?.circle?.name || undefined,
+              description: value?.description,
+              frequency_id: value.frequency_id,
               minValue: value?.range?.min_value,
               maxValue: value?.range?.max_value,
               period: undefined,
@@ -75,6 +85,37 @@ const DashboardGatekeeper = () => {
     }
   }
 
+  const editKpi = (record: Kpi) => async () => {
+    if (!record.id) {
+      return
+    }
+    try {
+      setIsModalOpen(true)
+      const kpiDt = await fetchSingleKpiWithDescFreq(record.id)
+      if(kpiDt) {
+        setKpiData({
+          kpi_id: kpiDt[0].id,
+          kpi_circle_id: kpiDt[0].circle_kpi[0].id,
+          circle_id: kpiDt[0].circle_kpi[0].circle?.id || 0,
+          name: kpiDt[0].name,
+          sample_value: kpiDt[0].sample_value,
+          min_value: kpiDt[0]?.range?.min_value,
+          max_value: kpiDt[0].range?.max_value,
+          description: kpiDt[0].description,
+          display_value: kpiDt[0].range?.display_value,
+          frequency_id: kpiDt[0].frequency_id
+        })
+      }
+
+    } catch (e) {
+      openNotificationWithIcon(
+        'error',
+        'Error retreiving KPI',
+        `Error while retrieving the KPI id ${record.id}: ${e}`
+      )
+    }
+  }
+
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -110,7 +151,8 @@ const DashboardGatekeeper = () => {
         </div>
         <Button onClick={() => console.log('download')} btnProps={{ size: 'small', icon: <DownloadOutlined /> }} text='Download' />
       </div>
-      <AddKPIModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+
+      <AddKPIModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} initialData={kpiData}/>
       <Table rowSelection={rowSelection} bordered dataSource={kpis}>
         <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
         <Column title='Name' align='center' key='name' dataIndex='name'/>
@@ -132,7 +174,7 @@ const DashboardGatekeeper = () => {
               </Popconfirm>
             </Tooltip>
             <Tooltip title="edit">
-              <Button onClick={() => console.log('edit')} btnProps={{  shape: 'circle', size: 'small', icon: <EditOutlined /> }} />
+              <Button onClick={editKpi(record)} btnProps={{  shape: 'circle', size: 'small', icon: <EditOutlined /> }} />
             </Tooltip>
           </Space>
         )} />
