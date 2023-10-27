@@ -1,4 +1,4 @@
-import { Modal, Button } from 'antd'
+import { Modal, Divider } from 'antd'
 import Tableau from './Tableau'
 import React from 'react'
 
@@ -15,16 +15,17 @@ const TableauChartModal: React.FC<ITableauChartModal> = ({ isModalOpen, setIsMod
 
   return (
     <Modal
-      title="Dashboards by Helgitas 👵"
-      width="1040px"
+      title={
+        <div>
+          Dashboards by Helgitas 👵
+          <Divider />
+        </div>
+      }
+      width="1035px"
       centered
       open={isModalOpen}
       onCancel={handleCancel}
-      footer={[
-        <Button key="cancel" onClick={handleCancel}>
-          Cancel
-        </Button>
-      ]}
+      footer={null}
     >
       <Tableau />
     </Modal>
