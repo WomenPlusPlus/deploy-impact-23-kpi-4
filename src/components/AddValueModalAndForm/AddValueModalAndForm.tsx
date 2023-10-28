@@ -91,8 +91,8 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
       setSubmitLoading(false)
       openNotificationWithIcon(
         'success',
-        'Adding Value Success',
-        `You successfully added value for ${record.name} KPI!`
+        'New value added successfully!',
+        `Congratulation! The new value of "${record.name}" KPI has been added to the database!`
       )
     }
   }
