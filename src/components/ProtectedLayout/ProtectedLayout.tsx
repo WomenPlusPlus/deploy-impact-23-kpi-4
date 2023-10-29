@@ -116,7 +116,7 @@ const ProtectedLayout = () => {
                 <Space.Compact direction="vertical" size={'small'} block>
                   <h3 className='welcome'>Welcome,</h3>
                   <p className='welcome'>{user?.email}</p>
-                  <Tag color='#FECC33' style={{ width: 'fit-content' }}>{user?.role}</Tag>
+                  <Tag color='#8A41B199' style={{ width: 'fit-content' }}>{user?.role}</Tag>
                 </Space.Compact>
                 <Select
                   bordered={false}

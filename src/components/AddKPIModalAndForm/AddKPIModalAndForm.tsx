@@ -1,199 +1,220 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Input, Modal, Select, Button, Space } from 'antd'
-import { fetchCircles, fetchUsersByRole, fetchFrequency, getRangeById, addKpi } from '../../utils/apiRequests'
+import {
+  fetchCircles,
+  fetchFrequency,
+  getRangeById,
+  addKpi,
+  updateKpi,
+} from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useDispatch, useSelector } from 'react-redux'
-import { addStateKpi, setCircles, setFrequencies } from '../../store/kpiSlice'
+import {
+  addStateKpi,
+  updateStateKpi,
+  setCircles,
+  setFrequencies,
+} from '../../store/kpiSlice'
 import { RootState } from '../../store/store'
-import { KpiSupabase, roles } from '../../types/types'
+import { KpiSupabase } from '../../types/types'
 
 export type FieldType = {
-  circle_id: number;
-  name: string;
-  description?: string;
-  sample_value: number;
-  min_value: number;
-  max_value: number;
-  display_value: string;
-  frequency_id: number;
-  economist?: string
-};
-
-interface IAddKPIModalAndForm {
-  isModalOpen: boolean,
-  setIsModalOpen: (b: boolean) => void
+  kpi_id: number
+  kpi_circle_id: number
+  circle_id: number
+  name: string
+  description?: string | null | undefined
+  sample_value: number
+  min_value: number | null | undefined
+  max_value: number | null | undefined
+  display_value: string | null | undefined
+  frequency_id: number,
+  units: string;
 }
 
-interface IEconomistSelectOptions {
-  label: string;
-  value: string;
+interface IAddKPIModalAndForm {
+  isModalOpen: boolean
+  setIsModalOpen: (b: boolean) => void
+  initialData?: FieldType
 }
 
 interface ICircleSelectOptions {
-  label: string;
-  value: number;
+  label: string
+  value: number
 }
 
 interface IFrequencySelectOptions {
-  label: string;
-  value: number;
+  label: string
+  value: number
 }
 
-const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsModalOpen }) => {
-  // Select options state
-  const [economistsOptions, setEconomistsOptions] = useState<IEconomistSelectOptions[]>([])
+const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
+  isModalOpen,
+  setIsModalOpen,
+  initialData,
+}) => {
+  // Local states
   const [circlesOptions, setCirclesOptions] = useState<ICircleSelectOptions[]>([])
   const [frequencyOptions , setFrequencyOptions] = useState<IFrequencySelectOptions[]>([])
+  const [localInitialData, setLocalInitialData] = useState(initialData)
 
   // Loading state
-  const [economistsLoading, setEconomistsLoading] = useState(false)
-  const [circlesLoading, setCirclesLoading] = useState(false)
-  const [frequencyLoading, setFrequencyLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
   // Hooks
-  const { openNotificationWithIcon, contextHolder }  = useNotifications()
+  const { openNotificationWithIcon, contextHolder } = useNotifications()
   const dispatch = useDispatch()
+  const [form] = Form.useForm()
 
   // Selectors
   const frequencies = useSelector((state: RootState) => state.kpis.frequencies)
   const circles = useSelector((state: RootState) => state.kpis.circles)
 
-  const [form] = Form.useForm()
+  const getCircleOptions = async () => {
+    const { circlesData, error } = await fetchCircles()
 
-  /** Function used to fetch the economists when the user focuses on the economists select input */
-  const handleEconomistsFocus = async () => {
-    setEconomistsLoading(true)
-
-    try {
-      const economistsFromSupabase = await fetchUsersByRole(roles.GATEKEEPER) // change to economists
-      const economistsSelectOptions: IEconomistSelectOptions[] = []
-
-      if (economistsFromSupabase) {
-        for (let i = 0; i < economistsFromSupabase.length; i++) {
-          economistsSelectOptions.push({ label: economistsFromSupabase[i].email, value: economistsFromSupabase[i].email })
-        }
-      }
-
-      setEconomistsOptions(economistsSelectOptions)
-      setEconomistsLoading(false)
-    } catch (e) {
+    if (error) {
       openNotificationWithIcon(
         'error',
-        'Fetch Economists Error',
-        'Error while fetching the economists. Please try again.'
+        'Circles Error',
+        `Error while fetching circles. ${error.message}.`
       )
-      setEconomistsLoading(false)
+      return
+    }
+
+    const circlesSelectOptions: ICircleSelectOptions[] = []
+
+    if (circlesData) {
+      dispatch(setCircles(circlesData))
+
+      for (let i = 0; i < circlesData.length; i++) {
+        circlesSelectOptions.push({
+          label: circlesData[i].name,
+          value: circlesData[i].id,
+        })
+      }
+
+      setCirclesOptions(circlesSelectOptions)
     }
   }
 
-  /** Function used to fetch the circles when the user focuses on the circles select input */
-  const handleCirclesFocus = async () => {
-    setCirclesLoading(true)
+  const getFrequencyOptions = async () => {
+    const { frequencyData, error } = await fetchFrequency()
 
-    try {
-      const circlesFromSupabase = await fetchCircles()
-      const circlesSelectOptions: ICircleSelectOptions[] = []
-
-      if (circlesFromSupabase) {
-        dispatch(setCircles(circlesFromSupabase))
-        for (let i = 0; i < circlesFromSupabase.length; i++) {
-          circlesSelectOptions.push({ label: circlesFromSupabase[i].name, value: circlesFromSupabase[i].id })
-        }
-
-        setCirclesOptions(circlesSelectOptions)
-      }
-      setCirclesLoading(false)
-    } catch (e) {
+    if (error) {
       openNotificationWithIcon(
         'error',
-        'Fetch Economists Error',
-        'Error while fetching the economists. Please try again.'
+        'Circles Error',
+        `Error while fetching circles. ${error.message}.`
       )
-      setCirclesLoading(false)
+      return
+    }
+
+    const frequenciesSelectOptions: IFrequencySelectOptions[] = []
+    if (frequencyData) {
+      dispatch(setFrequencies(frequencyData))
+
+      for (let i = 0; i < frequencyData.length; i++) {
+        frequenciesSelectOptions.push({
+          label: frequencyData[i].type,
+          value: frequencyData[i].id,
+        })
+      }
+
+      setFrequencyOptions(frequenciesSelectOptions)
     }
   }
 
-  /** Function used to fetch the frequencies when the user focuses on the frequencies select input */
-  const handleFrequency = async () => {
-    setFrequencyLoading(true)
 
-    try {
-      const frequenciesFromSupabase = await fetchFrequency()
-      const frequenciesSelectOptions: IFrequencySelectOptions[] = []
+  useEffect(() => {
+    getCircleOptions()
+    getFrequencyOptions()
+  }, [])
 
-      if (frequenciesFromSupabase) {
-        dispatch(setFrequencies(frequenciesFromSupabase))
+  useEffect(() => {
+    setLocalInitialData(initialData)
+    form.setFieldsValue(initialData)
+  }, [initialData])
 
-        for (let i = 0; i < frequenciesFromSupabase.length; i++) {
-          frequenciesSelectOptions.push({ label: frequenciesFromSupabase[i].type, value: frequenciesFromSupabase[i].id })
-        }
-
-        setFrequencyOptions(frequenciesSelectOptions)
-      }
-      setFrequencyLoading(false)
-    } catch (e) {
-      openNotificationWithIcon(
-        'error',
-        'Fetch Economists Error',
-        'Error while fetching the economists. Please try again.'
-      )
-      setCirclesLoading(false)
-    }
-  }
 
   /** Function that updates the state of Kpis in order to populate the table with newly added kpi */
-  const updateKpiState = async (newKpi: KpiSupabase[], values: FieldType) => {
-    const range = await getRangeById(newKpi[0].range_id)
-    const frequency = frequencies.filter(frequency => frequency.id === values.frequency_id)
-    const circle = circles.filter(circle => circle.id === values.circle_id)
+  const updateKpiState = async (
+    kpi: KpiSupabase[],
+    values: FieldType,
+    existingKpi = false
+  ) => {
+    const range = await getRangeById(kpi[0].range_id)
+    const frequency = frequencies.filter(
+      (frequency) => frequency.id === values.frequency_id
+    )
+    const circle = circles.filter((circle) => circle.id === values.circle_id)
 
     const stateKpi = {
-      id: newKpi[0].id,
-      key: newKpi[0].id,
-      name: newKpi[0].name,
-      sampleValue: newKpi[0].sample_value,
+      id: kpi[0].id,
+      key: kpi[0].id,
+      name: kpi[0].name,
+      sampleValue: kpi[0].sample_value,
       range: range && range[0].display_value,
       frequency: frequency[0].type,
       circle: circle[0].name,
-      description: newKpi[0].description,
+      frequency_id: kpi[0].frequency_id,
+      description: kpi[0].description,
+      minValue: range && range[0].min_value,
+      maxValue: range && range[0].max_value,
+      units: kpi[0].unit_of_measurement,
       period: undefined,
-      newValue: undefined
+      newValue: undefined,
     }
 
-    dispatch(addStateKpi(stateKpi))
+    if (existingKpi) dispatch(updateStateKpi(stateKpi))
+    else dispatch(addStateKpi(stateKpi))
   }
 
   const handleSubmit = async (values: FieldType) => {
     setSubmitLoading(true)
+    const isEditMode = !!values.kpi_id
+
     try {
-      const newKpi = await addKpi(values)
-      if (newKpi) {
-        await updateKpiState(newKpi, values)
+      if (isEditMode) {
+        const kpiData = await updateKpi(values)
+
+        if (kpiData) {
+          await updateKpiState([kpiData], values, true)
+        }
+      } else {
+        const newKpi = await addKpi(values)
+
+        if (newKpi) {
+          await updateKpiState([newKpi], values)
+        }
       }
 
       setIsModalOpen(false)
 
       openNotificationWithIcon(
         'success',
-        'KPI Insertion',
-        'You successfully added a new KPI!'
+        isEditMode ? 'KPI Update' : 'KPI Insertion',
+        isEditMode
+          ? 'You successfully saved KPI !'
+          : 'You successfully added a new KPI!'
       )
-
-      setSubmitLoading(false)
-    } catch (e) {
+    }
+    catch (e) {
       openNotificationWithIcon(
         'error',
-        'KPI Insertion',
-        'Error while adding a new KPI. Please try again.'
+        isEditMode? 'KPI Update' : 'KPI Insertion',
+        'Error while updating/adding a new KPI. Please try again.'
       )
-      setSubmitLoading(false)
     }
+
+    setSubmitLoading(false)
     resetForm()
   }
 
   const resetForm = () => {
+    setLocalInitialData({} as FieldType)
     form.setFieldsValue({
+      kpi_id: undefined,
       circle_id: undefined,
       name: '',
       description: '',
@@ -202,6 +223,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
       min_value: undefined,
       max_value: undefined,
       display_value: undefined,
+      units: undefined
     })
   }
 
@@ -214,17 +236,26 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
     <div>
       {contextHolder}
       <Modal
-        title="New KPI Form"
-        okText='Submit KPI'
+        title={
+          localInitialData?.kpi_id
+            ? 'Editing KPI'
+            : 'New KPI Form'
+        }
         open={isModalOpen}
         onCancel={handleCancel}
         footer={[
           <Button key="cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button loading={submitLoading} type="primary" form="AddKPI" key="submit" htmlType="submit">
-            Submit KPI
-          </Button>
+          <Button
+            loading={submitLoading}
+            type="primary"
+            form="AddKPI"
+            key="submit"
+            htmlType="submit"
+          >
+            {localInitialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
+          </Button>,
         ]}
       >
         <Form
@@ -232,17 +263,16 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
           id="AddKPI"
           layout="vertical"
           onFinish={handleSubmit}
+          initialValues={localInitialData}
         >
+          <Form.Item<FieldType> name="kpi_id" hidden={true}></Form.Item>
+          <Form.Item<FieldType> name="kpi_circle_id" hidden={true}></Form.Item>
           <Form.Item<FieldType>
             label="Circle"
-            name='circle_id'
+            name="circle_id"
             rules={[{ required: true, message: 'Please select the circle!' }]}
           >
-            <Select
-              onFocus={handleCirclesFocus}
-              loading={circlesLoading}
-              options={circlesOptions}
-            />
+            <Select options={circlesOptions} />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -261,24 +291,13 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
           </Form.Item>
           <Form.Item<FieldType>
             label="Frequency"
-            name='frequency_id'
-            rules={[{ required: true, message: 'Please select the frequency!' }]}
+            name="frequency_id"
+            rules={[
+              { required: true, message: 'Please select the frequency!' },
+            ]}
           >
-            <Select
-              onFocus={handleFrequency}
-              loading={frequencyLoading}
-              options={frequencyOptions}
-            />
+            <Select options={frequencyOptions} />
           </Form.Item>
-
-          <Form.Item<FieldType>
-            label="Sample Value"
-            name="sample_value"
-            rules={[{ required: true, message: 'Please input the sample value!' }]}
-          >
-            <Input type='number' />
-          </Form.Item>
-          <div style={{ paddingBottom: '12px' }}><strong>Range Inputs:</strong></div>
           <Space direction="horizontal" size="middle">
             <Form.Item<FieldType>
               label="Min Value"
@@ -295,23 +314,19 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({ isModalOpen, setIsM
               <Input type='number' />
             </Form.Item>
             <Form.Item<FieldType>
-              label="Displayed Value"
-              name="display_value"
-              rules={[{ required: true, message: 'Please input the displayed value!' }]}
+              label="Sample Value"
+              name="sample_value"
+              rules={[{ required: true, message: 'Please input the sample value!' }]}
             >
-              <Input />
+              <Input type='number' />
             </Form.Item>
           </Space>
           <Form.Item<FieldType>
-            label="Economist"
-            name='economist'
-            rules={[{ required: true, message: 'Please select the economist!' }]}
+            label="Units"
+            name="units"
+            rules={[{ required: true, message: 'Please input units!' }]}
           >
-            <Select
-              onFocus={handleEconomistsFocus}
-              loading={economistsLoading}
-              options={economistsOptions}
-            />
+            <Input />
           </Form.Item>
         </Form>
       </Modal>
