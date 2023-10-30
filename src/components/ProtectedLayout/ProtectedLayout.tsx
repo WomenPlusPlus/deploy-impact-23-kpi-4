@@ -9,6 +9,7 @@ import {
   LogoutOutlined,
   DashboardOutlined,
   UserOutlined,
+  InfoCircleOutlined
 } from '@ant-design/icons'
 import logo from '../../assets/logo.png'
 import { getMenuItems, isEconomist, isGatekeeper } from '../../utils/utils'
@@ -52,7 +53,8 @@ const ProtectedLayout = () => {
 
   const itemsEconomist: MenuItem[] = [
     getMenuItems('Dashboard', '1', <DashboardOutlined style={{ fontSize: 20 }}/>, navigateToPage('dashboard-economist')),
-    getMenuItems('Logout', '2', <LogoutOutlined style={{ fontSize: 20 }} />, logout),
+    getMenuItems('Info', '2', <InfoCircleOutlined style={{ fontSize: 20 }}/>, navigateToPage('info')),
+    getMenuItems('Logout', '3', <LogoutOutlined style={{ fontSize: 20 }} />, logout),
   ]
 
   const getMenuItemsByRole = () => {

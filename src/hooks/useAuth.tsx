@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useLocalStorage } from './useLocalStorage'
 import { supabase } from '../lib/api'
 import { User } from '@supabase/gotrue-js/src/lib/types'
-import { isEconomist, isGatekeeper } from '../utils/utils'
+import { roleToDashboard } from '../utils/utils'
 
 export type ContextType = {
     user?: User | null;
@@ -25,10 +25,8 @@ export const AuthProvider: React.FC<Props>  = ({ userData, children }) => {
   const login = (data: User) => {
     setUser(data)
 
-    if (isGatekeeper(data.role)) {
-      navigate('/dashboard-gatekeeper')
-    } else if (isEconomist(data.role)) {
-      navigate('/dashboard-economist')
+    if (data.role) {
+      return <Navigate to={roleToDashboard[data.role]} />
     }
   }
 

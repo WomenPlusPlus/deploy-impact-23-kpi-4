@@ -1,17 +1,12 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import { roles } from '../../types/types'
-import { isEconomist, isGatekeeper } from '../../utils/utils'
+import { roleToDashboard } from '../../utils/utils'
 
 const PublicLayout = () => {
   const { user } = useAuth()
 
-  if (user) {
-    if (isGatekeeper(user.role)) {
-      return <Navigate to="/dashboard-gatekeeper" />
-    } else if (isEconomist(user.role)) {
-      return <Navigate to="/dashboard-economist" />
-    }
+  if (user && user.role) {
+    return <Navigate to={roleToDashboard[user.role]} />
   }
 
   return (
