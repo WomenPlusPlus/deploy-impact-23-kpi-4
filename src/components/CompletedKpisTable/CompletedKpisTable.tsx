@@ -65,10 +65,6 @@ const CompletedKpisTable = () => {
     setIsModalOpen(true)
   }
 
-  const closeModal = () => {
-    setIsModalOpen(false)
-  }
-
   useEffect(() => {
     completedKpisRequest().then(() => setCompletedKpisLoading(false))
   }, [])
@@ -103,13 +99,12 @@ const CompletedKpisTable = () => {
       </div>
 
       <Table rowSelection={rowSelection} bordered dataSource={completedKpis}>
-        <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
-        <Column title='New Value' align='center' key='newValue' dataIndex='newValue'/>
-        <Column title='Units' align='center' key='units' dataIndex='units'/>
-        <Column title='Name' align='center' key='name' dataIndex='name'/>
-        <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
-        <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
-        <Column title='Period' align='center' key='period' dataIndex='period'/>
+        <Column title='Circle' key='circle' dataIndex='circle'/>
+        <Column title='KPI Value' align='right' key='newValue' dataIndex='newValue'/>
+        <Column title='Units' key='units' dataIndex='units'/>
+        <Column title='KPI Name' key='name' dataIndex='name'/>
+        <Column title='Frequency' key='frequency' dataIndex='frequency'/>
+        <Column title='Period' key='period' dataIndex='period'/>
       </Table>
     </div>
 
