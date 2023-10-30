@@ -9,7 +9,10 @@ The result is a web application: **Impact Tracker**, that helps you define KPIs 
 ## How to build and run the app
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-In order to run the app on your local machine you just have to clone this project and run the following commands:
+To run the app on your local machine, clone this project and create a `.env` file in the project directory, following the format of `.sample.env`. Be sure to include the correct environment variables and their values in the `.env` file to ensure the app functions correctly.\
+For confidentiality reasons, you can find the values to set on Supabase or you can contact us to get them.
+
+Then, run the following commands:
 ### `npm install`
 ### `npm start`
 And that's it!
