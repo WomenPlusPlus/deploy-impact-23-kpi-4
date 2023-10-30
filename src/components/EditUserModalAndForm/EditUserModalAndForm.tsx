@@ -76,11 +76,11 @@ const EditUserModalAndForm: React.FC<IModal> = ({ isModalOpen, setIsModalOpen, s
           </Button>
         ]}
       >
-        <div style={{ marginBottom: '20px' }}>Selected User: {selectedUser.email}</div>
+        <div className='mb-5'>Selected User: {selectedUser.email}</div>
         <Form id='ChangeRole' layout="vertical" onFinish={handleSubmit}>
           <Form.Item label='Select role for the user' name='role'>
             <Select
-              style={{ width: '100%' }}
+              className='w-full'
               options={[{ label: roles.ECONOMIST, value: roles.ECONOMIST }, { value: roles.GATEKEEPER, label: roles.GATEKEEPER }]}
             />
           </Form.Item>

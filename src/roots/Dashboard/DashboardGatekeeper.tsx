@@ -1,5 +1,4 @@
 import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
-import './Dashboard.css'
 import {
   deleteKpi,
   fetchKpis,
@@ -132,10 +131,6 @@ const DashboardGatekeeper = () => {
     setIsModalOpen(true)
   }
 
-  if (kpisLoading) {
-    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
-  }
-
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
   }
@@ -143,6 +138,10 @@ const DashboardGatekeeper = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
+  }
+
+  if (kpisLoading) {
+    return <Spin className='flex justify-center' />
   }
 
   return (
@@ -156,7 +155,7 @@ const DashboardGatekeeper = () => {
       }}
     >
       { contextHolder }
-      <div className='title-button'>
+      <div className='flex items-center justify-between'>
         <div className='flex items-center'>
           <p className='text-4xl font-semibold mr-6'>All KPIs</p>
           <Button text='Add New KPI' btnProps={{ type: 'primary', size: 'small', icon: <PlusOutlined /> }} onClick={showModal}/>

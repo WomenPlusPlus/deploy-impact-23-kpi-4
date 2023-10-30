@@ -1,5 +1,4 @@
 import { ConfigProvider, Spin, Table } from 'antd'
-import './Dashboard.css'
 import Button from '../../components/Button/Button'
 import { useEffect, useState } from 'react'
 import { fetchSingleKpi, fetchUncompletedKpis } from '../../utils/apiRequests'
@@ -116,7 +115,7 @@ const DashboardEconomist = () => {
   }
 
   if (kpisLoading) {
-    return  <Spin style={{ display: 'flex', justifyContent: 'center' }} />
+    return  <Spin className='flex justify-center' />
   }
 
   return (

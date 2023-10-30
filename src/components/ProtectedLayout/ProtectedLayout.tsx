@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { Layout, Menu, Button, ConfigProvider, Tag, Select, Space } from 'antd'
+import { Layout, Menu, Button, ConfigProvider, Select } from 'antd'
 const { Header, Sider, Content } = Layout
 import {
   MenuFoldOutlined,
@@ -13,7 +13,7 @@ import {
 import logo from '../../assets/logo.png'
 import { getMenuItems, isEconomist, isGatekeeper } from '../../utils/utils'
 import type { MenuProps } from 'antd'
-import './ProtectedLayout.css'
+
 type MenuItem = Required<MenuProps>['items'][number];
 
 const lgOptions = [
@@ -89,19 +89,19 @@ const ProtectedLayout = () => {
       >
         <Layout style={{ minHeight: '100vh' }}>
           <Sider style={{ minHeight: '100vh' }} trigger={null} collapsible collapsed={collapsed}>
-            <div className="logo-container">
-              <img className='sider-logo' src={logo} alt="Pro Juventute Logo" />
+            <div className='flex justify-center	m-3'>
+              <img className='w-10 h-10 mt-5' src={logo} alt="Pro Juventute Logo" />
             </div>
             <Menu
               theme="dark"
               mode="inline"
               defaultSelectedKeys={['1']}
-              style={{ marginTop: '50px' }}
+              className='mt-12'
               items={getMenuItemsByRole()}
             />
           </Sider>
           <Layout>
-            <Header className='header'>
+            <Header className='p-0 bg-white flex items-center justify-between'>
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined style={{ fontSize: 20 }} /> : <MenuFoldOutlined style={{ fontSize: 20 }} />}
@@ -112,21 +112,21 @@ const ProtectedLayout = () => {
                   height: 64,
                 }}
               />
-              <Space style={{ marginRight: '40px' }} align={'center'}>
-                <Space.Compact direction="vertical" size={'small'} block>
-                  <h3 className='welcome'>Welcome,</h3>
-                  <p className='welcome'>{user?.email}</p>
-                  <Tag color='#8A41B199' style={{ width: 'fit-content' }}>{user?.role}</Tag>
-                </Space.Compact>
+              <div className='flex items-start mr-10'>
+                <div>
+                  <h3 className='leading-normal mt-0 mr-0 mb-2'>Welcome</h3>
+                  <p className='leading-normal mt-0 mb-0'>{user?.email}</p>
+                </div>
                 <Select
+                  className='-mt-3 ml-1'
                   bordered={false}
                   defaultValue="EN"
                   options={lgOptions}
                 />
-              </Space>
+              </div>
 
             </Header>
-            <Content className='content'>
+            <Content className='my-6 mx-4 p-6 bg-white'>
               <Outlet />
             </Content>
           </Layout>

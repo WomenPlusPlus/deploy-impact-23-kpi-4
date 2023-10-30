@@ -84,7 +84,7 @@ const CompletedKpisTable = () => {
   }
 
   if (completedKpisLoading) {
-    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
+    return <Spin className='flex justify-center' />
   }
 
   return (
