@@ -23,7 +23,7 @@ What you can do with this app depends on the role you have: economist or gatekee
   * can delete a KPI
   * can access the Users page where they can see the table with all users and change their role
 * Economists
-  *  can see a table with KPIs to which values must be added
+  * can see a table with KPIs to which values must be added
   * can add a value to a KPI by opening the form which has clear explanations, validations, and information for them to add the correct value
   * once the value is submitted, the KPI will be added to the second table which is "KPIs History Record" where economists can see all the KPIs added in the past
   * see the Tableau charts for the history record table
