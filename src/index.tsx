@@ -20,6 +20,7 @@ import PublicLayout from './components/PublicLayout/PublicLayout'
 import AuthLayout from './components/AuthLayout/AuthLayout'
 import Users from './roots/Users/Users'
 import DashboardEconomist from './roots/Dashboard/DashboardEconomist'
+import InfoPage from './roots/Info/InfoPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<ProtectedLayout />}>
         <Route path="/dashboard-gatekeeper" element={<DashboardGatekeeper />} />
         <Route path="/dashboard-economist" element={<DashboardEconomist />} />
+        <Route path="/info" element={<InfoPage />} />
         <Route path="/users" element={<Users />} />
       </Route>
     </Route>

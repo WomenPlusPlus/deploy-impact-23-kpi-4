@@ -1,5 +1,4 @@
 import { ConfigProvider, Spin, Table, Space, Tooltip, Popconfirm } from 'antd'
-import './Dashboard.css'
 import {
   deleteKpi,
   fetchKpis,
@@ -132,10 +131,6 @@ const DashboardGatekeeper = () => {
     setIsModalOpen(true)
   }
 
-  if (kpisLoading) {
-    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
-  }
-
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
   }
@@ -143,6 +138,10 @@ const DashboardGatekeeper = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
+  }
+
+  if (kpisLoading) {
+    return <Spin className='flex justify-center' />
   }
 
   return (
@@ -156,7 +155,7 @@ const DashboardGatekeeper = () => {
       }}
     >
       { contextHolder }
-      <div className='title-button'>
+      <div className='flex items-center justify-between'>
         <div className='flex items-center'>
           <p className='text-4xl font-semibold mr-6'>All KPIs</p>
           <Button text='Add New KPI' btnProps={{ type: 'primary', size: 'small', icon: <PlusOutlined /> }} onClick={showModal}/>
@@ -166,13 +165,13 @@ const DashboardGatekeeper = () => {
 
       <AddKPIModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} initialData={kpiData}/>
       <Table rowSelection={rowSelection} bordered dataSource={kpis}>
-        <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
-        <Column title='Name' align='center' key='name' dataIndex='name'/>
-        <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
-        <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
-        <Column title='Units' align='center' key='units' dataIndex='units'/>
-        <Column title='Min Value' align='center' key='minValue' dataIndex='minValue'/>
-        <Column title='Max Value' align='center' key='maxValue' dataIndex='maxValue' />
+        <Column title='Circle' key='circle' dataIndex='circle'/>
+        <Column title='KPI Name' key='name' dataIndex='name'/>
+        <Column title='Frequency' key='frequency' dataIndex='frequency'/>
+        <Column title='Units' key='units' dataIndex='units'/>
+        <Column title='Min Value' align='right' key='minValue' dataIndex='minValue'/>
+        <Column title='Max Value' align='right' key='maxValue' dataIndex='maxValue' />
+        <Column title='Sample Value' align='right' key='sampleValue' dataIndex='sampleValue'/>
         <Column title='Actions' align='center' key='action' dataIndex='actions' render={(_: any, record: Kpi) => (
           <Space direction="horizontal">
             <Tooltip title="delete">

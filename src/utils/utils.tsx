@@ -41,3 +41,8 @@ export const getDisplayedKpiPeriod = (name: string | undefined, year: number | u
 
   return displayedPeriod
 }
+
+export const roleToDashboard: {[role: string]: string} = {
+  [roles.GATEKEEPER]: '/dashboard-gatekeeper',
+  [roles.ECONOMIST]: '/dashboard-economist',
+}

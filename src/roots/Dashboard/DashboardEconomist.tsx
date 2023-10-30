@@ -1,5 +1,4 @@
 import { ConfigProvider, Spin, Table } from 'antd'
-import './Dashboard.css'
 import Button from '../../components/Button/Button'
 import { useEffect, useState } from 'react'
 import { fetchSingleKpi, fetchUncompletedKpis } from '../../utils/apiRequests'
@@ -116,7 +115,7 @@ const DashboardEconomist = () => {
   }
 
   if (kpisLoading) {
-    return  <Spin style={{ display: 'flex', justifyContent: 'center' }} />
+    return  <Spin className='flex justify-center' />
   }
 
   return (
@@ -134,12 +133,11 @@ const DashboardEconomist = () => {
       <p className='text-2xl'>KPIs to update</p>
       <AddValueModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} record={selectedRecord} />
       <Table bordered dataSource={kpis}>
-        <Column title='Circle' align='center' key='circle' dataIndex='circle'/>
-        <Column title='Name' align='center' key='name' dataIndex='name'/>
-        <Column title='Sample Value' align='center' key='sampleValue' dataIndex='sampleValue'/>
-        <Column title='Frequency' align='center' key='frequency' dataIndex='frequency'/>
-        <Column title='Period' align='center' key='period' dataIndex='period'/>
-        <Column title='Units' align='center' key='units' dataIndex='units'/>
+        <Column title='Circle' key='circle' dataIndex='circle'/>
+        <Column title='KPI Name' key='name' dataIndex='name'/>
+        <Column title='Frequency'  key='frequency' dataIndex='frequency'/>
+        <Column title='Period' key='period' dataIndex='period'/>
+        <Column title='Units' key='units' dataIndex='units'/>
         <Column title='Actions' align='center' key='actions' dataIndex='action' render={(_: any, record: Kpi) => (
           <Button text='Add Value' btnProps={{ type: 'primary', size: 'small' }} onClick={showModal(record)} />
         )}/>
