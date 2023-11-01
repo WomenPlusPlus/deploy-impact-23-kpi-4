@@ -145,9 +145,10 @@ export const addKpi = async (values: FieldType) => {
     rangeId = await getRangeId(values.min_value, values.max_value)
   }
 
+  console.log(values)
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { data: newKpi } = await supabase
+  const { data: newKpi, error } = await supabase
     .from('kpi')
     .upsert(
       {
@@ -171,7 +172,7 @@ export const addKpi = async (values: FieldType) => {
     await addCircleKpi(newKpi.id, values.circle_id)
   }
 
-  return newKpi
+  return { newKpi, error }
 }
 
 export const updateKpi = async (values: FieldType) => {
@@ -179,7 +180,7 @@ export const updateKpi = async (values: FieldType) => {
   const rangeId = await getRangeId(values.min_value, values.max_value)
 
   // update KPI
-  const { data: kpiData, error: kpiError } = await supabase
+  const { data: kpiData, error } = await supabase
     .from('kpi')
     .update({
       name: values.name,
@@ -198,7 +199,7 @@ export const updateKpi = async (values: FieldType) => {
     values.kpi_id,
     values.circle_id)
 
-  return kpiData
+  return { kpiData, error }
 }
 
 /** Supabase request to get a specific range by giving the id as parameter*/

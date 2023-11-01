@@ -3,6 +3,7 @@ import { roles, User } from '../../types/types'
 import React, { useState } from 'react'
 import { changeUserRole } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
+import SubmitButton from '../Button/SubmitButton'
 
 interface IModal {
   isModalOpen: boolean,
@@ -15,8 +16,10 @@ interface IModal {
 const EditUserModalAndForm: React.FC<IModal> = ({ isModalOpen, setIsModalOpen, selectedUser, users, setUsers }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
+  const [form] = Form.useForm()
 
   const handleCancel = () => {
+    form.resetFields()
     setIsModalOpen(false)
   }
 
@@ -56,6 +59,7 @@ const EditUserModalAndForm: React.FC<IModal> = ({ isModalOpen, setIsModalOpen, s
       'You successfully changed user`s role'
     )
 
+    form.resetFields()
     setSubmitLoading(false)
     setIsModalOpen(false)
   }
@@ -71,14 +75,21 @@ const EditUserModalAndForm: React.FC<IModal> = ({ isModalOpen, setIsModalOpen, s
           <Button key="cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button loading={submitLoading} type="primary" form="ChangeRole" key="submit" htmlType="submit">
-            Submit
-          </Button>
+          <SubmitButton
+            key='submit'
+            formId='ChangeRole'
+            form={form}
+            loading={submitLoading}
+            text='Submit'
+          />
         ]}
       >
         <div className='mb-5'>Selected User: {selectedUser.email}</div>
-        <Form id='ChangeRole' layout="vertical" onFinish={handleSubmit}>
-          <Form.Item label='Select role for the user' name='role'>
+        <Form form={form} id='ChangeRole' layout="vertical" onFinish={handleSubmit}>
+          <Form.Item
+            rules={[{ required: true, message: 'Please select the role!' }]}
+            label='Select role for the user' name='role'
+          >
             <Select
               className='w-full'
               options={[{ label: roles.ECONOMIST, value: roles.ECONOMIST }, { value: roles.GATEKEEPER, label: roles.GATEKEEPER }]}
