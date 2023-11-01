@@ -145,7 +145,6 @@ export const addKpi = async (values: FieldType) => {
     rangeId = await getRangeId(values.min_value, values.max_value)
   }
 
-  console.log(values)
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const { data: newKpi, error } = await supabase
