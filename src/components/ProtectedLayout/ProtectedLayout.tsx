@@ -23,8 +23,8 @@ const lgOptions = [
     label: 'EN'
   },
   {
-    value: 'gn',
-    label: 'GN'
+    value: 'de',
+    label: 'DE'
   },
   {
     value: 'fr',
