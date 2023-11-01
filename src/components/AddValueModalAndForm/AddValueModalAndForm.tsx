@@ -8,6 +8,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { getDisplayedKpiPeriod } from '../../utils/utils'
 import { addStateCompletedKpi, deleteStateKpi } from '../../store/kpiSlice'
 import { useDispatch } from 'react-redux'
+import SubmitButton from '../Button/SubmitButton'
 
 export type FieldType = {
   name: string;
@@ -87,6 +88,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
       // After adding the record in "history record" table we need to remove it from "KPI to update" table
       dispatch(deleteStateKpi(record.id))
 
+      form.resetFields()
       setIsModalOpen(false)
       setSubmitLoading(false)
       openNotificationWithIcon(
@@ -98,6 +100,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
   }
 
   const handleCancel = () => {
+    form.resetFields()
     setIsModalOpen(false)
   }
 
@@ -138,15 +141,13 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           <Button key="cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button
+          <SubmitButton
+            key='submit'
+            formId='AddValue'
+            form={form}
             loading={submitLoading}
-            type="primary"
-            form="AddValue"
-            key="submit"
-            htmlType="submit"
-          >
-            Add Value
-          </Button>
+            text='Add Value'
+          />
         ]}
       >
         <Divider />

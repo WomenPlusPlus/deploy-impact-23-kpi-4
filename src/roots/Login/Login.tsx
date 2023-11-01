@@ -15,7 +15,7 @@ const Login = () => {
       }}
     >
       <div className='w-full h-screen flex overflow-hidden'>
-        <div className='basis-1/2 bg-[#f1f1f1] items-center flex'>
+        <div className='basis-1/2 items-center flex'>
           <img className='' src={Welcome} alt='Welcome to Impact Tracker' />
         </div>
         <div className='basis-1/2 flex items-center justify-center'>

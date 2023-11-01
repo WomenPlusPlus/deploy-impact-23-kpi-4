@@ -17,6 +17,7 @@ import {
 } from '../../store/kpiSlice'
 import { RootState } from '../../store/store'
 import { KpiSupabase } from '../../types/types'
+import SubmitButton from '../Button/SubmitButton'
 
 export type FieldType = {
   kpi_id: number
@@ -174,44 +175,55 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
     setSubmitLoading(true)
     const isEditMode = !!values.kpi_id
 
-    try {
-      if (isEditMode) {
-        const kpiData = await updateKpi(values)
+    if (isEditMode) {
+      const { kpiData, error } = await updateKpi(values)
 
-        if (kpiData) {
-          await updateKpiState([kpiData], values, true)
-        }
-      } else {
-        const newKpi = await addKpi(values)
-
-        if (newKpi) {
-          await updateKpiState([newKpi], values)
-        }
+      if (error) {
+        openNotificationWithIcon(
+          'error',
+          'KPI Update',
+          `Error while updating your KPI. ${error.message}`
+        )
+        setSubmitLoading(false)
+        return
       }
 
-      setIsModalOpen(false)
+      if (kpiData) {
+        await updateKpiState([kpiData], values, true)
+      }
+    } else {
+      const { newKpi, error } = await addKpi(values)
 
-      openNotificationWithIcon(
-        'success',
-        isEditMode ? 'KPI Update' : 'KPI Insertion',
-        isEditMode
-          ? 'You successfully saved KPI !'
-          : 'You successfully added a new KPI!'
-      )
-    }
-    catch (e) {
-      openNotificationWithIcon(
-        'error',
-        isEditMode? 'KPI Update' : 'KPI Insertion',
-        'Error while updating/adding a new KPI. Please try again.'
-      )
+      if (error) {
+        openNotificationWithIcon(
+          'error',
+          'KPI Insertion',
+          `Error while adding a new KPI. ${error.message}`
+        )
+        setSubmitLoading(false)
+        return
+      }
+
+      if (newKpi) {
+        await updateKpiState([newKpi], values)
+      }
+
     }
 
-    setSubmitLoading(false)
     resetForm()
+    setSubmitLoading(false)
+    setIsModalOpen(false)
+    openNotificationWithIcon(
+      'success',
+      isEditMode ? 'KPI Update' : 'KPI Insertion',
+      isEditMode
+        ? 'Your KPI has been successfully saved!!'
+        : 'You successfully added a new KPI!'
+    )
   }
 
   const resetForm = () => {
+    form.resetFields()
     setLocalInitialData({} as FieldType)
     form.setFieldsValue({
       kpi_id: undefined,
@@ -225,7 +237,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       display_value: undefined,
       units: undefined
     })
-    form.resetFields()
   }
 
   const handleCancel = () => {
@@ -233,13 +244,35 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
     resetForm()
   }
 
+  const validateSampleValue = async (_: any, value: string) => {
+    const minVal = form.getFieldValue('min_value')
+    const maxVal = form.getFieldValue('max_value')
+
+    if (!(minVal || minVal === 0) || !(maxVal || maxVal === 0) || Number(value) < minVal || Number(value) > maxVal) {
+      return Promise.reject(`Number must be between ${minVal} and ${maxVal}`)
+    }
+
+    return Promise.resolve()
+  }
+
+  const handleSampleValueChange = (value: string) => {
+    form.setFieldValue('sample_value', value )
+    const minVal = form.getFieldValue('min_value')
+    const maxVal = form.getFieldValue('max_value')
+
+    if (!(minVal || minVal === 0) || !(maxVal || maxVal === 0) || !value || Number(value) < minVal || Number(value) > maxVal) {
+      form.validateFields(['sample_value'])
+    }
+  }
+
   return (
     <div>
       {contextHolder}
       <Modal
+        forceRender
         title={
           localInitialData?.kpi_id
-            ? 'Editing KPI'
+            ? 'Edit KPI'
             : 'New KPI Form'
         }
         open={isModalOpen}
@@ -248,15 +281,13 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
           <Button key="cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button
+          <SubmitButton
+            key='submit'
+            formId='AddKPI'
+            form={form}
             loading={submitLoading}
-            type="primary"
-            form="AddKPI"
-            key="submit"
-            htmlType="submit"
-          >
-            {localInitialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
-          </Button>,
+            text={localInitialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
+          />
         ]}
       >
         <Form
@@ -266,8 +297,8 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
           onFinish={handleSubmit}
           initialValues={localInitialData}
         >
-          <Form.Item<FieldType> name="kpi_id" hidden={true}></Form.Item>
-          <Form.Item<FieldType> name="kpi_circle_id" hidden={true}></Form.Item>
+          <Form.Item<FieldType> name="kpi_id" hidden><Input hidden /></Form.Item>
+          <Form.Item<FieldType> name="kpi_circle_id" hidden><Input hidden /></Form.Item>
           <Form.Item<FieldType>
             label="Circle"
             name="circle_id"
@@ -317,9 +348,20 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
             <Form.Item<FieldType>
               label="Sample Value"
               name="sample_value"
-              rules={[{ required: true, message: 'Please input the sample value!' }]}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input a number!',
+                },
+                {
+                  validator: validateSampleValue,
+                }
+              ]}
             >
-              <Input type='number' />
+              <Input
+                type='number'
+                onChange={(event) => handleSampleValueChange(event.target.value)}
+              />
             </Form.Item>
           </Space>
           <Form.Item<FieldType>
