@@ -225,6 +225,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       display_value: undefined,
       units: undefined
     })
+    form.resetFields()
   }
 
   const handleCancel = () => {
