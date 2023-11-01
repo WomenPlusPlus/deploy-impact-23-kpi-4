@@ -248,7 +248,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
     const minVal = form.getFieldValue('min_value')
     const maxVal = form.getFieldValue('max_value')
 
-    if (!(minVal || minVal === 0) || !(maxVal || maxVal === 0) || !value || Number(value) < minVal || Number(value) > maxVal) {
+    if (!(minVal || minVal === 0) || !(maxVal || maxVal === 0) || Number(value) < minVal || Number(value) > maxVal) {
       return Promise.reject(`Number must be between ${minVal} and ${maxVal}`)
     }
 
