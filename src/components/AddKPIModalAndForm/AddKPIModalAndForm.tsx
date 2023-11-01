@@ -182,7 +182,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
         openNotificationWithIcon(
           'error',
           'KPI Update',
-          `Error while updating a the KPI. ${error.message}`
+          `Error while updating your KPI. ${error.message}`
         )
         setSubmitLoading(false)
         return
@@ -217,7 +217,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       'success',
       isEditMode ? 'KPI Update' : 'KPI Insertion',
       isEditMode
-        ? 'You successfully updated KPI !'
+        ? 'Your KPI has been successfully saved!!'
         : 'You successfully added a new KPI!'
     )
   }
