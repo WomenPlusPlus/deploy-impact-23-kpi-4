@@ -223,6 +223,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
   }
 
   const resetForm = () => {
+    form.resetFields()
     setLocalInitialData({} as FieldType)
     form.setFieldsValue({
       kpi_id: undefined,
@@ -236,7 +237,6 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
       display_value: undefined,
       units: undefined
     })
-    form.resetFields()
   }
 
   const handleCancel = () => {
