@@ -2,12 +2,13 @@ import { ConfigProvider } from 'antd'
 import Welcome from '../../assets/welcome.svg'
 import GoogleLogin from '../../components/GoogleLogin/GoogleLogin'
 import ProJuventute from '../../assets/ProJuventute.svg'
+import { primaryYellow } from '../../utils/theme'
 const Login = () => {
   return (
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#FECC33',
+          colorPrimary: primaryYellow,
           borderRadius: 2,
           controlHeight: 40,
           colorText: '#333333',

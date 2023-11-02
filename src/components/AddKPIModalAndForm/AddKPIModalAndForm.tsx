@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Modal, Select, Button, Space } from 'antd'
+import { Form, Input, Modal, Select, Space } from 'antd'
 import {
   fetchCircles,
   fetchFrequency,
@@ -17,7 +17,7 @@ import {
 } from '../../store/kpiSlice'
 import { RootState } from '../../store/store'
 import { KpiSupabase } from '../../types/types'
-import SubmitButton from '../Button/SubmitButton'
+import ModalFooterButtons from '../Button/ModalFooterButtons'
 
 export type FieldType = {
   kpi_id: number
@@ -277,18 +277,15 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
         }
         open={isModalOpen}
         onCancel={handleCancel}
-        footer={[
-          <Button key="cancel" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <SubmitButton
-            key='submit'
-            formId='AddKPI'
-            form={form}
+        footer={
+          <ModalFooterButtons
             loading={submitLoading}
             text={localInitialData?.kpi_id ? 'Save KPI' : 'Submit KPI'}
+            form={form}
+            formId='AddKPI'
+            handleCancel={handleCancel}
           />
-        ]}
+        }
       >
         <Form
           form={form}

@@ -1,9 +1,9 @@
-import { Button, Form, Modal, Select } from 'antd'
+import { Form, Modal, Select } from 'antd'
 import { roles, User } from '../../types/types'
 import React, { useState } from 'react'
 import { changeUserRole } from '../../utils/apiRequests'
 import { useNotifications } from '../../hooks/useNotifications'
-import SubmitButton from '../Button/SubmitButton'
+import ModalFooterButtons from '../Button/ModalFooterButtons'
 
 interface IModal {
   isModalOpen: boolean,
@@ -71,18 +71,14 @@ const EditUserModalAndForm: React.FC<IModal> = ({ isModalOpen, setIsModalOpen, s
         open={isModalOpen}
         title='Change role'
         onCancel={handleCancel}
-        footer={[
-          <Button key="cancel" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <SubmitButton
-            key='submit'
-            formId='ChangeRole'
-            form={form}
+        footer={
+          <ModalFooterButtons
             loading={submitLoading}
             text='Submit'
-          />
-        ]}
+            form={form}
+            formId='ChangeRole'
+            handleCancel={handleCancel}
+          />}
       >
         <div className='mb-5'>Selected User: {selectedUser.email}</div>
         <Form form={form} id='ChangeRole' layout="vertical" onFinish={handleSubmit}>
