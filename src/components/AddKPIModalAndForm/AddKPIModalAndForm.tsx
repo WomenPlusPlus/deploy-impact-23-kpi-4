@@ -348,6 +348,7 @@ const AddKPIModalAndForm: React.FC<IAddKPIModalAndForm> = ({
             <Form.Item<FieldType>
               label="Sample Value"
               name="sample_value"
+              dependencies={['min_value', 'max_value']}
               rules={[
                 {
                   required: true,
