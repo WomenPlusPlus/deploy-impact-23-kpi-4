@@ -11,12 +11,14 @@ import Column from 'antd/es/table/Column'
 import AddValueModalAndForm from '../../components/AddValueModalAndForm/AddValueModalAndForm'
 import CompletedKpisTable from '../../components/CompletedKpisTable/CompletedKpisTable'
 import { getDisplayedKpiPeriod } from '../../utils/utils'
+import { primaryGreen } from '../../utils/theme'
 
 const DashboardEconomist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { openNotificationWithIcon, contextHolder }  = useNotifications()
   const [selectedRecord, setSelectedRecord] = useState<kpiFromSupabase | null>(null)
   const [kpisLoading, setKpisLoading] = useState(true)
+
+  const { openNotificationWithIcon, contextHolder }  = useNotifications()
 
   const kpis = useSelector((state: RootState) => state.kpis.kpis)
   const dispatch = useDispatch()
@@ -122,7 +124,7 @@ const DashboardEconomist = () => {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#1FA5A6',
+          colorPrimary: primaryGreen,
           borderRadius: 2,
           controlHeight: 40
         },
@@ -131,7 +133,11 @@ const DashboardEconomist = () => {
       { contextHolder }
       <p className='text-4xl font-semibold mr-6'>Dashboard</p>
       <p className='text-2xl'>KPIs to update</p>
-      <AddValueModalAndForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} record={selectedRecord} />
+      <AddValueModalAndForm
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        record={selectedRecord}
+      />
       <Table bordered dataSource={kpis}>
         <Column title='Circle' key='circle' dataIndex='circle'/>
         <Column title='KPI Name' key='name' dataIndex='name'/>

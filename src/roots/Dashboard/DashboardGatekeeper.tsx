@@ -16,6 +16,7 @@ import Button from '../../components/Button/Button'
 import { DeleteOutlined, EditOutlined, DownloadOutlined, PlusOutlined } from '@ant-design/icons'
 import Column from 'antd/es/table/Column'
 import { FieldType } from '../../components/AddKPIModalAndForm/AddKPIModalAndForm'
+import { primaryGreen } from '../../utils/theme'
 
 const DashboardGatekeeper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -148,7 +149,7 @@ const DashboardGatekeeper = () => {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#1FA5A6',
+          colorPrimary: primaryGreen,
           borderRadius: 2,
           controlHeight: 40
         },

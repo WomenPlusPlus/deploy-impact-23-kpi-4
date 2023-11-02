@@ -1,9 +1,18 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, } from 'antd'
 import Button from './Button'
 import type { FormInstance } from 'antd'
 
-const SubmitButton = ({ form, formId, loading, text }: { form: FormInstance, formId: string, loading: boolean, text: string }) => {
+interface ISubmitButton {
+  form: FormInstance,
+  formId: string,
+  loading?: boolean,
+  text: string,
+  onClick?: () => void,
+  color: string
+}
+
+const SubmitButton:React.FC<ISubmitButton> = ({ form, formId, loading, text, onClick, color  }) => {
   const [submittable, setSubmittable] = useState(false)
 
   // Watch all values
@@ -21,7 +30,12 @@ const SubmitButton = ({ form, formId, loading, text }: { form: FormInstance, for
   }, [values])
 
   return (
-    <Button btnProps={{ type: 'primary', htmlType: 'submit', disabled: !submittable, form: formId, loading: loading }} text={text} />
+    <Button
+      color={color}
+      btnProps={{ type: 'primary', htmlType: 'submit', disabled: !submittable, form: formId, loading: loading }}
+      text={text}
+      onClick={onClick}
+    />
   )
 }
 

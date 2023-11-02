@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, Input, Modal, Button, Divider } from 'antd'
+import { Form, Input, Modal, Divider, ConfigProvider } from 'antd'
 import { useNotifications } from '../../hooks/useNotifications'
 import { frequency, kpiFromSupabase } from '../../types/types'
 import Info from '../../assets/Info.svg'
@@ -8,7 +8,10 @@ import { useAuth } from '../../hooks/useAuth'
 import { getDisplayedKpiPeriod } from '../../utils/utils'
 import { addStateCompletedKpi, deleteStateKpi } from '../../store/kpiSlice'
 import { useDispatch } from 'react-redux'
-import SubmitButton from '../Button/SubmitButton'
+import Button from '../Button/Button'
+import './styles.css'
+import ModalFooterButtons from '../Button/ModalFooterButtons'
+import { primaryYellow } from '../../utils/theme'
 
 export type FieldType = {
   name: string;
@@ -17,10 +20,10 @@ export type FieldType = {
 interface AddValueModalAndForm {
   isModalOpen: boolean,
   setIsModalOpen: (b: boolean) => void,
-  record: kpiFromSupabase | null
+  record: kpiFromSupabase | null,
 }
 
-const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, setIsModalOpen, record }) => {
+const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, setIsModalOpen, record  }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const { openNotificationWithIcon, contextHolder }  = useNotifications()
   const  { user } = useAuth()
@@ -88,8 +91,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
       // After adding the record in "history record" table we need to remove it from "KPI to update" table
       dispatch(deleteStateKpi(record.id))
 
-      form.resetFields()
-      setIsModalOpen(false)
+      handleCancel()
       setSubmitLoading(false)
       openNotificationWithIcon(
         'success',
@@ -102,6 +104,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
   const handleCancel = () => {
     form.resetFields()
     setIsModalOpen(false)
+    Modal.destroyAll()
   }
 
   const recordMin = record?.range?.min_value
@@ -129,6 +132,45 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
     }
   }
 
+  const displayConfirmModalContent = (value: string) => {
+    return (
+      <div>
+        <div>Are you sure you want to add the following KPI value to the database?</div>
+        <div className='mt-5'><strong>KPI Name:</strong> {record?.name}</div>
+        <div><strong>Value:</strong> {value}</div>
+      </div>
+    )
+  }
+
+  const showConfirmModal = (values: FieldType) => {
+    Modal.confirm({
+      title: 'Confirm adding a new KPI value',
+      className: 'confirm-modal',
+      content: displayConfirmModalContent(values.name),
+      footer: (_, { CancelBtn }) => (
+        <>
+          <ConfigProvider
+            theme={{
+              token: {
+                borderRadius: 2,
+                colorPrimary:  primaryYellow, // bg color
+              },
+              components: {
+                Button: {
+                  primaryColor: '#fff', // text color
+                }
+              }
+            }
+            }
+          >
+            <CancelBtn />
+            <Button text='Add' color={primaryYellow} btnProps={{ type: 'primary', loading: submitLoading }} onClick={() => handleSubmit(values)}/>
+          </ConfigProvider>
+        </>
+      ),
+    })
+  }
+
   return (
     <div>
       {contextHolder}
@@ -137,18 +179,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
         okText='Submit KPI'
         open={isModalOpen}
         onCancel={handleCancel}
-        footer={[
-          <Button key="cancel" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <SubmitButton
-            key='submit'
-            formId='AddValue'
-            form={form}
-            loading={submitLoading}
-            text='Add Value'
-          />
-        ]}
+        footer={<ModalFooterButtons text='Add Value' form={form} formId='AddValue' handleCancel={handleCancel} />}
       >
         <Divider />
         <div className='mb-10'>
@@ -162,7 +193,7 @@ const AddValueModalAndForm: React.FC<AddValueModalAndForm> = ({ isModalOpen, set
           form={form}
           id='AddValue'
           layout="vertical"
-          onFinish={handleSubmit}
+          onFinish={showConfirmModal}
           autoComplete='off'
         >
           <div className='flex items-center mb-2'>
