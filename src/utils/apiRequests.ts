@@ -305,6 +305,7 @@ export const fetchCompletedKpis = async () => {
       circle_kpi (id, circle(name), kpi (id, name, sample_value, frequency(type), range(min_value, max_value, display_value), unit_of_measurement)),
       kpi_period (id, completed, period( year, month, quarter))
     `)
+    .order('created_at', { ascending: false })
 
   return { completedKpis, error }
 }
